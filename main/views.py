@@ -8,7 +8,7 @@ from django.db.models import Q
 from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
                         TopicSerializer,
-                        AssignmentSerializer)
+                        AssignmentSerializer,TopicUpdateSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
 from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate
@@ -329,5 +329,67 @@ class TopicView(generics.GenericAPIView):
         )
 
 
-    
-    
+class TopicUpdateView(generics.GenericAPIView):
+    serializer_class = TopicUpdateSerializer
+    permission_classes = [IsAuthenticated]    
+
+    def get_class_queryset(self):
+        return Class.objects.filter(owner=self.request.user).all()
+    def get_topic_queryset(self):
+        return Topic.objects.filter(_class__owner = self.request.user)
+    def get_topic_updates_queryset(self):
+        return TopicUpdate.objects.filter(_class__owner = self.request.user)
+    def get(self,request,topic_id = None,*args,**kwargs):
+        topic = get_object_or_404(self.get_topic_queryset(),id = topic_id)
+        qs = TopicUpdate.objects.filter(topic = topic)
+        serializer = self.get_serializer_class()(instance=qs,many = True)
+        return Response(serializer.data)
+    def post(self,request,topic_id = None ,*args, **kget_topic_update_querysetwargs):
+        topic = get_object_or_404(self.get_topic_queryset(),id = topic_id)
+        serializer =self.get_serializer_class()(data = request.data)
+        if serializer.is_valid():
+            updates = TopicUpdate.objects.create(
+            _class = topic._class,
+            topic = topic,
+            title=serializer.validated_data.get("title"),
+            content=serializer.validated_data.get("content")
+
+            )
+            return Response({
+                "success":True,
+                "detail":"Topic updated added succesfully"
+            })
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    def put(self,request,update_id = None,*args, **kwargs):
+        obj = get_object_or_404(
+            self.get_topic_updates_queryset(),
+            id = update_id
+        )
+        serializer = self.get_serializer_class()(data=request.data,instance=obj) 
+        if serializer.is_valid():
+            obj.title = serializer.validated_data.get("title",obj.title)
+            obj.content = serializer.validated_data.get("content",obj.content)
+            obj.save()
+            return Response(serializer.data)
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    def delete(self,request,update_id = None,*args, **kwargs):
+        obj = get_object_or_404(
+            self.get_topic_updates_queryset(),
+            id = update_id
+        )
+        obj.delete()
+        return Response(
+            {
+                "success":True,
+                "detail":"Deleted successfully"
+            }
+        )
+
+        
+

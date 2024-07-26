@@ -238,7 +238,14 @@ class TopicUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicUpdate
         fields = [
+            "id",
             'title',
             'content',
             'date_created'
         ]
+
+        exta_kwargs = {
+            "date_created":{
+                "read_only":True
+            }
+        }

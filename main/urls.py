@@ -1,6 +1,6 @@
 from django.urls import path 
 from .views import (UserSignUpView,UserLoginView,
-UserProfileView,ClassView,StudentClassView,TeacherAssignmentView,TopicView)
+UserProfileView,ClassView,StudentClassView,TeacherAssignmentView,TopicView,TopicUpdateView)
 
 urlpatterns = [
      path("auth/signup",UserSignUpView.as_view()),
@@ -11,7 +11,11 @@ urlpatterns = [
      path("class/join/<uuid:class_id>",StudentClassView.as_view()),
      path("class/assignment/<uuid:class_id>",TeacherAssignmentView.as_view()),
      path("topics",TopicView.as_view()),
-     path("topics/<uuid:topic_id>",TopicView.as_view())
+     path("topics/<uuid:topic_id>",TopicView.as_view()),
+     path("topics/updates/<uuid:topic_id>",TopicUpdateView.as_view()),
+     path("topic/updates/<int:update_id>",TopicUpdateView.as_view())
+
+
 
 
 ]
