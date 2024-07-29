@@ -5,6 +5,7 @@ from django.utils import crypto
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.core import exceptions  
 class UserManager(BaseUserManager):
     def create_user(self,**fields):
         if not fields.get("email"):
@@ -186,3 +187,18 @@ class TopicUpdate(models.Model):
 
 
     
+class WorkSubmitions(models.Model):
+    _class = models.ForeignKey(Class, on_delete=models.CASCADE,related_name='submitions')
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'class_work_submitions')
+    date = models.DateTimeField(auto_now_add=True)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE,related_name='assignment_submitions')
+    score = models.IntegerField(null=True,blank=True,default=None)
+    comment = models.TextField(blank=True,default=None,null = True )
+    answer = models.TextField()
+
+    @property
+    def view_options(self):
+        return self.assignment.options
+    def clean(self):
+        if self.date > self.assignment.classwork.date_due:
+            raise exceptions.ValidationError("Due date passed")

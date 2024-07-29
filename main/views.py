@@ -16,6 +16,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 class UserSignUpView(generics.GenericAPIView):
     serializer_class = UserSignupSerializer
 
@@ -96,7 +98,7 @@ class ClassView(generics.GenericAPIView):
         user_class = Class.objects.filter(owner=self.request.user).all()
         return user_class
     def get(self,request,id = None,*args, **kwargs):
-
+        
         serializer = self.get_serializer_class()(
             self.get_queryset(),
             many =True,
