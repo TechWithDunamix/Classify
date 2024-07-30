@@ -1,5 +1,6 @@
 # from adrf.views import APIView
 from . import constants
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,10 +9,11 @@ from django.db.models import Q
 from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
                         TopicSerializer,
-                        AssignmentSerializer,TopicUpdateSerializer)
+                        AssignmentSerializer,TopicUpdateSerializer,
+                        WorkSubmitionSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
-from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate
+from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
@@ -393,5 +395,90 @@ class TopicUpdateView(generics.GenericAPIView):
             }
         )
 
+class WorkSubmitionView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = WorkSubmitionSerializer
+
+    def get_class_qs(self):
+        class_id = self.request.GET.get("class_id")
+
+        _class = get_object_or_404(Class,id = class_id)
+        _class_check = MemberShip.objects.filter(
+            _class = _class,
+            user = self.request.user).exists()
+        if not _class:
+            return None
+        return _class 
+    def get(self,request,*args,**kwargs):
+        class_id = request.GET.get("class_id")
+        if not class_id:
+            return Response(
+                {
+                    "detail":"Add class id a get param"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        _class = self.get_class_qs()
+        if not _class:
+            return Response(
+                {
+                    "detail":"User not allowed to submit this assignmeny"
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+        submitions  = WorkSubmitions.objects.filter(
+            _class = _class,
+            user = request.user
+        ).all()
+        serializer = WorkSubmitionSerializer(submitions,many = True)
+        return Response(serializer.data)
         
 
+    def post(self,request,assignment_id = None,*args,**kwargs):
+        class_id = request.GET.get("class_id")
+
+        if not class_id:
+            return Response({
+                "error":True,
+                "detail":"Provide a class_id as a get param"
+            },status=status.HTTP_400_BAD_REQUEST)
+        _class = self.get_class_qs()
+        if not _class:
+            return Response(
+                {
+                    "detail":"User not allowed to submit this assignment"
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = self.get_serializer_class()(data =request.data)        
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        assignment = get_object_or_404(
+            self.get_class_qs().assignments.filter(draft = False).all(),
+            id = assignment_id
+            )
+        check_work = WorkSubmitions.objects.filter(
+            user = request.user,assignment = assignment
+            
+        )
+        if check_work.exists():
+            return Response({
+                "error" : "User already submited assignment"
+                
+                },status=status.HTTP_400_BAD_REQUEST)
+        work = WorkSubmitions.objects.create(
+            user=request.user,
+            _class=self.get_class_qs(),
+            answer=serializer.data.get("answer"),
+            assignment = assignment
+        )
+        serializer.data.setdefault("code",assignment.code)
+        print(serializer.data)
+        return Response(
+            serializer.data
+        )
+        
+        

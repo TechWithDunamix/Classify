@@ -195,9 +195,10 @@ class WorkSubmitions(models.Model):
     score = models.IntegerField(null=True,blank=True,default=None)
     comment = models.TextField(blank=True,default=None,null = True )
     answer = models.TextField()
+    marked = models.BooleanField(default=False)
 
     @property
-    def view_options(self):
+    def options(self):
         return self.assignment.options
     def clean(self):
         if self.date > self.assignment.classwork.date_due:

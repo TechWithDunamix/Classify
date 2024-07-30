@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate
+from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
@@ -249,3 +249,12 @@ class TopicUpdateSerializer(serializers.ModelSerializer):
                 "read_only":True
             }
         }
+
+
+class WorkSubmitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ['answer','marked','score','date','comment']
+        model = WorkSubmitions 
+        read_only_fields = ['marked','score','date','comment']
+    
+    
