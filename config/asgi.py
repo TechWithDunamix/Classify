@@ -17,12 +17,13 @@ from django.urls import path
 from main.consumers import EmailConsumer
 from channels.routing import ChannelNameRouter
 from channels.security.websocket import AllowedHostsOriginValidator
+from main.middlewares import TokenAuthMiddleware
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 application = ProtocolTypeRouter(
     {
         "http":get_asgi_application(),
-        'websocket':AuthMiddlewareStack(
+        'websocket':TokenAuthMiddleware(
                 URLRouter(
                 [
                     path("ws/send_mail",EmailConsumer.as_asgi())

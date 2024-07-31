@@ -203,3 +203,18 @@ class WorkSubmitions(models.Model):
     def clean(self):
         if self.date > self.assignment.classwork.date_due:
             raise exceptions.ValidationError("Due date passed")
+
+
+class DMChat(models.Model):
+    _from = models.ForeignKey(User,related_name='sent_dm',on_delete=models.CASCADE)
+    to = models.ForeignKey(User,related_name='recieved_dm',on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+
+
+class classChat(models.Model):
+    user = models.ForeignKey(User,related_name='user_chats',on_delete=models.CASCADE)
+    _class = models.ForeignKey(Class,related_name='class_chats',on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+    active = models.BooleanField(default=False)
