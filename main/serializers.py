@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions
+from django.shortcuts import get_object_or_404
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
@@ -253,8 +254,42 @@ class TopicUpdateSerializer(serializers.ModelSerializer):
 
 class WorkSubmitionSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['answer','marked','score','date','comment']
+        fields = ['id','answer','marked','score','date','comment']
         model = WorkSubmitions 
         read_only_fields = ['marked','score','date','comment']
+
+class WorkMarkSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(read_only = True)
+    def get_user(self,obj):
+        print("obj : ", obj)
+        qs = get_object_or_404(User,email = obj.user.email)
+        return UserProfileViewSerializer(qs).data
+    class Meta:
+        fields = ['id','answer','marked','score','date','comment','user']
+        model = WorkSubmitions 
+        # read_only_fields = ['marked','score','date','comment']
+
+        extra_kwargs = {
+            "marked":{
+                "required":False 
+            },
+            "score":{
+                "required":False
+            },
+
+            "answer":{
+                "required":False 
+            },
+            "comment":{
+                "required":False 
+            },
+            "user":{
+                "required":False ,
+                "read_only":True
+            }
+            
+        }
+
+
     
     

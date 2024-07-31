@@ -10,13 +10,13 @@ from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
                         TopicSerializer,
                         AssignmentSerializer,TopicUpdateSerializer,
-                        WorkSubmitionSerializer)
+                        WorkSubmitionSerializer,WorkMarkSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
 from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404,get_list_or_404
 from django.contrib.contenttypes.models import ContentType
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -482,3 +482,57 @@ class WorkSubmitionView(generics.GenericAPIView):
         )
         
         
+class WorkMarkView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = WorkMarkSerializer
+    def get_cls_qs(self):
+        
+        _qs = WorkSubmitions.objects.filter(
+            _class__owner = self.request.user 
+        ).order_by("-marked")
+        return _qs
+    def get(self,request,*args, **kwargs):
+        class_id = request.GET.get("class_id")
+        qs = self.get_cls_qs()
+        serializer = self.get_serializer_class()(
+            qs,
+            many = True,
+            )
+        if class_id:
+            qs = get_list_or_404(self.get_cls_qs(),_class__id = class_id)
+            serializer = self.get_serializer_class()(
+                qs,many = True,
+                context = {
+                "request":request
+            }
+            )
+            
+
+        return Response(
+            serializer.data
+        )
+    def put(self,request,assignment_id = None,*args, **kwargs):
+        _qs = self.get_cls_qs()
+        print(_qs)
+        obj = get_object_or_404(self.get_cls_qs(),id = assignment_id)
+        serializer = self.get_serializer_class()(
+            data = request.data,
+            instance = obj ,
+            context = {
+                "request":request
+            }
+        )
+       
+
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        obj.score = serializer.validated_data.get("score",obj.score)
+        obj.comment = serializer.validated_data.get("comment",obj.comment)
+        obj.marked = True
+        obj.save()
+        return Response(
+            serializer.data
+        )
