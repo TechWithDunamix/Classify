@@ -16,7 +16,7 @@ class TokenAuthMiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
         headers = dict(scope["headers"])
         token_key = headers.get(b'sec-websocket-protocol', None)
-        print("headers are : ",token_key)
+        # print("headers are : ",token_key)
 
         if token_key:
             token_key = token_key.decode().strip()
