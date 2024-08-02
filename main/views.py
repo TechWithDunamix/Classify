@@ -10,10 +10,10 @@ from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
                         TopicSerializer,
                         AssignmentSerializer,TopicUpdateSerializer,
-                        WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer)
+                        WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer,AnnouncementSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
-from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat
+from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404,get_list_or_404
@@ -548,3 +548,72 @@ class ChatClassView(generics.GenericAPIView):
         return Response(
             serializer.data
         )
+
+
+class AnnouncementView(generics.GenericAPIView):
+    serializer_class = AnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+    def get_cls_qs(self):
+        user = self.request.user
+        _class = Class.objects.filter(owner = user) 
+        return _class
+    def get(self,request,*args, **kwargs):
+        if not request.GET.get("class_id"):
+            return Response({
+                "message":"include class id as a get pearam"
+            },status=status.HTTP_400_BAD_REQUEST)
+        _obj = self.get_cls_qs()
+        obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
+        qs = Anouncement.objects.filter(_class = obj)
+        serializer = self.get_serializer_class()(qs,many = True)
+        return Response(serializer.data)
+    def post(self,request,*args, **kwargs):
+        if not request.GET.get("class_id"):
+            return Response({
+                "message":"include class id as a get pearam"
+            },status=status.HTTP_400_BAD_REQUEST)
+        _obj = self.get_cls_qs()
+        obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
+        serializer = self.get_serializer_class()(data = request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+        Anouncement.objects.create(
+            _class = obj,
+            detail = serializer.validated_data.get("detail")
+        )
+        return Response(serializer.data)
+
+    def put(self,request,id = None,*args, **kwargs):
+        if not request.GET.get("class_id"):
+            return Response({
+                "message":"include class id as a get pearam"
+            },status=status.HTTP_400_BAD_REQUEST)
+        _obj = self.get_cls_qs()
+        obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
+        serializer = self.get_serializer_class()(data = request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+        announcement = get_object_or_404(Anouncement,_class__owner = request.user,id = id)
+        announcement.detail = serializer.validated_data.get("detail",announcement.detail)
+        announcement.save()
+        print(announcement)
+        return Response(serializer.data)
+    
+    def delete(self,request,id = None,*args, **kwargs):
+        if not request.GET.get("class_id"):
+            return Response({
+                "message":"include class id as a get pearam"
+            },status=status.HTTP_400_BAD_REQUEST)
+        _obj = self.get_cls_qs()
+        obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
+        
+        announcement = get_object_or_404(Anouncement,_class__owner = request.user,id = id)
+        announcement.delete()
+        print(announcement)
+        return Response({"detail":"deleted"})
+    
+    

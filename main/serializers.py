@@ -299,9 +299,16 @@ class ChatSerializer(serializers.ModelSerializer):
         return obj.user.username
     class Meta:
         model  = ClassChat
-        fields = ['content','timestamp','user']
+        fields = ['content','timestamp','user',"id"]
 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
-        pass
+        model = Anouncement
+        fields = '__all__'
+
+        extra_kwargs = {
+            "_class":{
+                "read_only":True
+            }
+        }
