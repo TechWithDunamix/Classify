@@ -212,9 +212,9 @@ class DMChat(models.Model):
     content = models.TextField()
 
 
-class classChat(models.Model):
+class ClassChat(models.Model):
     user = models.ForeignKey(User,related_name='user_chats',on_delete=models.CASCADE)
-    _class = models.ForeignKey(Class,related_name='class_chats',on_delete=models.CASCADE)
+    _class = models.ForeignKey(Class,related_name='class_message',on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    content = models.TextField()
-    active = models.BooleanField(default=False)
+    content = models.TextField(default = '')
+    active = models.BooleanField(default=True)

@@ -3,7 +3,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 import json
-from .models import Class
+from .models import Class,ClassChat
+
 
 class EmailConsumer(AsyncWebsocketConsumer):
     
@@ -30,10 +31,8 @@ class EmailConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "message": f"Email sent to: {email}"
         }))
-
-
-
 class ChatClass(AsyncWebsocketConsumer):
+    
     @database_sync_to_async
     def get_class_qs(self,class_id):
         try:
@@ -45,6 +44,18 @@ class ChatClass(AsyncWebsocketConsumer):
             return _class
         return 
 
+    @database_sync_to_async
+    def save_message(self,message):
+        class_id =  self.class_id 
+        _class = Class.objects.get(id = class_id)
+        ClassChat.objects.create(
+            user = self.scope['user'],
+            content = message,
+            _class = _class
+        )
+        test = f" message  '{message}' to {class_id}"
+        print(test)
+        return 
     async def connect(self):
         self.class_id = self.scope['url_route']['kwargs']['class_id']
         user = self.scope['user']
@@ -80,6 +91,7 @@ class ChatClass(AsyncWebsocketConsumer):
                 'message': data['text']
             }
         )
+        operation = await self.save_message(data['text'])
     async def send_message(self, event):
        
         await self.send(text_data=json.dumps({

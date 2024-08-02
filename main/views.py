@@ -10,10 +10,10 @@ from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
                         TopicSerializer,
                         AssignmentSerializer,TopicUpdateSerializer,
-                        WorkSubmitionSerializer,WorkMarkSerializer)
+                        WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
-from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions
+from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404,get_list_or_404
@@ -533,6 +533,18 @@ class WorkMarkView(generics.GenericAPIView):
         obj.comment = serializer.validated_data.get("comment",obj.comment)
         obj.marked = True
         obj.save()
+        return Response(
+            serializer.data
+        )
+
+class ChatClassView(generics.GenericAPIView):
+    serializer_class = ChatSerializer 
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request,class_id = None,*args, **kwargs):
+        obj = get_object_or_404(Class,id = class_id)
+        qs = ClassChat.objects.filter(_class = obj)
+        serializer = self.get_serializer_class()(qs,many = True)
         return Response(
             serializer.data
         )

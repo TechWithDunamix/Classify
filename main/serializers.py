@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions
+from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement
 from django.shortcuts import get_object_or_404
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -292,4 +292,16 @@ class WorkMarkSerializer(serializers.ModelSerializer):
 
 
     
-    
+class ChatSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    def get_user(self,obj):
+        return obj.user.username
+    class Meta:
+        model  = ClassChat
+        fields = ['content','timestamp','user']
+
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        pass
