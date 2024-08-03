@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement
+from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles
 from django.shortcuts import get_object_or_404
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -312,3 +312,13 @@ class AnnouncementSerializer(serializers.ModelSerializer):
                 "read_only":True
             }
         }
+
+class ClassFilesSerializer(serializers.ModelSerializer):
+    file_url = serializers.SerializerMethodField
+    class  Meta:
+        model = ClassFiles
+        fields = ['id','date_created','_file']
+
+    def get_file_url(self,obj):
+        request = self.context.get("request")
+        return request.build_absoulte_uri(obj._file)

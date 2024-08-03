@@ -1,7 +1,7 @@
 from django.urls import path 
 from .views import (UserSignUpView,UserLoginView,
 UserProfileView,ClassView,StudentClassView,TeacherAssignmentView,TopicView,TopicUpdateView,
-WorkSubmitionView,WorkMarkView,ChatClassView,AnnouncementView)
+WorkSubmitionView,WorkMarkView,ChatClassView,AnnouncementView,ClassFileView)
 
 urlpatterns = [
      path("auth/signup",UserSignUpView.as_view()),
@@ -21,9 +21,12 @@ urlpatterns = [
      path("class/assignments/<int:assignment_id>", WorkMarkView.as_view()),
      path("chat_class/<uuid:class_id>",ChatClassView.as_view()),
      path("chat_class/<uuid:class_id>/<int:id>",ChatClassView.as_view()),
-
      path("class/announcement",AnnouncementView.as_view()),
-     path("class/announcement/<uuid:id>",AnnouncementView.as_view())
+     path("class/announcement/<uuid:id>",AnnouncementView.as_view()),
+     path("class/files",ClassFileView.as_view()),
+     path("class/files/<int:file_id>",ClassFileView.as_view()),
+     
+
 
 
 

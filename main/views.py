@@ -9,11 +9,11 @@ from django.db.models import Q
 from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
                         TopicSerializer,
-                        AssignmentSerializer,TopicUpdateSerializer,
+                        AssignmentSerializer,TopicUpdateSerializer,ClassFilesSerializer,
                         WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer,AnnouncementSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
-from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement
+from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404,get_list_or_404
@@ -623,4 +623,74 @@ class AnnouncementView(generics.GenericAPIView):
         print(announcement)
         return Response({"detail":"deleted"})
     
+class ClassFileView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ClassFilesSerializer 
+    def get(self,request,file_id = None,*args, **kwargs):
+        class_id = request.GET.get("class_id")
+        if not class_id:
+            return Response(
+                {
+                    "detail":"Provide class id as a get param"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.get_serializer_class()(data = request.data)
+        
+        _class = get_object_or_404(Class,id = class_id)
+
+        qs = ClassFiles.objects.filter(_class = _class).order_by("-date_created")
+        serializer = self.get_serializer_class()(qs,many = True,context = {
+            "request":request
+        })
+        print(file_id)
+        if file_id:
+            obj = get_object_or_404(qs,id = file_id)
+            serializer = self.get_serializer_class()(obj,context = {
+                "request":request
+            })
+        return Response(serializer.data)
+        
+    def post(self,request,*args, **kwargs):
+        class_id = request.GET.get("class_id")
+        if not class_id:
+            return Response(
+                {
+                    "detail":"Provide class id as a get param"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.get_serializer_class()(data = request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        _file = request.FILES.get("_file")
+        _class = get_object_or_404(Class,id = class_id)
+        ClassFiles.objects.create(
+            _class = _class,
+            _file = _file
+        )
+        return Response(serializer.data)
     
+    def delete(self,request,file_id = None,*args, **kwargs):
+        class_id = request.GET.get("class_id")
+        if not class_id:
+            return Response(
+                {
+                    "detail":"Provide class id as a get param"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+     
+        _class = get_object_or_404(Class,id = class_id)
+
+        qs = ClassFiles.objects.filter(_class = _class).order_by("-date_created")
+        obj = get_object_or_404(qs,id = file_id)
+        obj.delete()
+        return Response("delete successfull")
+        
