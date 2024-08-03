@@ -131,6 +131,10 @@ class Assignment(models.Model):
     options = models.JSONField(null = True,default = list)
     code = models.CharField(max_length=90)
 
+    @property
+    def date_created(self):
+        return self.classwork.date_created
+
 
     def save(self,*args, **kwargs):
         

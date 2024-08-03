@@ -122,7 +122,8 @@ class ClassView(generics.GenericAPIView):
         serializer = self.get_serializer_class()(
             data = request.data,
             context = {
-                "owner":request.user
+                "owner":request.user,
+                "request":request
             }
             )
         if serializer.is_valid():
@@ -134,7 +135,7 @@ class ClassView(generics.GenericAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def put(self,request,id = None,*args,**kwargs):
-        obj = get_object_or_404(Class,id = id)
+        obj = get_object_or_404(self.get_queryset(),id = id)
         serializer = self.get_serializer_class()(
             data = request.data,
             instance=obj,
@@ -151,8 +152,16 @@ class ClassView(generics.GenericAPIView):
 class StudentClassView(generics.GenericAPIView):
     serializer_class = ClassSerializer
     permission_classes = [IsAuthenticated]
+
+    def get(self,request,*args, **kwargs):
+        qs = Class.objects.filter(members__user = request.user)
+        serializer = self.get_serializer_class()(qs,many = True,context = {
+            "request":request
+        })
+        return Response(serializer.data)
     def post(self,request,class_id = None,*args, **kwargs):
-        _class = get_object_or_404(Class,id = class_id)
+
+        _class = get_object_or_404(Class,class_code = class_id)
         member,created = MemberShip.objects.get_or_create(user = request.user,_class=_class)
         response = {
             "detail":"user already in group",
@@ -235,16 +244,37 @@ class TeacherAssignmentView(generics.GenericAPIView):
             classwork_type=serializer.validated_data.get("classwork_type"),
             mark=serializer.validated_data.get("mark")
             )
+            print(serializer.validated_data)
             asm  = Assignment.objects.create(
                 title=serializer.validated_data.get("title"),
                 question = serializer.validated_data.get("question"),
                 classwork = class_work,
                 _class = _class,
+                _files = serializer.validated_data.get("_files"),
                 options = serializer.validated_data.get("options"),
                 draft=serializer.validated_data.get("draft")
             )
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class StudentAssignmentView(generics.GenericAPIView):
+    serializer_class =  AssignmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request,*args, **kwargs):
+        class_id = request.GET.get("class_id")
+        if not class_id:
+            return Response("Provide the class id",status=status.HTTP_400_BAD_REQUEST)
+        classes = Class.objects.filter(members__user = request.user)
+        obj = get_object_or_404(classes,id = class_id)
+        qs = obj.assignments.all()
+        context = {
+            "request":request
+        }
+        serializer = self.get_serializer_class()(qs,many = True ,context = context)
+        return Response(serializer.data)
+        
+
 
 class TopicView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -569,7 +599,8 @@ class AnnouncementView(generics.GenericAPIView):
             return Response({
                 "message":"include class id as a get pearam"
             },status=status.HTTP_400_BAD_REQUEST)
-        _obj = self.get_cls_qs()
+        _obj = Class.objects.filter(members__user=request.user)
+
         obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
         qs = Anouncement.objects.filter(_class = obj)
         serializer = self.get_serializer_class()(qs,many = True)
