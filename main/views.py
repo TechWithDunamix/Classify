@@ -548,6 +548,13 @@ class ChatClassView(generics.GenericAPIView):
         return Response(
             serializer.data
         )
+    def delete(self,request,class_id = None,id = None,*args,**kwargs):
+        qs = get_object_or_404(Class,id = class_id)
+        obj = get_object_or_404(qs.class_message.all(),id = id)
+        obj.delete()
+        return Response("Deleted successfully")
+        
+
 
 
 class AnnouncementView(generics.GenericAPIView):
