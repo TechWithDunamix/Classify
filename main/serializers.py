@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles
 from django.shortcuts import get_object_or_404
+from .validators import file_size_validator
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
@@ -322,9 +323,16 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
 class ClassFilesSerializer(serializers.ModelSerializer):
     file_url = serializers.SerializerMethodField
+    _file = serializers.FileField(validators = [file_size_validator])
     class  Meta:
         model = ClassFiles
-        fields = ['id','date_created','_file']
+        fields = ['id','date_created','_file',"name"]
+
+        extra_kwargs = {
+            "name":{
+                "required":False
+            }
+        }
 
     def get_file_url(self,obj):
         request = self.context.get("request")

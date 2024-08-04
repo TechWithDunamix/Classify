@@ -20,6 +20,7 @@ from django.shortcuts import get_object_or_404,get_list_or_404
 from django.contrib.contenttypes.models import ContentType
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+import faker
 class UserSignUpView(generics.GenericAPIView):
     serializer_class = UserSignupSerializer
 
@@ -674,8 +675,8 @@ class ClassFileView(generics.GenericAPIView):
         serializer = self.get_serializer_class()(data = request.data)
         
         _class = get_object_or_404(Class,id = class_id)
-
-        qs = ClassFiles.objects.filter(_class = _class).order_by("-date_created")
+        query = Q(_class = _class) | Q(user = request.user)
+        qs = ClassFiles.objects.filter(query).order_by("-date_created")
         serializer = self.get_serializer_class()(qs,many = True,context = {
             "request":request
         })
@@ -688,28 +689,27 @@ class ClassFileView(generics.GenericAPIView):
         return Response(serializer.data)
         
     def post(self,request,*args, **kwargs):
-        class_id = request.GET.get("class_id")
-        if not class_id:
-            return Response(
-                {
-                    "detail":"Provide class id as a get param"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+       class_id = request.GET.get("class_id")
+       query = Q(members__user = request.user) | Q(owner = request.user)
+       _class_qs = Class.objects.filter(query)
+       try:
+           _class = _class_qs.get(id = class_id)
+       except Class.DoesNotExist:
+           _class = None 
 
-        serializer = self.get_serializer_class()(data = request.data)
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        _file = request.FILES.get("_file")
-        _class = get_object_or_404(Class,id = class_id)
-        ClassFiles.objects.create(
-            _class = _class,
-            _file = _file
-        )
-        return Response(serializer.data)
+       serializer = self.get_serializer_class()(data = request.data)
+       if not serializer.is_valid():
+           return Response(serializer.errors,status=400)
+       fake = faker.Faker()
+       name = serializer.validated_data.get("name",fake.file_name())
+       ClassFiles.objects.create(
+           _file = request.FILES.get("_file"),
+           user = request.user,
+           name = name,
+           _class = _class
+       )
+       return Response("success")
+
     
     def delete(self,request,file_id = None,*args, **kwargs):
         class_id = request.GET.get("class_id")

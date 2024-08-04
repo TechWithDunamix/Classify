@@ -118,9 +118,16 @@ class ClassWork(models.Model):
 
 class ClassFiles(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
-    _class = models.ForeignKey(Class,related_name='classfiles',on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    code = models.CharField(max_length=200)
+
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name = 'user_files',null = True)
+    _class = models.ForeignKey(Class,related_name='classfiles',on_delete=models.CASCADE,null = True)
     _file = models.FileField(blank=False,null = False,upload_to='class_files')
     
+    def save(self,*args, **kwargs):
+        self.code = crypto.get_random_string(7)
+        return super().save(*args, **kwargs)
 class Assignment(models.Model):
     title = models.CharField(max_length=240)
     draft = models.BooleanField(default=False)
