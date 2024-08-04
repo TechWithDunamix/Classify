@@ -289,7 +289,9 @@ class TopicView(generics.GenericAPIView):
                 "detail" : "provide class id as a get param i.e url/endpoint?class_id={class_id}"
             },
             status=status.HTTP_400_BAD_REQUEST)
-        _class = get_object_or_404(self.get_class_queryset(),id = class_id)
+        query = Q(owner=self.request.user) | Q(members__user=self.request.user)
+        qs = Class.objects.filter(query)
+        _class = get_object_or_404(qs,id = class_id)
         qs = Topic.objects.filter(_class=_class).all()
         serializer = self.get_serializer_class()(instance=qs,many = True)
         return Response(serializer.data)
@@ -370,7 +372,8 @@ class TopicUpdateView(generics.GenericAPIView):
     def get_class_queryset(self):
         return Class.objects.filter(owner=self.request.user).all()
     def get_topic_queryset(self):
-        return Topic.objects.filter(_class__owner = self.request.user)
+        query = Q(_class__owner = self.request.user) | Q(_class__members__user=self.request.user)
+        return Topic.objects.filter(query)
     def get_topic_updates_queryset(self):
         return TopicUpdate.objects.filter(_class__owner = self.request.user)
     def get(self,request,topic_id = None,*args,**kwargs):
@@ -599,7 +602,8 @@ class AnnouncementView(generics.GenericAPIView):
             return Response({
                 "message":"include class id as a get pearam"
             },status=status.HTTP_400_BAD_REQUEST)
-        _obj = Class.objects.filter(members__user=request.user)
+        query = Q(members__user=request.user) | Q(owner = request.user)
+        _obj = Class.objects.filter(query)
 
         obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
         qs = Anouncement.objects.filter(_class = obj)
