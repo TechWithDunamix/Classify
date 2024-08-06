@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment
+from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment,Grading,MemberShip
 from django.shortcuts import get_object_or_404
 from .validators import file_size_validator
 class UserSignupSerializer(serializers.ModelSerializer):
@@ -356,3 +356,22 @@ class CommentSerializer(serializers.ModelSerializer):
             return obj.user_name
         except AttributeError:
             pass
+
+class GradingSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
+    def get_title(self,obj):
+        return obj.title
+    def get_username(self,obj):
+        return obj.username
+    class Meta:
+        model = Grading
+        fields = ['score',"title","username"]
+
+
+class MemberSerializer(serializers.ModelSerializer):
+    user = UserProfileViewSerializer()
+    class Meta:
+        model = MemberShip
+        fields = "__all__"

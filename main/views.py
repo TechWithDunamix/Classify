@@ -9,9 +9,10 @@ from django.utils import crypto,timezone
 from django.db.models import Q
 from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
-                        TopicSerializer,CommentSerializer,
+                        TopicSerializer,CommentSerializer,GradingSerializer,
                         AssignmentSerializer,TopicUpdateSerializer,ClassFilesSerializer,
-                        WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer,AnnouncementSerializer)
+                        WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer,AnnouncementSerializer,
+                        MemberSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
 from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment
@@ -772,3 +773,57 @@ class CommentView(generics.GenericAPIView):
         return Response(serializer.data)
 
 
+class TeacherGradingView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = GradingSerializer
+    def dispatch(self, request, *args, **kwargs):
+        if not request.GET.get("class_id"):
+            return HttpResponseBadRequest("Provide class_id as a get_param")
+        return super().dispatch(request, *args, **kwargs)
+    def get_cls_qs(self):
+        return Class.objects.filter(owner = self.request.user)
+    def get(self,request,*args, **kwargs):
+        _class_qs = self.get_cls_qs()
+        class_id = request.GET.get("class_id")
+        obj = get_object_or_404(_class_qs,id = class_id)
+        qs = obj.student_grading.all()
+        serializer = self.get_serializer_class()(qs,many = True)
+        return Response(serializer.data)
+
+
+class StudentGradingView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = GradingSerializer
+    def dispatch(self, request, *args, **kwargs):
+        if not request.GET.get("class_id"):
+            return HttpResponseBadRequest("Provide class_id as a get_param")
+        return super().dispatch(request, *args, **kwargs)
+    def get_cls_qs(self):
+        return Class.objects.filter(members__user = self.request.user)
+    def get(self,request,*args, **kwargs):
+        _class_qs = self.get_cls_qs()
+        print(_class_qs)
+        class_id = request.GET.get("class_id")
+        obj = get_object_or_404(_class_qs,id = class_id)
+        qs = obj.student_grading.filter(user = request.user)
+        serializer = self.get_serializer_class()(qs,many = True)
+        return Response(serializer.data)
+    
+class MembersView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MemberSerializer
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.GET.get("class_id"):
+            return HttpResponseBadRequest("Provide class_id as a get_param")
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_cls_qs(self):
+        return Class.objects.filter(owner = self.request.user)
+    def get(self,request,*args, **kwargs):
+        class_id = request.GET.get("class_id")
+        _class_qs = self.get_cls_qs()
+        obj = get_object_or_404(_class_qs,id = class_id)
+        users = obj.members.all()
+        serializer = self.get_serializer_class()(users,many = True) 
+        return Response(serializer.data)

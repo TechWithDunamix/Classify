@@ -248,4 +248,10 @@ class Grading(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE,related_name = 'grades')
     score = models.IntegerField(default=0)
 
+    @property
+    def username(self):
+        return self.user.username 
     
+    @property
+    def title(self):
+        return self.assignment.title
