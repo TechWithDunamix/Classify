@@ -1,5 +1,6 @@
 # from adrf.views import APIView
 from . import constants
+from django.http import HttpResponseBadRequest
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
@@ -8,12 +9,12 @@ from django.utils import crypto,timezone
 from django.db.models import Q
 from .serializers import (UserSignupSerializer,UserLoginSerializer,
                         UserProfileViewSerializer,ClassSerializer,
-                        TopicSerializer,
+                        TopicSerializer,CommentSerializer,
                         AssignmentSerializer,TopicUpdateSerializer,ClassFilesSerializer,
                         WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer,AnnouncementSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
-from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles
+from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404,get_list_or_404
@@ -729,3 +730,45 @@ class ClassFileView(generics.GenericAPIView):
         obj.delete()
         return Response("delete successfull")
         
+
+class CommentView(generics.GenericAPIView):
+    serializer_class= CommentSerializer
+    permission_classes = [IsAuthenticated]
+    def get_class_qs(self):
+        user = self.request.user 
+        query = Q(owner = user) | Q(members__user = user)
+        class_qs = Class.objects.filter(query)
+        return class_qs
+    def dispatch(self, request, *args, **kwargs):
+        if not request.GET.get("class_id"):
+            return HttpResponseBadRequest({
+                "message" : "Provide class_id as get pram"
+            })
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self,request,id,*args,**kwargs):
+        class_qs = self.get_class_qs()
+        class_id =request.GET.get("class_id")
+        _class = get_object_or_404(class_qs,id = class_id)
+        obj = get_object_or_404(_class.announcments.all(),id = id)
+        qs = obj.announcment_comment.all()
+        serializer = self.get_serializer_class()(qs,many =True)
+        return Response(serializer.data,status = 200)
+    def post(self,request,id = None,*args, **kwargs):
+        class_qs = self.get_class_qs()
+        class_id =request.GET.get("class_id")
+        _class = get_object_or_404(class_qs,id = class_id)
+
+        anouncment = get_object_or_404(_class.announcments.all(),id = id)
+        serializer = self.get_serializer_class()(data = request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors,status=400)
+        Comment.objects.create(
+            content = serializer.validated_data['content'],
+            anouncement = anouncment,
+            user = request.user,
+            _class = _class
+        )
+        return Response(serializer.data)
+
+

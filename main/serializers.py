@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles
+from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment
 from django.shortcuts import get_object_or_404
 from .validators import file_size_validator
 class UserSignupSerializer(serializers.ModelSerializer):
@@ -337,3 +337,22 @@ class ClassFilesSerializer(serializers.ModelSerializer):
     def get_file_url(self,obj):
         request = self.context.get("request")
         return request.build_absoulte_uri(obj._file)
+    
+
+class CommentSerializer(serializers.ModelSerializer):
+    user_name = serializers.SerializerMethodField(read_only = True)
+    class Meta:
+        model = Comment
+        fields = ['date','content',"user_name"]
+
+        extra_kwargs = {
+            "user_name":{
+                "ready_only":True
+            }
+        }
+
+    def get_user_name(self,obj):
+        try:
+            return obj.user_name
+        except AttributeError:
+            pass

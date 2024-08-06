@@ -1,7 +1,8 @@
 from django.urls import path 
 from .views import (UserSignUpView,UserLoginView,
 UserProfileView,ClassView,StudentClassView,TeacherAssignmentView,TopicView,TopicUpdateView,
-WorkSubmitionView,WorkMarkView,ChatClassView,AnnouncementView,ClassFileView,StudentAssignmentView)
+WorkSubmitionView,WorkMarkView,ChatClassView,AnnouncementView,ClassFileView,StudentAssignmentView,
+CommentView)
 
 urlpatterns = [
      path("auth/signup",UserSignUpView.as_view()),
@@ -27,6 +28,8 @@ urlpatterns = [
      path("class/announcement/<uuid:id>",AnnouncementView.as_view()),
      path("class/files",ClassFileView.as_view()),
      path("class/files/<int:file_id>",ClassFileView.as_view()),
+     path("comment/<uuid:id>",CommentView.as_view()),
+
      
 
 

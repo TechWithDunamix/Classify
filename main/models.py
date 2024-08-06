@@ -178,6 +178,17 @@ class Anouncement(models.Model):
     def __str__(self):
         return self._class.name 
 
+class Comment(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,unique=True)
+    _class = models.ForeignKey(Class,related_name='announcments_comments',on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='comments')
+    anouncement  = models.ForeignKey(Anouncement, on_delete=models.CASCADE,
+                                     related_name='announcment_comment')
+    content =models.TextField()
+    @property
+    def user_name(self):
+        return self.user.username
 class Topic(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,unique=True)
     _class = models.ForeignKey(Class,related_name='topics',on_delete=models.CASCADE)
@@ -229,3 +240,12 @@ class ClassChat(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     content = models.TextField(default = '')
     active = models.BooleanField(default=True)
+
+
+class Grading(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name = "grading")
+    _class = models.ForeignKey(Class, on_delete=models.CASCADE,related_name="student_grading")
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE,related_name = 'grades')
+    score = models.IntegerField(default=0)
+
+    
