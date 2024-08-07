@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'daphne',
     'channels',
     'rest_framework',
+    "corsheaders",
     'rest_framework.authtoken',
     "django.contrib.admin",
     "django.contrib.auth",
@@ -42,11 +43,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'main.apps.MainConfig',
+    
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -150,3 +153,11 @@ CHANNEL_LAYERS = {
 # settings.py
 
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
+
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",
+    
+    "http://localhost:5173",
+    "http://127.0.0.1:9000",
+]
+

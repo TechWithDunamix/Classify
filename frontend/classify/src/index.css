@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-p{
+*{
   font-family: "Rubik";
+}
+
+button {
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px
+
 }

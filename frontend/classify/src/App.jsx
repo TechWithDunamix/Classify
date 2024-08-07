@@ -1,11 +1,16 @@
-import './App.css'
-
+import {BrowserRouter,Routes,Route} from "react-router-dom"
+import SignUpForm from "./components/signupform"
+// import HomePage from "./pages/site/home"
 function App() {
 
   return (
-    <>
-     <p className='text-red-600'>Hello world </p>
-    </>
+    <BrowserRouter>
+        <Routes>
+          <Route index element={<SignUpForm />} />
+
+        </Routes>
+    
+    </BrowserRouter>
   )
 }
 

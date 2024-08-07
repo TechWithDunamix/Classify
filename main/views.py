@@ -17,7 +17,7 @@ from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
 from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.shortcuts import get_object_or_404,get_list_or_404
 from django.contrib.contenttypes.models import ContentType
 from channels.layers import get_channel_layer
@@ -25,6 +25,8 @@ from asgiref.sync import async_to_sync
 import faker
 class UserSignUpView(generics.GenericAPIView):
     serializer_class = UserSignupSerializer
+    permission_classes= [AllowAny]
+    authentication_classes = []
 
     def get_serializer_class(self):
         return UserSignupSerializer
@@ -46,7 +48,7 @@ class UserSignUpView(generics.GenericAPIView):
 
 class UserLoginView(generics.GenericAPIView):
     serializer_class = UserLoginSerializer
-    
+    permission_classes = [AllowAny]
     def post(self,request,*args,**kwargs):
         serializer  = self.get_serializer_class()(data = request.data)
         if serializer.is_valid():
