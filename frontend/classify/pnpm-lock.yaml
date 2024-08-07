@@ -24,8 +24,8 @@ importers:
         specifier: ^1.0.6
         version: 1.0.6(react@18.3.1)
       '@zayne-labs/callapi':
-        specifier: ^0.5.2
-        version: 0.5.2
+        specifier: ^0.5.3
+        version: 0.5.3
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -44,7 +44,7 @@ importers:
         version: 18.3.0
       '@vitejs/plugin-react':
         specifier: ^4.3.1
-        version: 4.3.1(vite@5.3.5)
+        version: 4.3.1(vite@5.4.0)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.41)
@@ -67,11 +67,11 @@ importers:
         specifier: ^8.4.41
         version: 8.4.41
       tailwindcss:
-        specifier: ^3.4.7
-        version: 3.4.7
+        specifier: ^3.4.8
+        version: 3.4.8
       vite:
-        specifier: ^5.3.5
-        version: 5.3.5
+        specifier: ^5.4.0
+        version: 5.4.0
 
 packages:
 
@@ -523,8 +523,8 @@ packages:
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0
 
-  '@zayne-labs/callapi@0.5.2':
-    resolution: {integrity: sha512-+/MbrGy3LhW2OqQ7AzDMU3f/wxeKEtva5+g+XVl2JCPt/IiLgyucpP3uytYpEsuJ2cwS73RG6QRSn2628iviRg==}
+  '@zayne-labs/callapi@0.5.3':
+    resolution: {integrity: sha512-Gy8dFkkMcC0cs3YvQelPVGBpBB7wk1WhIF6S6om+GTY7YGsbPqn2csTm7mCF1nT08ki0S90ct+W84TwykkP40g==}
     engines: {node: '>=18.17.x'}
 
   acorn-jsx@5.3.2:
@@ -1580,8 +1580,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  tailwindcss@3.4.7:
-    resolution: {integrity: sha512-rxWZbe87YJb4OcSopb7up2Ba4U82BoiSGUdoDr3Ydrg9ckxFS/YWsvhN323GMcddgU65QRy7JndC7ahhInhvlQ==}
+  tailwindcss@3.4.8:
+    resolution: {integrity: sha512-GkP17r9GQkxgZ9FKHJQEnjJuKBcbFhMFzKu5slmN6NjlCuFnYJMQ8N4AZ6VrUyiRXlDtPKHkesuQ/MS913Nvdg==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -1645,8 +1645,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  vite@5.3.5:
-    resolution: {integrity: sha512-MdjglKR6AQXQb9JGiS7Rc2wC6uMjcm7Go/NHNO63EwiJXfuk9PgqiP/n5IDJCziMkfw9n4Ubp7lttNwz+8ZVKA==}
+  vite@5.4.0:
+    resolution: {integrity: sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -1654,6 +1654,7 @@ packages:
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
+      sass-embedded: '*'
       stylus: '*'
       sugarss: '*'
       terser: ^5.4.0
@@ -1665,6 +1666,8 @@ packages:
       lightningcss:
         optional: true
       sass:
+        optional: true
+      sass-embedded:
         optional: true
       stylus:
         optional: true
@@ -2108,18 +2111,18 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react@4.3.1(vite@5.3.5)':
+  '@vitejs/plugin-react@4.3.1(vite@5.4.0)':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.25.2)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.25.2)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.3.5
+      vite: 5.4.0
     transitivePeerDependencies:
       - supports-color
 
-  '@zayne-labs/callapi@0.5.2': {}
+  '@zayne-labs/callapi@0.5.3': {}
 
   acorn-jsx@5.3.2(acorn@8.12.1):
     dependencies:
@@ -3353,7 +3356,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tailwindcss@3.4.7:
+  tailwindcss@3.4.8:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -3455,7 +3458,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@5.3.5:
+  vite@5.4.0:
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.41

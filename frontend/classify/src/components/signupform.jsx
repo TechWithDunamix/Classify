@@ -91,12 +91,12 @@ const SignUpForm = () => {
     const config = {
       "method" : "POST",
       body:data,
-      headers:{
-        "Authorization" : `Token ${localStorage.getItem("token")}`
-      }
+      // headers:{
+      //   "Authorization" : `Token ${localStorage.getItem("token")}`
+      // }
       
     }
-    const request = await fetch("http://localhost:8000/api/v1/auth/signup/",config)
+    const request = await callMainApi("/auth/signup/",config)
     if (request.error){
       setStep(1)
       setFormErrors(
