@@ -12,3 +12,7 @@ button {
   border-bottom-right-radius: 40px
 
 }
+
+body{
+  overflow-x: hidden;
+}

@@ -80,7 +80,8 @@ class UserProfileView(generics.GenericAPIView):
     def get(self,request,*args,**kwargs):
         serializer = self.get_serializer_class()(
             self.get_queryset(),
-            context = {"request":request}
+            context = {"request":request},
+            
             )
         return Response(serializer.data)
 

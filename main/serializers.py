@@ -3,10 +3,11 @@ from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpda
 from django.shortcuts import get_object_or_404
 from .validators import file_size_validator
 class UserSignupSerializer(serializers.ModelSerializer):
+        
     class Meta:
         fields = '__all__'
         model = User 
-
+        
         extra_kwargs = {
             "password":{
                 "write_only":True 
@@ -46,6 +47,11 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 class UserProfileViewSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make all fields not required
+        for field in self.fields.values():
+            field.required = False
     image_url = serializers.SerializerMethodField()
     class Meta:
         model = User
@@ -77,7 +83,7 @@ class UserProfileViewSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get("username",instance.username)
         instance.profile_image = validated_data.get("profile_image",instance.profile_image)
         instance.intro = validated_data.get("intro",instance.intro)
-        # instance.
+        instance.save()
         return instance
 class ClassSettingSerializer(serializers.ModelSerializer):
     class Meta:

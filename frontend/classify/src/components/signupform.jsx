@@ -3,8 +3,8 @@ import 'daisyui/dist/full.css';
 import PagesLayout from './UI/pageslayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faEnvelope, faLock, faUser, faCalendarDay, faFileImage, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { callMainApi } from '../utils';
-import { toQueryString } from "@zayne-labs/callapi"
+import { api } from '../utils';
+import Loader from './widgets/loader';
 const interestsList = [
   { name: 'Programming', emoji: '💻' },
   { name: 'Design', emoji: '🎨' },
@@ -25,6 +25,7 @@ const interestsList = [
 
 const SignUpForm = () => {
   const [step, setStep] = useState(1);
+  const[isLoading,SetIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -79,6 +80,7 @@ const SignUpForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    SetIsLoading(true)
     e.preventDefault();
     console.log(formData); 
     formData['intrest'] = formData.interest
@@ -87,27 +89,27 @@ const SignUpForm = () => {
         data.append(key, formData[key]);
     });
     data.append("profile_image",formData.profileImage[0])
-    console.log(Array.from(data.entries()))
-    const config = {
-      "method" : "POST",
-      body:data,
-      // headers:{
-      //   "Authorization" : `Token ${localStorage.getItem("token")}`
-      // }
-      
-    }
-    const request = await callMainApi("/auth/signup/",config)
-    if (request.error){
-      setStep(1)
-      setFormErrors(
-        {
-          "email":request.error.errorData.email
-        }
-
-      )
-    }
-    console.log(request)
     
+    api.post('/auth/signup/', data, {}, 5000,
+      (data, status) => {
+          SetIsLoading(false)
+          console.log(data)
+          localStorage.setItem("token",data.token)
+          localStorage.setItem("email",data.email)
+          localStorage.setItem("id",data.id)
+      },
+      (err, status) => {
+
+        SetIsLoading(false)
+        if (status === 400){
+          setStep(1)
+          setFormErrors(
+            err.message
+          )
+        }
+      },
+      (err) => alert("Request timeout")
+    );
   };
 
   return (
@@ -300,7 +302,9 @@ const SignUpForm = () => {
                     <FontAwesomeIcon icon={faChevronRight} className="w-5 h-5 inline-block mr-2" />
                     Finish
                   </button>
+                 
                 </div>
+                {isLoading && <Loader />}
               </div>
             )}
           </form>
