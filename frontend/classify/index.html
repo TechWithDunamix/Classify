@@ -2,12 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="" href="./src/assets/react.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>Classify</title>
+    <style>
+      @keyframes loader {
+        0% {
+          transform: scale(1.5);
+          color: rgb(41, 2, 46);
+        }
+        50% {
+          transform: scale(0.5);
+          color: purple;
+        }
+        100% {
+          transform: scale(1.5);
+          color: rgb(77, 9, 67);
+        }
+      }
+
+      #load {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgb(43, 1, 43);
+   
+        font-stretch: ultra-expanded;
+        animation: loader 2s infinite;
+      }
+      #load p{
+        font-size: 1.4rem;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <div id="load" class="loader">
+      <div>
+        <p>Classify 
+        <span style="font-size:0.5rem">By Dunamix</span>
+
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
