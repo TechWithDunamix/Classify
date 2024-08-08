@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="flex h-screen">
-      <div className={`bg-secondary text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-16 md:w-16' : 'w-full md:w-64'}`}>
+      <div className={`bg-secondary text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-16s md:w-16' : 'w-full md:w-64'}`}>
         <div className="font-bold text-2xl p-5 text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
           {isCollapsed ? '' : 'Classroom'}
         </div>
@@ -46,10 +46,10 @@ const DashboardLayout = ({ children }) => {
           <div>Classify</div>
          
           <div className="dropdown dropdown-end">
-            <button className="btn btn-square btn-ghost">
+            <button className="btn btn-square btn-ghost z-250">
               <FontAwesomeIcon icon={faUsers} />
             </button>
-            <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-4 text-purple-800">
+            <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-4 text-purple-800 z-50">
               <li><a href="#">Profile</a></li>
               <li><a href="#">Settings</a></li>
               <li><a href="#">Logout</a></li>
