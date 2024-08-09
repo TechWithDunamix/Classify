@@ -78,6 +78,8 @@ class ClassSetting(models.Model):
     student_can_post = models.BooleanField(default=False)
     student_can_comment = models.BooleanField(default=True)
     default_grade = models.IntegerField(default=100)
+    use_code = models.BooleanField(default = True)
+
 
 class Class(models.Model):
     id = models.UUIDField(primary_key=True,editable=False,unique=True,default=uuid.uuid4)
@@ -99,7 +101,9 @@ class Class(models.Model):
         return self.name
 
     def save(self,*args,**kwargs):
+        
         super().save(*args, **kwargs)
+
 
 class ClassWork(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,unique=True)

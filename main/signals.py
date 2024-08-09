@@ -9,7 +9,9 @@ def set_class_code(**kwargs):
     if kwargs.get("created"):
         obj = kwargs.get("instance")
         obj.class_code = crypto.get_random_string(8)
+
         obj.save()
+    
     
 
 @receiver(signal=pre_save,sender = Assignment)

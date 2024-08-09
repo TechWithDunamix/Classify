@@ -98,7 +98,19 @@ class ClassSettingSerializer(serializers.ModelSerializer):
 class ClassSerializer(serializers.ModelSerializer):
     setting= serializers.SerializerMethodField()
     cover_image_url = serializers.SerializerMethodField()
-  
+    cover = serializers.ImageField(required = False)
+    student_can_post = serializers.BooleanField(required=False)
+    student_can_comment = serializers.BooleanField(required=False)
+    default_grade = serializers.IntegerField(required=False)
+    use_code = serializers.BooleanField(required=False)
+
+
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.context.get("request").method == "PUT":
+            for fields in self.fields.values():
+                fields.required = False
+        
     class Meta:
         model = Class
         fields = '__all__'
@@ -106,6 +118,9 @@ class ClassSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "owner":{
                 "read_only":True 
+            },
+            "required":{
+                "read_only":False
             },
             "class_setting":{
                 "read_only":True 
@@ -155,7 +170,6 @@ class ClassSerializer(serializers.ModelSerializer):
 
     def update(self,instance,validated_data):
         instance.name = validated_data.get("name",instance.name)
-        instance.cover = validated_data.get("cover",instance.cover)
         instance.category = validated_data.get("category",instance.category)
         instance.description = validated_data.get("description",instance.description)
         instance.setting.student_can_post = validated_data.get("student_can_post",
@@ -166,9 +180,14 @@ class ClassSerializer(serializers.ModelSerializer):
         
         instance.setting.default_grade = validated_data.get("default_grade",
                                     instance.setting.default_grade)
+        
+        instance.setting.use_code = validated_data.get("use_code",instance.setting.use_code)
+
 
         instance.save()
         instance.setting.save()
+
+        return instance
         
 
 

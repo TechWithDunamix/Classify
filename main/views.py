@@ -142,6 +142,9 @@ class ClassView(generics.GenericAPIView):
     
     def put(self,request,id = None,*args,**kwargs):
         obj = get_object_or_404(self.get_queryset(),id = id)
+        
+        # request.data.pop("cover")
+
         serializer = self.get_serializer_class()(
             data = request.data,
             instance=obj,
@@ -150,11 +153,14 @@ class ClassView(generics.GenericAPIView):
             }
         )
         if serializer.is_valid():
-            serializer.update(instance=obj,validated_data=serializer.validated_data)
+            obj = serializer.update(instance=obj,validated_data=serializer.validated_data)
+            if request.FILES.get("cover"):
+                obj.cover = request.FILES.get("cover")
+                obj.save()
+            
             return Response(serializer.data)
 
-        return Response(serializer.data)
-
+        return Response(serializer.errors,status = 400)
 class StudentClassView(generics.GenericAPIView):
     serializer_class = ClassSerializer
     permission_classes = [IsAuthenticated]
@@ -167,7 +173,7 @@ class StudentClassView(generics.GenericAPIView):
         return Response(serializer.data)
     def post(self,request,class_id = None,*args, **kwargs):
 
-        _class = get_object_or_404(Class,class_code = class_id)
+        _class = get_object_or_404(Class.objects.filter(use_code = True),class_code = class_id)
         member,created = MemberShip.objects.get_or_create(user = request.user,_class=_class)
         response = {
             "detail":"user already in group",

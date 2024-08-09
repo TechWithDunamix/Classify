@@ -13,13 +13,15 @@ const ProfileSettings1 = ({data}) => {
   };
 
  
-
+  const  handleChange = (e) => {
+    setImage(e.target.files[0])
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
     const formData = new FormData()
     formData.append("profile_image",image)
 
-    api.put("/user/profile",formData,{},5000,
+    api.put("/user/profile",formData,{},50000,
       (data,status) => {
         console.log(data)
         window.location.reload()
@@ -87,7 +89,7 @@ const ProfileSettings1 = ({data}) => {
           className="rounded-full w-[12rem] h-[12rem] text-center mt-8"
             />
 
-         <input onChange = {(e) => setImage(e.target.files[0])} type="file" className="file-input file-input-bordered w-full max-w-xs mt-10 " />
+         <input onChange = {handleChange} type="file" className="file-input file-input-bordered w-full max-w-xs mt-10 " />
 
          <button onClick = {handleSubmit} className='mx-2 my-2 btn bg-purple-950 text-white mt-4 rounded-sm'>Upload</button>
 
