@@ -5,6 +5,7 @@ import DashboardHome from './pages/webapp/dashboardhome';
 import PrivateRoute from './pages/protectedroutes';
 import ProfilePage from './pages/webapp/profile';
 import CreateNewClass from './pages/webapp/createNewClass';
+import TeacherViewClass from './pages/webapp/teachertabs';
 function App() {
   
   return (
@@ -14,6 +15,8 @@ function App() {
         <Route path="d" element={<PrivateRoute element={<DashboardHome />} />} />
         <Route path="profile" element={<PrivateRoute element={<ProfilePage />} />} />
         <Route path="class/new" element={<PrivateRoute element={<CreateNewClass />} />} />
+        <Route path="class/view/:id" element={<PrivateRoute element={<TeacherViewClass />} />} />
+
 
 
       </Routes>

@@ -1,12 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
-
+import { Link } from 'react-router-dom';
 const ClassCard = ({ data }) => {
   return (
     <div className="relative card w-full sm:w-64 md:w-72 shadow-sm bg-white text-gray-800 rounded-md m-2">
       <button className="absolute text-purple-600 top-2 right-2 bg-gray-100 p-2 rounded-full shadow hover:bg-gray-200">
-        <FontAwesomeIcon icon={faEye} className="text-purple-600" />
+        <Link to={`/class/view/${data.id}`}> <FontAwesomeIcon icon={faEye} className="text-purple-600" /></Link>
       </button>
       {data.image_url ? (
         <div
