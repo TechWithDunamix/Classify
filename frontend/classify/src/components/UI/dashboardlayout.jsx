@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="flex h-screen">
-      <div className={`bg-secondary text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-16s md:w-16' : 'w-full md:w-64'}`}>
+      <div className={`bg-secondary  text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-16s md:w-16' : 'w-full md:w-64'}`}>
         <div className="font-bold text-2xl p-5 text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
           {isCollapsed ? '' : 'Classroom'}
         </div>
@@ -56,7 +56,7 @@ const DashboardLayout = ({ children }) => {
             </ul>
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-2 overflow-x-hidden ">
+        <div className="flex-1 overflow-y-auto p-0 overflow-x-hidden ">
           {isCollapsed && children}
         </div>
       </div>

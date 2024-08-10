@@ -4,7 +4,7 @@ const TabLayout = ({ children }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const tabs = ['Stream', 'Classwork', 'People', 'Grades'];
+  const tabs = ['Stream', 'Classwork', 'People', 'Grades',"Setting"];
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -13,7 +13,7 @@ const TabLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl md:px-6 px-1">
         <div className="tabs flex justify-start">
           {/* Show first two tabs */}
           {tabs.slice(0, 2).map((tab, index) => (

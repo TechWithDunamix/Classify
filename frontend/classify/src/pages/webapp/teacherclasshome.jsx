@@ -81,7 +81,7 @@ const TeachersClassHome = () => {
     };
 
     return (
-        <div className="p-4">
+        <div className="">
             {classData?.cover_image_url ? (
                 <div className="relative">
                     <div
