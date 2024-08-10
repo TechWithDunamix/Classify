@@ -8,10 +8,10 @@ const ClassCard = ({ data }) => {
       <button className="absolute text-purple-600 top-2 right-2 bg-gray-100 p-2 rounded-full shadow hover:bg-gray-200">
         <Link to={`/class/view/${data.id}`}> <FontAwesomeIcon icon={faEye} className="text-purple-600" /></Link>
       </button>
-      {data.image_url ? (
+      {data.cover_image_url ? (
         <div
           className="h-28 bg-cover bg-center rounded-t-md"
-          style={{ backgroundImage: `url(${data.image_url})` }}
+          style={{ backgroundImage: `url(${data.cover_image_url})` }}
         ></div>
       ) : (
         <div className="h-28 flex items-center justify-center bg-gray-200 rounded-t-md">

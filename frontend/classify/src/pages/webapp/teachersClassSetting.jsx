@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loader from "../../components/widgets/loader"
 import { useEffect } from "react";
 import { api } from "../../utils";
 import {
@@ -15,7 +16,7 @@ const ClassSettings = () => {
   const {id} = useParams()
   const [classData,setClassData] = useState({})
   const [classDataNew,setNewClassData] = useState({})
-   
+  const [isLoading,setIsLoading]= useState(false)
   const fetchData = () => {
     api.get(
         `/class/${id}`, 
@@ -48,22 +49,32 @@ const ClassSettings = () => {
   
     const handleInputChange = (e) => {
       const { name, value } = e.target;
-      setNewClassData((prevUser) => ({
-        ...prevUser,
-        [name]: value,
-      }));
-
       setClassData((prevUser) => ({
         ...prevUser,
         [name]: value,
       }));
-      if (name == "student_can_post"){
-        setClassData((prevUser) => ({
-          ...prevUser,
-          ['student_can_post'] : !classData.student_can_post,
-        }));
-      }
+     
     };
+
+    const handleSubmit = () => {
+      setIsLoading(true)
+      api.put(`/class/${id}`,classData,{},50000,
+        (data,status) => {
+            window.location.href = "/d"
+        },
+        (err,status) => {
+          setIsLoading(false)  
+
+          alert("AN error occured")
+
+        },
+        (error) => {
+          setIsLoading(false)  
+
+          alert("Error : Time out")
+        }
+      )
+    }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-xl">
@@ -217,10 +228,12 @@ const ClassSettings = () => {
 
             <button
               className="btn bg-purple-800 text-white ml-auto mt-4"
-              onClick={(e) => console.log(classData)}
+              onClick={(e) => handleSubmit()}
             >
               Apply
             </button>
+
+          {isLoading &&  <Loader/> }
           </div>
         </div>
       </div>
