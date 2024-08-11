@@ -208,6 +208,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     _date_due = serializers.SerializerMethodField(read_only=True)
     _mark = serializers.SerializerMethodField(read_only=True)
     _files = serializers.JSONField(required = False)
+    draft = serializers.BooleanField(required=True)
     def date_created(self,obj):
         return obj.date_created
     def get__date_due(self,obj):
@@ -248,6 +249,9 @@ class AssignmentSerializer(serializers.ModelSerializer):
             },
             "mark":{
                 "required":False
+            },
+            "draft":{
+                "required":True
             }
         }
 

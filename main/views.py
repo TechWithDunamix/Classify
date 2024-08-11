@@ -264,7 +264,7 @@ class TeacherAssignmentView(generics.GenericAPIView):
                 _class = _class,
                 _files = serializer.validated_data.get("_files"),
                 options = serializer.validated_data.get("options"),
-                draft=serializer.validated_data.get("draft")
+                draft=serializer.validated_data.get("draft",False)
             )
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)

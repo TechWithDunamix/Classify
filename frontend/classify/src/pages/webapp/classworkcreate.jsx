@@ -3,17 +3,22 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { api } from "../../utils.js";
+import Loader from "../../components/widgets/loader.jsx";
 
 const CreateClassWork = () => {
     const { id } = useParams();
     const [title, setTitle] = useState("");
     const [value, setValue] = useState("");
     const [dateDue, setDateDue] = useState("");
-    const [classworkType, setClassworkType] = useState("");
+    const [classworkType, setClassworkType] = useState("ClassWork");
     const [mark, setMark] = useState("");
     const [files, setFiles] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [newUrl, setNewUrl] = useState("");
+    const [isDraft, setIsDraft] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const handleAddUrl = () => {
         if (newUrl.trim()) {
@@ -27,7 +32,25 @@ const CreateClassWork = () => {
         setFiles(files.filter((_, i) => i !== index));
     };
 
+    const validateForm = () => {
+        const newErrors = {};
+        if (!title.trim()) newErrors.title = "Title is required.";
+        if (!value.trim()) newErrors.value = "Instructions are required.";
+        if (!mark.trim()) {
+            newErrors.mark = "Marks are required.";
+        } else if (!Number.isInteger(Number(mark))) {
+            newErrors.mark = "Marks must be an integer.";
+        }
+        if (!dateDue) newErrors.dateDue = "Date Due is required.";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = () => {
+        if (!validateForm()) return;
+
+        setIsLoading(true);
         const data = {
             title,
             question: value,
@@ -35,10 +58,25 @@ const CreateClassWork = () => {
             classwork_type: classworkType,
             mark,
             _files: files.length ? files : null,
+            draft: isDraft, 
         };
 
-        // Make your API call here using the `data`
-        console.log(data)
+        api.post(`/class/assignment/${id}`, data, {}, 5000,
+            (data, status) => {
+                console.log(data);
+                setIsLoading(false);
+                window.location.href = `/class/view/${id}`
+
+            },
+            (error, status) => {
+                console.log(error);
+            },
+            (error) => {
+                alert("Error timed out");
+                setIsLoading(false);
+            }
+        );
+        console.log(data);
     };
 
     return (
@@ -48,31 +86,35 @@ const CreateClassWork = () => {
                     <h2 className="text-xl font-bold mb-4">Create Class Work</h2>
 
                     <input
-                        className="bg-white w-full py-4 px-2 my-4 border-2"
+                        className={`bg-white w-full py-4 px-2 my-4 border-2 ${errors.title ? 'border-red-600' : ''}`}
                         placeholder="ClassWork Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
+                    {errors.title && <p className="text-red-600">{errors.title}</p>}
 
                     <p className="mb-4">Add Class Work Instructions</p>
-                    <ReactQuill value={value} onChange={setValue} className="h-32 mb-12" />
-
+                    <ReactQuill value={value} onChange={setValue} className={`h-32 mb-12 ${errors.value ? 'border-red-600' : ''}`} />
+                    {errors.value && <p className="text-red-600">{errors.value}</p>}
 
                     <input
-                        className="bg-white w-full py-4 px-2 my-4 border-2"
+                        type="number"
+                        className={`bg-white w-full py-4 px-2 my-4 border-2 ${errors.mark ? 'border-red-600' : ''}`}
                         placeholder="Marks"
                         value={mark}
                         onChange={(e) => setMark(e.target.value)}
                     />
+                    {errors.mark && <p className="text-red-600">{errors.mark}</p>}
 
                     <div className="py-4">
                         <p className="text-slate-700 my-3">Date Due</p>
                         <input
                             type="datetime-local"
-                            className="date bg-white py-2 w-full border-2"
+                            className={`date bg-white py-2 w-full border-2 ${errors.dateDue ? 'border-red-600' : ''}`}
                             value={dateDue}
                             onChange={(e) => setDateDue(e.target.value)}
                         />
+                        {errors.dateDue && <p className="text-red-600">{errors.dateDue}</p>}
                     </div>
 
                     <div className="my-4">
@@ -124,12 +166,26 @@ const CreateClassWork = () => {
                         </div>
                     )}
 
+                    {/* Draft Switch */}
+                    <div className="flex items-center my-4">
+                        <label htmlFor="draft-switch" className="mr-2 text-slate-700">Save as Draft</label>
+                        <input
+                            type="checkbox"
+                            id="draft-switch"
+                            checked={isDraft}
+                            onChange={(e) => setIsDraft(e.target.checked)}
+                            className="toggle-switch"
+                        />
+                    </div>
+
                     <button
                         className="btn bg-purple-800 text-white mt-8"
                         onClick={handleSubmit}
                     >
                         Submit
                     </button>
+
+                    {isLoading && <Loader />}
                 </div>
             </div>
         </DashboardLayout>

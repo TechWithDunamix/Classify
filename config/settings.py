@@ -141,15 +141,23 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication"
     ]
 }
-
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "CONFIG": {
+            "capacity": 1000,  # Number of messages that can be in a channel at once
+            "expiry": 10,  # Number of seconds to keep messages in memory
         },
     },
 }
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 # settings.py
 
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
