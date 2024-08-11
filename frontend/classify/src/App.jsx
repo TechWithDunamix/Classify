@@ -6,6 +6,7 @@ import PrivateRoute from './pages/protectedroutes';
 import ProfilePage from './pages/webapp/profile';
 import CreateNewClass from './pages/webapp/createNewClass';
 import TeacherViewClass from './pages/webapp/teachertabs';
+import CreateClassWork from './pages/webapp/classworkcreate';
 function App() {
   
   return (
@@ -16,6 +17,8 @@ function App() {
         <Route path="profile" element={<PrivateRoute element={<ProfilePage />} />} />
         <Route path="class/new" element={<PrivateRoute element={<CreateNewClass />} />} />
         <Route path="class/view/:id" element={<PrivateRoute element={<TeacherViewClass />} />} />
+        <Route path="class/cw/create/:id" element={<PrivateRoute element={<CreateClassWork />} />} />
+
 
 
 
