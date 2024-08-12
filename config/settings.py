@@ -97,7 +97,7 @@ DATABASES = {
         'USER': 'your_db_user',
         'PASSWORD': 'your_db_password',
         'HOST': 'db',
-        'PORT': '2352',
+        'PORT': '5432',
     }
 }
 
