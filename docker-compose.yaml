@@ -16,7 +16,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      -"2352:2352"
+      - "2352:2352"
     environment:
       POSTGRES_DB: your_db_name
       POSTGRES_USER: your_db_user
