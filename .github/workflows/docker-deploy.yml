@@ -26,4 +26,4 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/classify-web:latest  # Adjust the repository name and tag if necessary
+        tags: techwithdunamix/classify-web:latest  # Adjust the repository name and tag if necessary
