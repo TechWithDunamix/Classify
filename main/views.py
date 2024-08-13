@@ -226,10 +226,14 @@ class TeacherAssignmentView(generics.GenericAPIView):
             draft = True
         else:
             draft = False
-        qs = self.get_object().assignments.filter(draft = draft).all()
+        if draft:
+            qs = self.get_object().assignments.filter(draft = draft).all()
+        else:
+            qs = self.get_object().assignments.all()
+
         return qs
     def get(self,request,class_id = None,*args,**kwargs):
-        obj = self.get_asm_qs()
+        obj = self.get_asm_qs().order_by("-classwork__date_created")
         context = {
             "request":request
         }
@@ -262,7 +266,7 @@ class TeacherAssignmentView(generics.GenericAPIView):
                 question = serializer.validated_data.get("question"),
                 classwork = class_work,
                 _class = _class,
-                _files = serializer.validated_data.get("_files"),
+                _files = serializer.validated_data.get("_files",[]),
                 options = serializer.validated_data.get("options"),
                 draft=serializer.validated_data.get("draft",False)
             )

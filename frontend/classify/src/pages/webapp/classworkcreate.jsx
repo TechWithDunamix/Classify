@@ -5,7 +5,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { api } from "../../utils.js";
 import Loader from "../../components/widgets/loader.jsx";
-
+import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const CreateClassWork = () => {
     const { id } = useParams();
     const [title, setTitle] = useState("");
@@ -57,7 +58,7 @@ const CreateClassWork = () => {
             date_due: dateDue,
             classwork_type: classworkType,
             mark,
-            _files: files.length ? files : null,
+            _files: files.length ? files : [],
             draft: isDraft, 
         };
 
@@ -69,10 +70,18 @@ const CreateClassWork = () => {
 
             },
             (error, status) => {
-                console.log(error);
+                
+                if (status === 404){
+                    window.location.href = "/not-found"
+                }
+
+                if (status === 400){
+                    toast.error("Error 400 : Bad request")
+                    setIsLoading(false)
+                }
             },
             (error) => {
-                alert("Error timed out");
+                toast.error("Sever is to slow , try refreshing")
                 setIsLoading(false);
             }
         );

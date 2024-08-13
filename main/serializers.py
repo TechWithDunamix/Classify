@@ -202,15 +202,22 @@ class ClassSerializer(serializers.ModelSerializer):
 class AssignmentSerializer(serializers.ModelSerializer):
     date_due = serializers.DateTimeField(required=False,write_only=True)
     date_created = serializers.SerializerMethodField(required=False,read_only =True)
+    is_due = serializers.SerializerMethodField(required=False,read_only =True)
+
     classwork_type = serializers.CharField(write_only=True)
     mark = serializers.IntegerField(write_only=True)
     # if self.context.get("request").method == 'GET':
     _date_due = serializers.SerializerMethodField(read_only=True)
     _mark = serializers.SerializerMethodField(read_only=True)
-    _files = serializers.JSONField(required = False)
+    _files = serializers.JSONField(required = False,default = [])
     draft = serializers.BooleanField(required=True)
     def date_created(self,obj):
         return obj.date_created
+    
+    def get_is_due(self,obj):
+        if self.context.get("request").method == "POST":
+            return ""    
+        return obj.is_due
     def get__date_due(self,obj):
         request = self.context.get("request")
         print(self.context)
@@ -227,7 +234,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = ["id",'question','title','options','_files',
-        'date_due','classwork_type','mark','_mark','_date_due','draft',"date_created"]
+        'date_due','classwork_type','mark','_mark','_date_due','draft',"date_created","is_due"]
 
         # if self.context.get("request") == 'GET':
             # fields.append("_mark")

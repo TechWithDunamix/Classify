@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
 import uuid,json 
-from django.utils import crypto
+from django.utils import crypto,timezone
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -137,16 +137,19 @@ class Assignment(models.Model):
     draft = models.BooleanField(default=False)
     _class = models.ForeignKey(Class,related_name='assignments',on_delete=models.CASCADE,null = True)
     classwork = models.OneToOneField(ClassWork,related_name='assingment',on_delete=models.CASCADE)
-    _files = models.JSONField(default = list)
+    _files = models.JSONField(default = list,null=True)
     question = models.TextField()
     options = models.JSONField(null = True,default = list)
     code = models.CharField(max_length=90)
 
+    
     @property
     def date_created(self):
         return self.classwork.date_created
 
-
+    @property
+    def is_due(self):
+        return self.classwork.date_due < timezone.now()
     def save(self,*args, **kwargs):
         
         created = self.pk

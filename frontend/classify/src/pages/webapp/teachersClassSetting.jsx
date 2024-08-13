@@ -11,7 +11,7 @@ import {
   faLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
-
+import { toast } from "react-toastify";
 const ClassSettings = () => {
   const {id} = useParams()
   const [classData,setClassData] = useState({})
@@ -36,11 +36,15 @@ const ClassSettings = () => {
             console.log(classData)
 
         },
-        (error, data) => {
+        (error, status) => {
             console.error("Fetch error:", error);
+            if (status === 400){
+              window.location.href = "/not-found"
+            }
+            
         },
         (error) => {
-            alert("Error: Request timed out");
+            toast.error("server is to slow try refreshing")
         }
     );
 };
@@ -65,7 +69,9 @@ const ClassSettings = () => {
         (err,status) => {
           setIsLoading(false)  
 
-          alert("AN error occured")
+          if (status === 404){
+            window.location.href = "/not-found"
+          }
 
         },
         (error) => {

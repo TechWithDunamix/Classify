@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { api } from "../../utils";
-
+import { Navigate } from "react-router-dom";
 const TeachersClassHome = () => {
     const { id } = useParams();
     const [classData, setClassData] = useState(null);
@@ -19,7 +19,13 @@ const TeachersClassHome = () => {
                 console.log(data);
                 setClassData(data);
             },
-            (error, data) => {
+            (error, status) => {
+               
+                if (status === 404){
+                    window.location.href = "/not-found"
+                }
+
+                
                 console.error("Fetch error:", error);
             },
             (error) => {
@@ -73,6 +79,10 @@ const TeachersClassHome = () => {
             },
             (error, status) => {
                 console.error("Upload error:", error);
+                if (status === 404){
+                    return <Navigate to={"not-found"} />
+
+                }
             },
             (error) => {
                 alert("Request Timeout");

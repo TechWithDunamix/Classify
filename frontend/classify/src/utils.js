@@ -78,7 +78,7 @@ class FetchWrapper {
   }
 }
 
-export const api = new FetchWrapper('http://localhost:8000/api/v1', {
+export const api = new FetchWrapper('http://0.0.0.0:8000/api/v1', {
   'Authorization': `Token ${localStorage.getItem("token")}`
 });
 

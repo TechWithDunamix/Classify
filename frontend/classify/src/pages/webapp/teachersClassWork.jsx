@@ -7,6 +7,9 @@ import { faMagnifyingGlass, faAdd } from "@fortawesome/free-solid-svg-icons";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Link } from "react-router-dom";
+import AssignmentBlock from "../../components/widgets/teacherclassworkview";
+import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
 const TeachersClassClassWork = () => {
     const { id } = useParams();
     const [classWork, setClassWork] = useState(null);
@@ -16,8 +19,12 @@ const TeachersClassClassWork = () => {
             (data, status) => {
                 setClassWork(data);
             },
-            (data, error) => {
-                alert("An error occurred");
+            (data, status) => {
+                
+                if (status === 404){
+                    window.location.href = "/not-found"
+                }
+
             },
             (error) => {
                 alert("Error timed out");
@@ -66,7 +73,20 @@ const TeachersClassClassWork = () => {
     }
 
     return (
-        <p>Hello world {id}</p>
+        <div>
+            <button 
+                    className="btn bg-purple-900 text-white ml-auto text-right"
+                    onClick={openModal}
+                >
+                    <FontAwesomeIcon icon={faAdd} />
+                    <Link to={`/class/cw/create/${id}`}>Create</Link>
+                </button>
+            {classWork.map((data,index) => {
+                return (
+                    <AssignmentBlock key={index} data={data}/>
+                )
+            })}
+        </div>
     );
 };
 

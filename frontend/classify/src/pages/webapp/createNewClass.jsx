@@ -5,7 +5,7 @@ import { faFaceMeh, faPen, faUserFriends, faArrowAltCircleLeft } from '@fortawes
 import { Link } from "react-router-dom";
 import { api } from "../../utils";
 import Loader from "../../components/widgets/loader";
-import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const CreateNewClass = () => {
     const [isLoading,setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
