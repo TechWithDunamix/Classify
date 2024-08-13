@@ -240,7 +240,7 @@ class TeacherAssignmentView(generics.GenericAPIView):
         serializer = self.get_serializer_class()(obj,many = True,context = context)
         return Response(serializer.data)
 
-    def post(self,request,class_id,*args,**kwargs):
+    def post(self,request,class_id = None,*args,**kwargs):
         _class = self.get_object()
         print(_class)
         context = {
@@ -272,6 +272,12 @@ class TeacherAssignmentView(generics.GenericAPIView):
             )
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def delete(self,request,class_id = None,asm_id = None):
+        qs = self.get_object().assignments.all()
+        obj = get_object_or_404(qs,id = asm_id)
+        obj.delete()
+        return Response("Sucess")
+
 
 class StudentAssignmentView(generics.GenericAPIView):
     serializer_class =  AssignmentSerializer

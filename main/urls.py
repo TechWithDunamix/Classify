@@ -12,6 +12,8 @@ urlpatterns = [
      path("class/<uuid:id>",ClassView.as_view()),
      path("class/join/<str:class_id>/",StudentClassView.as_view()),
      path("class/assignment/<uuid:class_id>",TeacherAssignmentView.as_view()),
+     path("class/assignment/<uuid:class_id>/<int:asm_id>",TeacherAssignmentView.as_view()),
+
      path("class/students/assignment",StudentAssignmentView.as_view()),
 
      path("topics",TopicView.as_view()),
