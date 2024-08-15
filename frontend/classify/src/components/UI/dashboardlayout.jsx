@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faHome, faBook, faUsers, faCalendar, faCog } from '@fortawesome/free-solid-svg-icons';
-
+import { Link } from 'react-router-dom';
 const DashboardLayout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -11,30 +11,32 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="flex h-screen">
-      <div className={`bg-secondary  text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-16s md:w-16' : 'w-full md:w-64'}`}>
-        <div className="font-bold text-2xl p-5 text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
-          {isCollapsed ? '' : 'Classroom'}
+      <div className={`bg-secondary  text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-0 md:w-16' : 'w-16 md:w-64'} z-50`}>
+        <div className="font-bold text-2xl p-5 hidden md:inline-block text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
+          {isCollapsed ? '' : 'Classroom'} 
         </div>
-        <ul className="list-none p-0">
+        <ul className={`list-none p-0 ${isCollapsed && "hidden md:block"} mt-12`}>
           <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
-            <FontAwesomeIcon icon={faHome} className="mr-4" />
-            {!isCollapsed && <span>Home</span>}
+           
+           <Link to={"/d"}> <FontAwesomeIcon icon={faHome} className="mr-4" />
+            {!isCollapsed && <span className='hidden md:inline-block'> Home</span>}
+            </Link>
           </li>
           <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
             <FontAwesomeIcon icon={faBook} className="mr-4" />
-            {!isCollapsed && <span>Classes</span>}
+            {!isCollapsed && <span className='hidden md:inline-block'>Classes</span>}
           </li>
           <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
             <FontAwesomeIcon icon={faUsers} className="mr-4" />
-            {!isCollapsed && <span>People</span>}
+            {!isCollapsed && <span className='hidden md:inline-block'> People</span>}
           </li>
           <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
             <FontAwesomeIcon icon={faCalendar} className="mr-4" />
-            {!isCollapsed && <span>Calendar</span>}
+            {!isCollapsed && <span className='hidden md:inline-block'>Calendar</span>}
           </li>
           <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
             <FontAwesomeIcon icon={faCog} className="mr-4" />
-            {!isCollapsed && <span>Settings</span>}
+            {!isCollapsed && <span className='hidden md:inline-block'>Settings</span>}
           </li>
         </ul>
       </div>
@@ -56,8 +58,8 @@ const DashboardLayout = ({ children }) => {
             </ul>
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-0 overflow-x-hidden ">
-          {isCollapsed && children}
+        <div className={`flex-1 overflow-y-auto p-0 overflow-x-hidden`}>
+          {children}
         </div>
       </div>
     </div>

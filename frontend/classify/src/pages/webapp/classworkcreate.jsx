@@ -62,7 +62,7 @@ const CreateClassWork = () => {
             draft: isDraft, 
         };
 
-        api.post(`/class/assignment/${id}`, data, {}, 5000,
+        api.post(`/class/assignment?class_id=${id}`, data, {}, 5000,
             (data, status) => {
                 console.log(data);
                 setIsLoading(false);

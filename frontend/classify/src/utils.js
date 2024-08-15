@@ -1,3 +1,7 @@
+// Ensure polyfills are loaded
+import 'whatwg-fetch';  // Fetch polyfill
+import 'es6-promise/auto';  // Promise polyfill
+
 class FetchWrapper {
   constructor(baseURL, defaultHeaders = {}) {
     this.baseURL = baseURL;
@@ -35,7 +39,14 @@ class FetchWrapper {
       fetch(url, config)
         .then(async response => {
           clearTimeout(timer);
-          const responseData = await response.json().catch(() => ({}));
+          let responseData = {};
+          try {
+            responseData = await response.json();
+          } catch (e) {
+            // Handle JSON parse error if any
+            responseData = {};
+          }
+
           if (response.ok) {
             if (onSuccess) onSuccess(responseData, response.status);
             resolve({ data: responseData, status: response.status });
@@ -81,5 +92,3 @@ class FetchWrapper {
 export const api = new FetchWrapper('http://0.0.0.0:8000/api/v1', {
   'Authorization': `Token ${localStorage.getItem("token")}`
 });
-
-
