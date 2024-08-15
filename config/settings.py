@@ -173,10 +173,4 @@ CHANNEL_LAYERS = {
 
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
 
-CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    
-    "http://localhost:5173",
-    "http://127.0.0.1:9000",
-]
-
+CORS_ALLOW_ALL_ORIGINS = True

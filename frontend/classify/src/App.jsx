@@ -10,6 +10,7 @@ import CreateClassWork from './pages/webapp/classworkcreate';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundPage from './pages/404';
+import VideoCall from './pages/webrtc';
 function App() {
   
   return (
@@ -18,6 +19,8 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path='*' element={<NotFoundPage />} />
+        <Route path="vid" element={<VideoCall />}  />
+
         <Route path="signup" element={<SignUpForm />} />
         <Route path="d" element={<PrivateRoute element={<DashboardHome />} />} />
         <Route path="profile" element={<PrivateRoute element={<ProfilePage />} />} />

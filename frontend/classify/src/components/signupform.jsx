@@ -4,6 +4,7 @@ import PagesLayout from './UI/pageslayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faEnvelope, faLock, faUser, faCalendarDay, faFileImage, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { api } from '../utils';
+import { toast } from 'react-toastify';
 import Loader from './widgets/loader';
 const interestsList = [
   { name: 'Programming', emoji: '💻' },
@@ -90,7 +91,7 @@ const SignUpForm = () => {
     });
     data.append("profile_image",formData.profileImage[0])
     
-    api.post('/auth/signup/', data, {}, 5000,
+    api.post('/auth/signup/', data, {}, 50000,
       (data, status) => {
           SetIsLoading(false)
           console.log(data)
@@ -108,7 +109,7 @@ const SignUpForm = () => {
           )
         }
       },
-      (err) => alert("Request timeout")
+      (err) => toast.error("Server is slow be petient")
     );
   };
 

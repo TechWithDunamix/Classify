@@ -7,10 +7,11 @@
     <title>Classify</title>
     <style>
       .loader-container{
-        height:100vh;
+        height:70vh;
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow: hidden;
       }
       @keyframes loader {
         0% {
@@ -42,12 +43,12 @@
       }
 
       .container {
-        --uib-size: 150px; /* Make the ping animation smaller */
+        --uib-size: 70px; /* Make the ping animation smaller */
         --uib-color: purple; /* Change the color to purple */
         --uib-speed: 2s;
         position: relative;
         height: var(--uib-size);
-        width: 200px;
+        width: 70px;
       }
 
       .container::before,
@@ -86,7 +87,7 @@
     <div id="root"></div>
     <div class="loader-container" id="load">
       <div  class="container"></div>
-      <p>By Dunamix</p>
+      
     </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

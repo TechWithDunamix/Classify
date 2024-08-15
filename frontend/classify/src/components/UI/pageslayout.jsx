@@ -2,8 +2,10 @@ import Navbar from "../widgets/pagesnavbar"
 const PagesLayout = ({children}) => {
     return (
         <div>
+            <div className="fixed w-full -mt-[6rem] z-50">
             <Navbar />
-            <div className="min-h-[100vh] mb-2">
+            </div>
+            <div className="min-h-[80vh] mb-2 mt-24">
             {children}
 
             </div>

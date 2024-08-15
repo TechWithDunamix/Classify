@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faClipboard, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-
-const AssignmentBlock = ({ data }) => {
+import { api } from '../../utils';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+const AssignmentBlock = ({ data ,fetch}) => {
   const [open, setOpen] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-
+  const {id} = useParams()
   const handleToggle = () => {
     setOpen(!open);
   };
@@ -22,6 +24,20 @@ const AssignmentBlock = ({ data }) => {
     setShowOptions(!showOptions);
   };
 
+  const handleDelete = (asm_id) => {
+    
+    api.delete(`/class/assignment/${asm_id}?class_id=${id}`,{},50000,
+      (data,status) => {
+        fetch()
+      },
+      (error,status) => {
+          if (status === 404){
+            toast.error("Not found")
+          }
+          toast.error("An error occured")
+      }
+    )
+  }
   return (
     <div className="bg-white p-4 w-[60%] mx-auto border-b-2 shadow-sm rounded-lg">
       <div className="flex items-center mb-2 cursor-pointer" onClick={handleToggle}>
@@ -50,8 +66,10 @@ const AssignmentBlock = ({ data }) => {
             <FontAwesomeIcon icon={faEllipsisV} className="h-5 w-5" />
             {showOptions && (
               <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200">
+                <button 
+                onClick={(e) => handleDelete(data.id)}
+                className="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100">Delete</button>
                 <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Update</button>
-                <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Delete</button>
 
                {data.draft && <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Delete</button>}
 

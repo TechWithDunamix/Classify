@@ -1,6 +1,6 @@
 # from adrf.views import APIView
 from . import constants
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest,HttpResponseNotFound
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
@@ -22,7 +22,7 @@ from django.shortcuts import get_object_or_404,get_list_or_404
 from django.contrib.contenttypes.models import ContentType
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-import faker
+import faker,uuid
 class UserSignUpView(generics.GenericAPIView):
     serializer_class = UserSignupSerializer
     permission_classes= [AllowAny]
@@ -101,6 +101,7 @@ class ClassView(generics.GenericAPIView):
     serializer_class = ClassSerializer
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAuthenticated, ]
+    
     def get_queryset(self):
 
         user_class = Class.objects.filter(owner=self.request.user).all()
@@ -204,11 +205,21 @@ class StudentClassView(generics.GenericAPIView):
 class TeacherAssignmentView(generics.GenericAPIView):
     serializer_class = AssignmentSerializer
     permission_classes = [IsAuthenticated]
+    def dispatch(self, request, *args, **kwargs):
+        if not request.GET.get("class_id"):
+            return HttpResponseBadRequest("Provide class_id as a get_param")
+        try:
+            uuid.UUID(
+                self.request.GET.get("class_id"),version=4
+            )
+        except:
+            return HttpResponseNotFound("Not found")
+        return super().dispatch(request, *args, **kwargs)
     def get_queryset(self):
         return Class.objects.filter(owner=self.request.user).all()
     
     def get_object(self):
-        class_id = self.kwargs['class_id']
+        class_id = self.request.GET['class_id']
         _class = get_object_or_404(self.get_queryset(),id = class_id)
         if _class.owner != self.request.user:
             return Response({
@@ -232,12 +243,16 @@ class TeacherAssignmentView(generics.GenericAPIView):
             qs = self.get_object().assignments.all()
 
         return qs
-    def get(self,request,class_id = None,*args,**kwargs):
+    def get(self,request,asm_id = None,*args,**kwargs):
         obj = self.get_asm_qs().order_by("-classwork__date_created")
         context = {
             "request":request
         }
         serializer = self.get_serializer_class()(obj,many = True,context = context)
+        if asm_id:
+            obj = self.get_asm_qs().get(id = asm_id)
+            serializer = self.get_serializer_class()(obj,context = context)
+            
         return Response(serializer.data)
 
     def post(self,request,class_id = None,*args,**kwargs):

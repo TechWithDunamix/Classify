@@ -4,6 +4,8 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { api } from "../../utils";
 import { Navigate } from "react-router-dom";
+import { faCameraAlt,faUser,faPaperclip} from "@fortawesome/free-solid-svg-icons";
+
 const TeachersClassHome = () => {
     const { id } = useParams();
     const [classData, setClassData] = useState(null);
@@ -95,7 +97,7 @@ const TeachersClassHome = () => {
             {classData?.cover_image_url ? (
                 <div className="relative">
                     <div
-                        className="h-48 sm:h-56 lg:h-64 bg-cover bg-center rounded-t-md"
+                        className="h-48 sm:h- lg:h-64 bg-cover bg-center rounded-t-md"
                         style={{ backgroundImage: `url(${classData.cover_image_url})` }}
                     ></div>
                     <button
@@ -181,6 +183,22 @@ const TeachersClassHome = () => {
                     </div>
                 </div>
             )}
+            {/* other sections */}
+            <div className="w-full flex p-2 gap-4">
+                <div className="">
+                    <button className="btn text-purple-700 md:text-[1rem] text-[0.5rem]">
+                        <FontAwesomeIcon icon={faCameraAlt} className=""/>
+                        Start a class call
+                    </button>
+                </div>
+                <div className="" >
+                <button className="btn bg-purple-950 border-2 text-white">
+                        <FontAwesomeIcon icon={faPaperclip} className=""/>
+                        
+                        Make Announcment
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
