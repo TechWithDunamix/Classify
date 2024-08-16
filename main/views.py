@@ -250,7 +250,7 @@ class TeacherAssignmentView(generics.GenericAPIView):
         }
         serializer = self.get_serializer_class()(obj,many = True,context = context)
         if asm_id:
-            obj = self.get_asm_qs().get(id = asm_id)
+            obj = get_object_or_404(self.get_asm_qs(),id = asm_id)
             serializer = self.get_serializer_class()(obj,context = context)
             
         return Response(serializer.data)
@@ -643,7 +643,7 @@ class AnnouncementView(generics.GenericAPIView):
         _obj = Class.objects.filter(query)
 
         obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
-        qs = Anouncement.objects.filter(_class = obj)
+        qs = Anouncement.objects.filter(_class = obj).all().order_by("-date")
         serializer = self.get_serializer_class()(qs,many = True)
         return Response(serializer.data)
     def post(self,request,*args, **kwargs):

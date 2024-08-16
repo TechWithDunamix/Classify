@@ -178,13 +178,14 @@ class Assignment(models.Model):
 class Anouncement(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,unique=True)
     _class = models.ForeignKey(Class,related_name='announcments',on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     detail =models.TextField()
 
 
     def __str__(self):
         return self._class.name 
-
+    
+    
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,unique=True)
     _class = models.ForeignKey(Class,related_name='announcments_comments',on_delete=models.CASCADE)

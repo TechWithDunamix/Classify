@@ -5,6 +5,7 @@ import { useParams, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnnouncmentHome from "../../components/primitives/announcmentHome";
 import { api } from "../../utils";
+import { toast } from "react-toastify";
 
 const TeachersClassHome = () => {
   const { id } = useParams();
@@ -12,7 +13,8 @@ const TeachersClassHome = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [image, setImage] = useState(null);
-
+  const [announcementText,setAnnouncementText] = useState("")
+  const [newAnnouncement,setNewAnnouncement] = useState(0)
   useEffect(() => {
     fetchData();
   }, []);
@@ -74,10 +76,34 @@ const TeachersClassHome = () => {
         }
       },
       (error) => {
-        alert("Request Timeout");
+       toast.error("Server is not responding ")
       }
     );
   };
+
+  const handleMakeAnnouncement = () => {
+    const data  = {
+      detail:announcementText
+    }
+
+    api.post(`/class/announcement?class_id=${id}`,data,{},50000,
+      (date,status) => {
+        setShowAnnouncementModal(false)
+        toast.success("Announcement Published")
+        setNewAnnouncement(newAnnouncement + 1)
+      },
+      (error,status) => {
+        if (status === 404){
+          return <Navigate to={"/not-found"} />
+        }
+
+        toast.error("Bad request")
+      },
+      (error) => {
+        toast.error("Sever is not responding !!")
+      }
+    )
+  }
 
   const handleAnnouncementClick = () => setShowAnnouncementModal(true);
 
@@ -177,7 +203,7 @@ const TeachersClassHome = () => {
             </button>
           </div>
 
-          <AnnouncmentHome />
+          <AnnouncmentHome key={newAnnouncement}/>
         </div>
       </div>
 
@@ -191,9 +217,12 @@ const TeachersClassHome = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
             <h2 className="text-xl font-bold mb-4 text-purple-900">Make Announcement</h2>
             <textarea
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md bg-purple-300 active:border-purple-900"
               rows="4"
               placeholder="Write your announcement..."
+              value={announcementText}
+              onChange={(e) => setAnnouncementText(e.target.value)}
+
             />
             <div className="flex justify-end mt-4">
               <button
@@ -202,7 +231,7 @@ const TeachersClassHome = () => {
               >
                 Cancel
               </button>
-              <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition duration-300 ease-in-out">
+              <button onClick = {handleMakeAnnouncement} className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition duration-300 ease-in-out">
                 Submit
               </button>
             </div>

@@ -5,7 +5,8 @@ import Loader from "../widgets/loader"
 import { useParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBoxOpen } from "@fortawesome/free-solid-svg-icons"
-const AnnouncmentHome = () => {
+import AnnouncementCard from "../widgets/announcementCards"
+const AnnouncmentHome = ({flag}) => {
     const {id} = useParams()
     const [data,setData] = useState(null)
     const fetchData = () => {
@@ -28,7 +29,7 @@ const AnnouncmentHome = () => {
             }
         )
     }
-    useEffect(fetchData,[])
+    useEffect(fetchData,[flag])
 
     if (!data){
         return (
@@ -40,7 +41,7 @@ const AnnouncmentHome = () => {
     if (data.length === 0){
         return (
             <div className="flex justify-center items-center">
-                <div className="mt-12 text-center">
+                <div className="mt-12 text-centers">
                     <FontAwesomeIcon icon={faBoxOpen} className="h-32 w-32 text-gray-700"/>
                     <p>No data on your in your class stream. </p>
                 </div>
@@ -48,8 +49,10 @@ const AnnouncmentHome = () => {
         )
     }
     return (
-        <div className="md:w-[70%] bg-green-900 ml-auto">
-        <p>Hello world</p>
+        <div className="h-[600px] overflow-y-auto">
+            {data.slice(0,6).map(datas => {
+                return <AnnouncementCard announcement={datas.detail} date={datas.date} />
+            })}
         </div>
     )
 }
