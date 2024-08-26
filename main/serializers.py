@@ -259,6 +259,9 @@ class AssignmentSerializer(serializers.ModelSerializer):
             },
             "draft":{
                 "required":True
+            },
+            "date_due" : {
+                "required" :  False
             }
         }
 

@@ -11,7 +11,7 @@ const CreateClassWork = () => {
     const { id } = useParams();
     const [title, setTitle] = useState("");
     const [value, setValue] = useState("");
-    const [dateDue, setDateDue] = useState("");
+    const [dateDue, setDateDue] = useState(null);
     const [classworkType, setClassworkType] = useState("ClassWork");
     const [mark, setMark] = useState("");
     const [files, setFiles] = useState([]);
@@ -42,7 +42,7 @@ const CreateClassWork = () => {
         } else if (!Number.isInteger(Number(mark))) {
             newErrors.mark = "Marks must be an integer.";
         }
-        if (!dateDue) newErrors.dateDue = "Date Due is required.";
+
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -55,13 +55,14 @@ const CreateClassWork = () => {
         const data = {
             title,
             question: value,
-            date_due: dateDue,
             classwork_type: classworkType,
             mark,
             _files: files.length ? files : [],
             draft: isDraft, 
         };
-
+        if (dateDue){
+            data.date_due = dateDue
+        }
         api.post(`/class/assignment?class_id=${id}`, data, {}, 5000,
             (data, status) => {
                 console.log(data);

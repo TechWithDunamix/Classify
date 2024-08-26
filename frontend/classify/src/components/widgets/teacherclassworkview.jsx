@@ -44,7 +44,7 @@ const AssignmentBlock = ({ data ,fetch}) => {
         <FontAwesomeIcon icon={faClipboard} className="h-8 w-8 p-2 rounded-full bg-purple-500 text-white" />
         <div className="text-md ml-4 flex items-center">
           {data.title}
-          {!data.is_due && (
+          {data.is_due && (
             <FontAwesomeIcon
               icon={faCheckCircle}
               className="ml-2 text-green-500 h-5 w-5"

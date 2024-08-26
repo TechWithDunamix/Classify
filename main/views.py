@@ -317,7 +317,7 @@ class StudentAssignmentView(generics.GenericAPIView):
             return Response("Provide the class id",status=status.HTTP_400_BAD_REQUEST)
         classes = Class.objects.filter(members__user = request.user)
         obj = get_object_or_404(classes,id = class_id)
-        qs = obj.assignments.all()
+        qs = obj.assignments.all().order_by("-classwork__date_created")
         context = {
             "request":request
         }

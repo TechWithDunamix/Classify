@@ -150,7 +150,10 @@ class Assignment(models.Model):
 
     @property
     def is_due(self):
-        return self.classwork.date_due > timezone.now()
+        if not self.classwork.date_due:
+            return False 
+        
+        return self.classwork.date_due < timezone.now()
     def save(self,*args, **kwargs):
         
         created = self.pk
