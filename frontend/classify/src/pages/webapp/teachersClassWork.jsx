@@ -60,7 +60,7 @@ const TeachersClassClassWork = () => {
                     <FontAwesomeIcon icon={faAdd} />
                     <Link to={`/class/cw/create/${id}`}>Create</Link>
                 </button>
-                <div className="flex h-[70vh] justify-center items-center">
+                <div className="flex h-[50vh] justify-center items-center">
                     <div className="text-center">
                         <FontAwesomeIcon icon={faMagnifyingGlass} className="h-40 w-36 text-slate-400" />
                         <p className="mt-5">This class has no class work attached to it!</p>

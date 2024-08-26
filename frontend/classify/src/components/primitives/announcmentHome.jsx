@@ -28,6 +28,22 @@ const AnnouncmentHome = ({flag}) => {
                 toast.error("Server is too slow ")
             }
         )
+    };
+    const deleteStream = (_id) => {
+        api.delete(`/class/announcement/${_id}?class_id=${id}`,{},50000,
+            (data,status) => {
+                toast.success("Stream deleted !")
+                fetchData()
+            },
+            (error,status) => {
+                if (status === 404){
+                    toast.error("Not found")
+                }
+            },
+            (error) =>{
+                toast.error("Serveris not responding")
+            }
+        )
     }
     useEffect(fetchData,[flag])
 
@@ -41,7 +57,7 @@ const AnnouncmentHome = ({flag}) => {
     if (data.length === 0){
         return (
             <div className="flex justify-center items-center">
-                <div className="mt-12 text-centers">
+                <div className="mt-12 text-center">
                     <FontAwesomeIcon icon={faBoxOpen} className="h-32 w-32 text-gray-700"/>
                     <p>No data on your in your class stream. </p>
                 </div>
@@ -51,7 +67,7 @@ const AnnouncmentHome = ({flag}) => {
     return (
         <div className="h-[600px] overflow-y-auto">
             {data.slice(0,6).map(datas => {
-                return <AnnouncementCard announcement={datas.detail} date={datas.date} />
+                return <AnnouncementCard data={datas} deleteStream = {deleteStream}/>
             })}
         </div>
     )

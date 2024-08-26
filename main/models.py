@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
 import uuid,json 
@@ -179,7 +180,17 @@ class Anouncement(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,unique=True)
     _class = models.ForeignKey(Class,related_name='announcments',on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length = 220)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null = True)
+    by_admin = models.BooleanField(default=False)
     detail =models.TextField()
+    _type = models.CharField(default = 'stream',max_length=120)
+
+    def save(self,**kwargs) -> None:
+        if self._class.owner == self.user:
+            self.by_admin = True
+
+        super().save(**kwargs)
 
 
     def __str__(self):
@@ -206,6 +217,10 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.title
+
+
+    class Meta:
+        ordering = ["-date_created"]
     
 class TopicUpdate(models.Model):
     _class = models.ForeignKey(Class,related_name='topic_update',

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faHome, faBook, faUsers, faCalendar, faCog } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 const DashboardLayout = ({ children }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleSidebarToggle = () => {
     setIsCollapsed(!isCollapsed);

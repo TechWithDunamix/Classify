@@ -167,25 +167,38 @@ class StudentClassView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self,request,*args, **kwargs):
+        class_id = request.GET.get("class_id")
         qs = Class.objects.filter(members__user = request.user)
         serializer = self.get_serializer_class()(qs,many = True,context = {
             "request":request
         })
+        if class_id:
+            obj = get_object_or_404(qs,id = class_id)
+            serializer = self.get_serializer_class()(
+            obj,
+            # many =True,
+            context = {
+                'request':request,
+                'id':obj.id
+            })
         return Response(serializer.data)
     def post(self,request,class_id = None,*args, **kwargs):
 
-        _class = get_object_or_404(Class.objects.filter(use_code = True),class_code = class_id)
+        _class = get_object_or_404(Class.objects.filter(setting__use_code = True),class_code = class_id)
         member,created = MemberShip.objects.get_or_create(user = request.user,_class=_class)
         response = {
             "detail":"user already in group",
-            "code":constants.ALREADY_EXISTS
+            "code":constants.ALREADY_EXISTS,
+            "class_id" : _class.id
         }
 
         if created:
             _class.members.add(member)
             response = {
             "detail":"user added to group",
-            "code":constants.ADDED_SUCCESFULLY
+            "code":constants.ADDED_SUCCESFULLY,
+            "class_id" : _class.id
+
                         }
         
 
@@ -331,6 +344,8 @@ class TopicView(generics.GenericAPIView):
         _class = get_object_or_404(qs,id = class_id)
         qs = Topic.objects.filter(_class=_class).all()
         serializer = self.get_serializer_class()(instance=qs,many = True)
+
+
         return Response(serializer.data)
 
     def post(self,request,*args,**kwargs):
@@ -632,7 +647,9 @@ class AnnouncementView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     def get_cls_qs(self):
         user = self.request.user
-        _class = Class.objects.filter(owner = user) 
+        query = Q(members__user = user) | Q(owner = user)
+        _class = Class.objects.filter(query).all() 
+        
         return _class
     def get(self,request,*args, **kwargs):
         if not request.GET.get("class_id"):
@@ -641,10 +658,17 @@ class AnnouncementView(generics.GenericAPIView):
             },status=status.HTTP_400_BAD_REQUEST)
         query = Q(members__user=request.user) | Q(owner = request.user)
         _obj = Class.objects.filter(query)
+        
 
-        obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
+        obj = get_list_or_404(_obj,id = request.GET.get("class_id"))[0]
+        
+            
+            
         qs = Anouncement.objects.filter(_class = obj).all().order_by("-date")
-        serializer = self.get_serializer_class()(qs,many = True)
+        context = {
+            "request" : request
+        }
+        serializer = self.get_serializer_class()(qs,many = True,context = context)
         return Response(serializer.data)
     def post(self,request,*args, **kwargs):
         if not request.GET.get("class_id"):
@@ -652,15 +676,21 @@ class AnnouncementView(generics.GenericAPIView):
                 "message":"include class id as a get pearam"
             },status=status.HTTP_400_BAD_REQUEST)
         _obj = self.get_cls_qs()
-        obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
-        serializer = self.get_serializer_class()(data = request.data)
+        obj = get_list_or_404(_obj,id = request.GET.get("class_id"))[0]
+        context = {
+            "request" : request
+        }
+        serializer = self.get_serializer_class()(data = request.data,context = context)
         if not serializer.is_valid():
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
         Anouncement.objects.create(
             _class = obj,
-            detail = serializer.validated_data.get("detail")
+            detail = serializer.validated_data.get("detail"),
+            title = serializer.validated_data.get("title"),
+            user = request.user,
+            _type = serializer.validated_data.get("_type")
         )
         return Response(serializer.data)
 
@@ -671,28 +701,38 @@ class AnnouncementView(generics.GenericAPIView):
             },status=status.HTTP_400_BAD_REQUEST)
         _obj = self.get_cls_qs()
         obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
-        serializer = self.get_serializer_class()(data = request.data)
+        context = {
+            "request" : request
+        }
+        serializer = self.get_serializer_class()(data = request.data,context = context)
         if not serializer.is_valid():
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
-        announcement = get_object_or_404(Anouncement,_class__owner = request.user,id = id)
+        query = Q(class__owner = request.user) | Q(user = request.user)
+        qs = Anouncement.objects.filter(query).filter(_class = obj)
+        announcement = get_object_or_404(qs,id = id)
         announcement.detail = serializer.validated_data.get("detail",announcement.detail)
         announcement.save()
         print(announcement)
         return Response(serializer.data)
     
     def delete(self,request,id = None,*args, **kwargs):
+        
         if not request.GET.get("class_id"):
             return Response({
                 "message":"include class id as a get pearam"
             },status=status.HTTP_400_BAD_REQUEST)
         _obj = self.get_cls_qs()
-        obj = get_object_or_404(_obj,id = request.GET.get("class_id"))
+        print(_obj)
         
-        announcement = get_object_or_404(Anouncement,_class__owner = request.user,id = id)
+        
+        obj = get_list_or_404(_obj,id = request.GET.get("class_id"))[0]
+        print(obj)
+        query = Q(_class__owner = request.user) | Q(user = request.user)
+        qs = Anouncement.objects.filter(query).filter(_class = obj)
+        announcement = get_object_or_404(qs,id = id)
         announcement.delete()
-        print(announcement)
         return Response({"detail":"deleted"})
     
 class ClassFileView(generics.GenericAPIView):

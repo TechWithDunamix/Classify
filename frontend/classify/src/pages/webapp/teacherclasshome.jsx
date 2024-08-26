@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faCameraAlt, faPaperclip } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faCameraAlt, faPaperclip, faQuestionCircle, faLightbulb, faComments, faBullhorn } from "@fortawesome/free-solid-svg-icons";
 import { useParams, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnnouncmentHome from "../../components/primitives/announcmentHome";
 import { api } from "../../utils";
 import { toast } from "react-toastify";
+import ReactQuill from 'react-quill';
 
 const TeachersClassHome = () => {
   const { id } = useParams();
@@ -13,10 +14,29 @@ const TeachersClassHome = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [image, setImage] = useState(null);
-  const [announcementText,setAnnouncementText] = useState("")
-  const [newAnnouncement,setNewAnnouncement] = useState(0)
+  const [announcementText, setAnnouncementText] = useState("");
+  const [newAnnouncement, setNewAnnouncement] = useState(0);
+  const [userData, setUserData] = useState();
+  const [streamDIV, setStreamDiv] = useState(false);
+  const [postType, setPostType] = useState("question"); // New state for post type
+  const [postTitle,setPostTitle] = useState("")
+  const fetchUserData = () => {
+    api.get("/user/profile", {}, 50000,
+      (data, status) => {
+        setUserData(data);
+      },
+      (error, status) => {
+        return;
+      },
+      (error) => {
+        toast.error("Server is too slow !!");
+      }
+    );
+  };
+
   useEffect(() => {
     fetchData();
+    fetchUserData();
   }, []);
 
   useEffect(() => {
@@ -76,34 +96,37 @@ const TeachersClassHome = () => {
         }
       },
       (error) => {
-       toast.error("Server is not responding ")
+        toast.error("Server is not responding ");
       }
     );
   };
 
   const handleMakeAnnouncement = () => {
-    const data  = {
-      detail:announcementText
-    }
+    const data = {
+      detail: announcementText,
+      _type: postType,
+      title:postTitle
+    };
 
-    api.post(`/class/announcement?class_id=${id}`,data,{},50000,
-      (date,status) => {
-        setShowAnnouncementModal(false)
-        toast.success("Announcement Published")
-        setNewAnnouncement(newAnnouncement + 1)
+    api.post(`/class/announcement?class_id=${id}`, data, {}, 50000,
+      (date, status) => {
+        setShowAnnouncementModal(false);
+        toast.success("Announcement Published");
+        setNewAnnouncement(newAnnouncement + 1);
+        setStreamDiv(false)
       },
-      (error,status) => {
-        if (status === 404){
-          return <Navigate to={"/not-found"} />
+      (error, status) => {
+        if (status === 404) {
+          return <Navigate to={"/not-found"} />;
         }
 
-        toast.error("Bad request")
+        toast.error("Bad request");
       },
       (error) => {
-        toast.error("Sever is not responding !!")
+        toast.error("Server is not responding !!");
       }
-    )
-  }
+    );
+  };
 
   const handleAnnouncementClick = () => setShowAnnouncementModal(true);
 
@@ -180,66 +203,133 @@ const TeachersClassHome = () => {
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row gap-4 mt-6">
-        <div className="md:w-[30%] flex justify-center items-center border-2 h-36 p-4 rounded-lg shadow-sm">
+      <div className="mt-6">
+        {/* <div className="md:w-[30%] flex justify-center items-center border-2 h-36 p-4 rounded-lg shadow-sm">
           <div className="text-center">
             <p className="text-lg font-medium">Class Code</p>
             <p className="text-2xl font-bold">{classData?.class_code || "N/A"}</p>
           </div>
-        </div>
+        </div> */}
 
-        <div className="md:w-[70%] flex flex-col gap-4">
+        <div className="md:w-[100%] flex flex-col gap-4">
           <div className="flex gap-4">
-            <button className="w-full bg-purple-50 text-purple-700 font-medium rounded-lg p-2 flex items-center justify-center shadow-sm">
+            <button 
+            className="rounded-full bg-purple-50 text-purple-700 font-medium px-4 justify-center p-2 flex items-center justify-center shadow-sm">
               <FontAwesomeIcon icon={faCameraAlt} className="mr-2" />
-              Start a Class Call
+              
             </button>
-            <button
-              className="w-full bg-purple-950 text-white font-medium text-[0.8rem] rounded-lg p-2 flex items-center justify-center shadow-sm"
-              onClick={handleAnnouncementClick}
-            >
-              <FontAwesomeIcon icon={faPaperclip} className="mr-2 " />
-              Make Announcement
-            </button>
+            <div onClick={() => setStreamDiv(!streamDIV)}
+              className="flex items-center gap-4 border-2 p-2 rounded-md w-full cursor-pointer">
+              <img src={userData && userData.profile_image} className="w-8 h-8 rounded-full" />
+              <span>What's on your mind ?</span>
+            </div>
           </div>
-
-          <AnnouncmentHome key={newAnnouncement}/>
+          <div className="max-w-[100%]">
+          {streamDIV && (
+            <motion.div className=""
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.3 }}
+            >
+              <form className="">
+                <label htmlFor="announcement-text" className="block text-sm font-medium text-gray-700 mb-2">
+                  Create Post
+                </label>
+                <div className="flex gap-4 mb-4 flex-col md:flex-row">
+                  <div className="hidden">
+                    <input
+                      type="radio"
+                      id="question"
+                      name="postType"
+                      value="question"
+                      checked={postType === "question"}
+                      onChange={() => setPostType("question")}
+                      className="mr-2"
+                    />
+                    <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
+                    <label htmlFor="question" className="text-sm text-gray-700">Question</label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="idea"
+                      name="postType"
+                      value="idea"
+                      checked={postType === "idea"}
+                      onChange={() => setPostType("idea")}
+                      className="mr-2"
+                    />
+                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" />
+                    <label htmlFor="idea" className="text-sm text-gray-700">Idea</label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="discussion"
+                      name="postType"
+                      value="discussion"
+                      checked={postType === "discussion"}
+                      onChange={() => setPostType("discussion")}
+                      className="mr-2"
+                    />
+                    <FontAwesomeIcon icon={faComments} className="mr-2" />
+                    <label htmlFor="discussion" className="text-sm text-gray-700">Discussion</label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="announcement"
+                      name="postType"
+                      value="announcement"
+                      checked={postType === "announcement"}
+                      onChange={() => setPostType("announcement")}
+                      className="mr-2"
+                    />
+                    <FontAwesomeIcon icon={faBullhorn} className="mr-2" />
+                    <label htmlFor="announcement" className="text-sm text-gray-700">Announcement</label>
+                  </div>
+                </div>
+                <input  
+                placeholder="Post title"
+                className="w-full bg-white border-2 px-2 p-2 my-2"
+                value={postTitle}
+                onChange={(e) => setPostTitle(e.target.value)}/>
+                <ReactQuill
+                  id="announcement-text"
+                  name="announcement-text"
+                  value={announcementText}
+                  onChange={setAnnouncementText}
+                  rows="4"
+                  className="w-full p-2  border-gray-300 rounded-md bg-white h-36"
+                  placeholder="Type your announcement here..."
+                />
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="button"
+                    onClick={handleMakeAnnouncement}
+                    className="px-4 py-2 mt-12 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition duration-300 ease-in-out"
+                  >
+                    Post
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          )}
+          </div>
         </div>
       </div>
 
-      {showAnnouncementModal && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-            <h2 className="text-xl font-bold mb-4 text-purple-900">Make Announcement</h2>
-            <textarea
-              className="w-full p-2 border rounded-md bg-purple-300 active:border-purple-900"
-              rows="4"
-              placeholder="Write your announcement..."
-              value={announcementText}
-              onChange={(e) => setAnnouncementText(e.target.value)}
-
-            />
-            <div className="flex justify-end mt-4">
-              <button
-                className="mr-2 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-md transition duration-300 ease-in-out"
-                onClick={handleCloseAnnouncementModal}
-              >
-                Cancel
-              </button>
-              <button onClick = {handleMakeAnnouncement} className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition duration-300 ease-in-out">
-                Submit
-              </button>
-            </div>
-          </div>
-        </motion.div>
+      {!streamDIV && (
+        <AnnouncmentHome
+          handleCloseAnnouncementModal={handleCloseAnnouncementModal}
+          handleMakeAnnouncement={handleMakeAnnouncement}
+          announcementText={announcementText}
+          setAnnouncementText={setAnnouncementText}
+        />
       )}
     </div>
   );
 };
 
-export default TeachersClassHome
+export default TeachersClassHome;

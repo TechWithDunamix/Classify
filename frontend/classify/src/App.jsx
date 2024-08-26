@@ -11,6 +11,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundPage from './pages/404';
 import VideoCall from './pages/webrtc';
+import LandingPage from './pages/site/landing';
+import TopicView from './pages/webapp/topicView';
+import StudentViewClass from './pages/webapp/studentstabs';
 function App() {
   
   return (
@@ -18,6 +21,8 @@ function App() {
     <BrowserRouter>
       <ToastContainer />
       <Routes>
+      <Route index element={<LandingPage />} />
+
         <Route path='*' element={<NotFoundPage />} />
         <Route path="vid" element={<VideoCall />}  />
 
@@ -27,7 +32,8 @@ function App() {
         <Route path="class/new" element={<PrivateRoute element={<CreateNewClass />} />} />
         <Route path="class/view/:id" element={<PrivateRoute element={<TeacherViewClass />} />} />
         <Route path="class/cw/create/:id" element={<PrivateRoute element={<CreateClassWork />} />} />
-
+        <Route path='class/:id/topic' element={<PrivateRoute element={<TopicView />} />} />
+        <Route path='s/:id' element={<PrivateRoute element={<StudentViewClass />} />} />
 
 
 

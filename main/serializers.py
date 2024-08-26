@@ -345,8 +345,52 @@ class ChatSerializer(serializers.ModelSerializer):
         model  = ClassChat
         fields = ['content','timestamp','user',"id"]
 
+class CommentSerializer(serializers.ModelSerializer):
+    user_name = serializers.SerializerMethodField(read_only = True)
+    class Meta:
+        model = Comment
+        fields = ['date','content',"user_name"]
+
+        extra_kwargs = {
+            "user_name":{
+                "ready_only":True
+            }
+        }
+
+    def get_user_name(self,obj):
+        try:
+            return obj.user_name
+        except AttributeError:
+            return ""
 
 class AnnouncementSerializer(serializers.ModelSerializer):
+    comments = serializers.SerializerMethodField(read_only = True)
+    user = UserProfileViewSerializer(read_only = True)
+    is_owner = serializers.SerializerMethodField(read_only = True)
+    user_is_admin = serializers.SerializerMethodField(read_only = True)
+    def get_is_owner(self,obj):
+        request  = self.context.get("request")
+
+        if request.method == "GET":
+            return obj.user == request.user
+        return ""
+
+    def get_user_is_admin(self,obj):
+        request  = self.context.get("request")
+
+        if request.method == "GET":
+            return request.user == obj._class.owner
+        return ""
+
+
+    def get_comments(self,obj):
+        request  = self.context.get("request")
+
+        if request.method == "GET":
+            qs = obj.announcment_comment.all()
+            serializer = CommentSerializer(qs,many =True)
+            return serializer.data
+        return ""
     class Meta:
         model = Anouncement
         fields = '__all__'
@@ -375,23 +419,6 @@ class ClassFilesSerializer(serializers.ModelSerializer):
         return request.build_absoulte_uri(obj._file)
     
 
-class CommentSerializer(serializers.ModelSerializer):
-    user_name = serializers.SerializerMethodField(read_only = True)
-    class Meta:
-        model = Comment
-        fields = ['date','content',"user_name"]
-
-        extra_kwargs = {
-            "user_name":{
-                "ready_only":True
-            }
-        }
-
-    def get_user_name(self,obj):
-        try:
-            return obj.user_name
-        except AttributeError:
-            pass
 
 class GradingSerializer(serializers.ModelSerializer):
     title = serializers.SerializerMethodField()

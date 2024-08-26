@@ -10,7 +10,9 @@ urlpatterns = [
      path("user/profile",UserProfileView.as_view()),
      path("class",ClassView.as_view()),
      path("class/<uuid:id>",ClassView.as_view()),
-     path("class/join/<str:class_id>/",StudentClassView.as_view()),
+     path("class/join/<str:class_id>",StudentClassView.as_view()),
+     path("class/s",StudentClassView.as_view()),
+
      path("class/assignment",TeacherAssignmentView.as_view()),
      path("class/assignment/<int:asm_id>",TeacherAssignmentView.as_view()),
 
