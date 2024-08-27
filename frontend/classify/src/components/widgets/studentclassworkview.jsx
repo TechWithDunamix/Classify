@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faClipboard, faCheckDouble, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faClipboard, faCheckDouble, faTimes,faCheck } from '@fortawesome/free-solid-svg-icons';
 import { api } from '../../utils';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -50,7 +50,7 @@ const StudentAssignmentBlock = ({ data, fetch }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    api.post(`/class/assignment/submit?class_id=${id}`, { answer: submission }, 50000,
+    api.post(`/assignment/submit/${data.id}?class_id=${id}`, { answer: submission },{}, 50000,
       (data, status) => {
         toast.success("Submission successful");
         setShowForm(false);
@@ -65,7 +65,7 @@ const StudentAssignmentBlock = ({ data, fetch }) => {
   return (
     <div className="bg-white p-4 mb-4 mx-auto border border-gray-200 rounded-lg shadow-lg md:w-[60%]">
       <div className="flex items-center mb-3 cursor-pointer" onClick={handleToggle}>
-        <FontAwesomeIcon icon={faClipboard} className="h-6 w-6 p-2 rounded-full bg-purple-500 text-white" />
+        <FontAwesomeIcon icon={faClipboard} className="h-3 w-3 p-2 rounded-full bg-purple-500 text-white" />
         <div className="ml-4 text-md  flex items-center">
           <span>{!showForm && data.title}</span>
           {data.is_due && (
@@ -87,7 +87,9 @@ const StudentAssignmentBlock = ({ data, fetch }) => {
       
       {open && (
         <div>
-          
+          <hr />
+          <p>{data.title}</p>
+          <div className="mt-4 mb-4 text-gray-700" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.question) }} />
           {showForm ? (
             <div className='mt-5'>
               <button
@@ -96,32 +98,32 @@ const StudentAssignmentBlock = ({ data, fetch }) => {
               >
                 <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
               </button>
-              <p>{data.title}</p>
-              <div className="mt-4 mb-4 text-gray-700" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.question) }} />
+              
 
               
               <ReactQuill
                 value={submission}
                 onChange={setSubmission}
-                className="mb-4 h-40 mb-20"
+                className="h-40 mb-28"
                 placeholder="Enter your answer here..."
               />
               <button
                 onClick={handleSubmit}
-                className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none"
+                className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none"
               >
                 Submit Answer
               </button>
             </div>
           ) : (
             <div>
+             {!data.is_submited ? 
               <button
-                onClick={() => setShowForm(true)}
-                disabled={data.is_due}
-                className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none disabled:bg-gray-300"
-              >
-                Make Submission
-              </button>
+              onClick={() => setShowForm(true)}
+              disabled={data.is_due}
+              className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none disabled:bg-gray-300"
+            >
+              Make Submission
+            </button> : <p className='text-green-900 text-xs'>Submited <FontAwesomeIcon icon={faCheck}/></p>}
             </div>
           )}
         </div>

@@ -143,7 +143,10 @@ class Assignment(models.Model):
     options = models.JSONField(null = True,default = list)
     code = models.CharField(max_length=90)
 
-    
+    @property
+    def is_submited(self):
+        qs = WorkSubmitions.objects.filter(_class = self._class,assignment = self)
+        return qs
     @property
     def date_created(self):
         return self.classwork.date_created
