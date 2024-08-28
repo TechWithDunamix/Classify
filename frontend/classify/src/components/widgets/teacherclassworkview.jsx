@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faClipboard, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { api } from '../../utils';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 const AssignmentBlock = ({ data ,fetch}) => {
   const [open, setOpen] = useState(false);
@@ -82,12 +84,11 @@ const AssignmentBlock = ({ data ,fetch}) => {
       {open && (
         <div>
           <div className="text-sm text-gray-700 mb-2 flex justify-between mt-2 px-5">
-            <p>Total Submissions: 30</p>
-            <p>Total Marked: 25</p>
+            <p>Total Submissions: {data.submitions.length}</p>
           </div>
-          <button className="ml-auto text-purple-900 px-4 py-2 rounded-lg hover:bg-purple-600 focus:outline-none">
+          <Link to={`/classwork/${data.id}?title=${data.title}&cwd=${id}`}><button className="ml-auto text-purple-900 px-4 py-2 rounded-lg hover:bg-purple-600 focus:outline-none">
             View Submissions
-          </button>
+          </button></Link>
         </div>
       )}
     </div>

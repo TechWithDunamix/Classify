@@ -200,6 +200,7 @@ class ClassSerializer(serializers.ModelSerializer):
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
+    submitions = serializers.SerializerMethodField(required=False,read_only = True)
     date_due = serializers.DateTimeField(required=False,write_only=True)
     date_created = serializers.SerializerMethodField(required=False,read_only =True)
     is_due = serializers.SerializerMethodField(required=False,read_only =True)
@@ -211,6 +212,16 @@ class AssignmentSerializer(serializers.ModelSerializer):
     _mark = serializers.SerializerMethodField(read_only=True)
     _files = serializers.JSONField(required = False,default = [])
     draft = serializers.BooleanField(required=True)
+
+    def get_submitions(self,obj):
+        req = self.context.get("request")
+        if req.method == "POST":
+            return ""
+        if obj._class.owner == req.user:
+            qs = WorkSubmitions.objects.filter(assignment = obj)
+            submitions = WorkMarkSerializer(qs,many = True,context= self.context)
+            return submitions.data
+        return "Teachers only !"
     def date_created(self,obj):
         return obj.date_created
     def get_is_submited(self,obj):
@@ -239,7 +250,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         return obj.classwork.mark
     class Meta:
         model = Assignment
-        fields = ["id",'question','title','options','_files','is_submited',
+        fields = ["id",'question','title','options','_files','is_submited',"submitions",
         'date_due','classwork_type','mark','_mark','_date_due','draft',"date_created","is_due"]
 
         # if self.context.get("request") == 'GET':
@@ -316,7 +327,8 @@ class WorkMarkSerializer(serializers.ModelSerializer):
     def get_user(self,obj):
         print("obj : ", obj)
         qs = get_object_or_404(User,email = obj.user.email)
-        return UserProfileViewSerializer(qs).data
+    
+        return UserProfileViewSerializer(qs,context = self.context).data
     class Meta:
         fields = ['id','answer','marked','score','date','comment','user']
         model = WorkSubmitions 

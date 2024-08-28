@@ -14,6 +14,8 @@ import VideoCall from './pages/webrtc';
 import LandingPage from './pages/site/landing';
 import TopicView from './pages/webapp/topicView';
 import StudentViewClass from './pages/webapp/studentstabs';
+import ClassworkSubmitions from './pages/webapp/classworksubmitons';
+import ClassworkPage from './pages/webapp/teachersubmitionpage';
 function App() {
   
   return (
@@ -34,6 +36,10 @@ function App() {
         <Route path="class/cw/create/:id" element={<PrivateRoute element={<CreateClassWork />} />} />
         <Route path='class/:id/topic' element={<PrivateRoute element={<TopicView />} />} />
         <Route path='s/:id' element={<PrivateRoute element={<StudentViewClass />} />} />
+        <Route path='classwork' element={<PrivateRoute element={<ClassworkSubmitions />} />} />
+        <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
+
+
 
 
 
