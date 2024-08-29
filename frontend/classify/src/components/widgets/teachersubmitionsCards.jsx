@@ -1,16 +1,46 @@
 // SubmissionCard.js
-import React, { useState } from 'react';
-
-const SubmissionCard = ({ student ,data}) => {
+import React, { useState ,useEffect} from 'react';
+import {api} from "../../utils.js"
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaCheckDouble } from 'react-icons/fa';
+const SubmissionCard = ({ student ,data,fetch}) => {
     const [isAnswerVisible, setIsAnswerVisible] = useState(false);
-
+    const [score,setScore] = useState()
+    const [remark,setRemark] = useState()
+    const intialLoad = ()=>{
+        if (student.marked){
+            setScore(student.score)
+            setRemark(student.comment)
+        }
+    }
+    useEffect(intialLoad,[])
     const toggleAnswer = () => {
         setIsAnswerVisible(!isAnswerVisible);
         
     };
-
+    const onGrade = () => {
+        const data = {
+            "score" : score,
+            "comment" : remark
+        }
+        api.put(`/class/assignments/${student.id}`,data,{},50000,
+            (data,success) => {
+                fetch()
+                toast.success("Classwork graded successfully")
+            },
+            (error,status)=>{
+                toast.error(`An error occoured with code ${status}`)
+            },
+            (error) => {
+                toast.error("Server is to slow")
+            }
+        )
+    }
     return (
         <div className="card bg-white p-4 rounded border border-gray-300">
+            {student.marked && <FaCheckDouble className='text-green-400 font-extralight'/>}
             <div className="flex items-start space-x-3">
                 <img className="h-10 w-10 rounded-full" src={data.user.image_url} alt="User Icon" />
                 <div className="flex-1">
@@ -28,17 +58,24 @@ const SubmissionCard = ({ student ,data}) => {
                         <input 
                             type="number" 
                             className="bg-white w-[187px] border border-gray-300 rounded-md px-2 py-1 text-sm" 
-                            placeholder="Grade" 
+                            placeholder="Grade"
+                            onChange={(e)=> setScore(e.target.value)}
+                            value={score}
+
                         />
                         <input 
                             type="text" 
                             rows="8" 
                             className="bg-white w-[187px] border border-gray-300 rounded-md px-2 py-1 text-sm" 
                             placeholder="Add comments..." 
+                            onChange={(e) => setRemark(e.target.value)}
+                            value={remark}
                         />
                     </div>
                     <div className="mt-3 flex space-x-3">
-                        <button className="text-green-500 hover:text-green-700 text-sm">
+                        <button 
+                        onClick={onGrade}
+                        className="text-green-500 hover:text-green-700 text-sm">
                             <i className="fas fa-check-circle"></i> Submit
                         </button>
                         <button className="text-red-500 hover:text-red-700 text-sm">

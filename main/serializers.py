@@ -351,6 +351,10 @@ class WorkMarkSerializer(serializers.ModelSerializer):
             "user":{
                 "required":False ,
                 "read_only":True
+            },
+            "_comment":{
+                "write_only" : True,
+                "required" : False
             }
             
         }

@@ -599,7 +599,7 @@ class WorkMarkView(generics.GenericAPIView):
     def put(self,request,assignment_id = None,*args, **kwargs):
         _qs = self.get_cls_qs()
         print(_qs)
-        obj = get_object_or_404(self.get_cls_qs(),id = assignment_id)
+        obj = get_object_or_404(_qs,id = assignment_id)
         serializer = self.get_serializer_class()(
             data = request.data,
             instance = obj ,
@@ -615,6 +615,7 @@ class WorkMarkView(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         obj.score = serializer.validated_data.get("score",obj.score)
+        print(serializer.validated_data)
         obj.comment = serializer.validated_data.get("comment",obj.comment)
         obj.marked = True
         obj.save()

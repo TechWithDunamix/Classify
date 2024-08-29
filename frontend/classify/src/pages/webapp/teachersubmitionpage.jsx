@@ -66,7 +66,7 @@ const ClassworkPage = () => {
             </header>
             <div className="card-grid flex flex-col justify-center gap-4">
                 {submitions.map(data => (
-                    <SubmissionCard key={data.id} student={data} data={data}/>
+                    <SubmissionCard key={data.id} student={data} data={data} fetch={fetchSubmitions}/>
                 ))}
             </div>
         </div>
