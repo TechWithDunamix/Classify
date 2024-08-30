@@ -68,6 +68,8 @@ const StudentAssignmentBlock = ({ data, fetch }) => {
         <FontAwesomeIcon icon={faClipboard} className="h-3 w-3 p-2 rounded-full bg-purple-500 text-white" />
         <div className="ml-4 text-md  flex items-center">
           <span>{!showForm && data.title}</span>
+          <span className='text-sm text-green-500'><sup>{data.submitions && data.submitions.score}%</sup></span>
+
           {data.is_due && (
             <FontAwesomeIcon
               icon={faCheckDouble}

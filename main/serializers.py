@@ -212,7 +212,18 @@ class AssignmentSerializer(serializers.ModelSerializer):
     _mark = serializers.SerializerMethodField(read_only=True)
     _files = serializers.JSONField(required = False,default = [])
     draft = serializers.BooleanField(required=True)
+    marked = serializers.SerializerMethodField(read_only = False)
 
+    def get_marked(self,obj):
+        request = self.context.get("request")
+        user = request.user
+        qs = WorkSubmitions.objects.filter(assignment = obj)
+        
+        if not qs.exists():
+           return False
+        if user == qs.first().user:
+            return True
+        return False
     def get_submitions(self,obj):
         req = self.context.get("request")
         if req.method == "POST":
@@ -221,7 +232,17 @@ class AssignmentSerializer(serializers.ModelSerializer):
             qs = WorkSubmitions.objects.filter(assignment = obj)
             submitions = WorkMarkSerializer(qs,many = True,context= self.context)
             return submitions.data
-        return "Teachers only !"
+        user_qs = WorkSubmitions.objects.filter(assignment = obj,user = req.user).first()
+        if not user_qs:
+            return None
+        if user_qs.user == req.user:
+            submition = WorkMarkSerializer(user_qs,context= self.context)
+            return submition.data
+
+        if not user_qs.user == req.user:    
+            return submitions.data
+        return None
+        
     def date_created(self,obj):
         return obj.date_created
     def get_is_submited(self,obj):
@@ -250,7 +271,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         return obj.classwork.mark
     class Meta:
         model = Assignment
-        fields = ["id",'question','title','options','_files','is_submited',"submitions",
+        fields = ["id",'question','title','options','_files','is_submited',"submitions",'marked',
         'date_due','classwork_type','mark','_mark','_date_due','draft',"date_created","is_due"]
 
         # if self.context.get("request") == 'GET':

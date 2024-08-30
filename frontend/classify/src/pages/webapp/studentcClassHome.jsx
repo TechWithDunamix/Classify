@@ -138,11 +138,17 @@ const StudentClassHome = () => {
               <FontAwesomeIcon icon={faCameraAlt} className="mr-2" />
               
             </button>
-            <div onClick={() => setStreamDiv(!streamDIV)}
-              className="flex items-center gap-4 border-2 p-2 rounded-md w-full cursor-pointer">
-              <img src={userData && userData.profile_image} className="w-8 h-8 rounded-full" />
-              <span>What's on your mind ?</span>
+            {classData && (
+              classData.setting.student_can_post ? (
+                <div onClick={() => setStreamDiv(!streamDIV)}
+            className="flex items-center gap-4 border-2 p-2 rounded-md w-full cursor-pointer">
+            <img src={userData && userData.profile_image} className="w-8 h-8 rounded-full" />
+            <span>What's on your mind ?</span>
             </div>
+              ) : (<p className="text-slate-400 ">This class does not support Student to post on the stream </p>)
+            )
+            
+          }
           </div>
           <div className="max-w-[100%]">
           {streamDIV && (

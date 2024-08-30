@@ -4,6 +4,7 @@ import SubmissionCard from '../../components/widgets/teachersubmitionsCards';
 import DashboardLayout from '../../components/UI/dashboardlayout';
 import { api } from "../../utils";
 import { useParams } from 'react-router-dom';
+import Loader from '../../components/widgets/loader';
 const ClassworkPage = () => {
     const [students, setStudents] = useState([]);
     const [submitions,setSubmitions] = useState([])
@@ -58,6 +59,15 @@ const ClassworkPage = () => {
         setStudents(sampleStudents);
     }, []);
 
+    if (submitions.length < 1){
+        return (
+            <DashboardLayout>
+            <div className='h-[50%] flex items-center justify-center'>
+                <Loader />
+            </div>
+            </DashboardLayout>
+        )
+    }
     return (
         <DashboardLayout>
         <div className="container mx-auto px-4 py-8 bg-gray-100 text-gray-800">

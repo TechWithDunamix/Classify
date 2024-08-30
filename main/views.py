@@ -144,8 +144,7 @@ class ClassView(generics.GenericAPIView):
     def put(self,request,id = None,*args,**kwargs):
         obj = get_object_or_404(self.get_queryset(),id = id)
         
-        # request.data.pop("cover")
-
+        print(request.data)
         serializer = self.get_serializer_class()(
             data = request.data,
             instance=obj,
@@ -154,9 +153,11 @@ class ClassView(generics.GenericAPIView):
             }
         )
         if serializer.is_valid():
-            obj = serializer.update(instance=obj,validated_data=serializer.validated_data)
+            if not request.FILES.get("cover"):
+                serializer.update(instance=obj,validated_data=serializer.validated_data)
             if request.FILES.get("cover"):
                 obj.cover = request.FILES.get("cover")
+                print(obj.setting.use_code)
                 obj.save()
             
             return Response(serializer.data)
