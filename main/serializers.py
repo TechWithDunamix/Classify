@@ -107,7 +107,7 @@ class ClassSerializer(serializers.ModelSerializer):
     student_can_comment = serializers.BooleanField(required=False)
     default_grade = serializers.IntegerField(required=False)
     use_code = serializers.BooleanField(required=False)
-    members = MemberSerializer(many = True)
+    members = serializers.SerializerMethodField(read_only = True)
 
 
     def __init__(self,*args, **kwargs):
@@ -131,7 +131,8 @@ class ClassSerializer(serializers.ModelSerializer):
                 "read_only":True 
             },
             "members":{
-                "read_only":True
+                "read_only":True,
+                "required":False
             },
             "cover":{
                 "required":False
@@ -143,6 +144,15 @@ class ClassSerializer(serializers.ModelSerializer):
                 "read_only":True
             }
         }
+    def to_representation(self,*args,**kwargs):
+        data = super().to_representation(*args,**kwargs)
+        check = data['setting']['use_code']
+        if not check:
+            data['class_code'] = '######'
+        return data
+    def get_members(self,obj):
+        serializer = MemberSerializer(obj.members,many = True)
+        return serializer.data
     def get_cover_image_url(self,obj):
         request = self.context.get("request")
         if obj.cover:

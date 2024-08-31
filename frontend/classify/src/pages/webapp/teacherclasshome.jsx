@@ -150,8 +150,12 @@ const TeachersClassHome = () => {
             Total Students: {classData?.members?.length || 0}
           </p>
 
-          <p className="bg-black opacity-50 text-sm text-white px-4 py-2 absolute bottom-0 left-1 m-3 rounded-md shadow-md">
+          <p className="bg-black hidden md:block  opacity-50 text-sm text-white px-4 py-2 absolute bottom-0 left-1 m-3 rounded-md shadow-md">
            {classData?.name}
+          </p>
+
+          <p className="bg-black opacity-50 text-xs text-white px-4 py-2 absolute top-0 left-1 m-3 rounded-md shadow-md">
+           {classData?.class_code}
           </p>
 
         </div>
@@ -168,6 +172,13 @@ const TeachersClassHome = () => {
           </button>
           <p className="absolute bottom-0 right-1 m-3 bg-gray-800 text-white px-4 py-2 rounded-md shadow-md">
             Total Students: {classData?.members?.length || 0}
+          </p>
+          <p className="bg-black opacity-50 hidden md:block text-sm text-white px-4 py-2 absolute bottom-0 left-1 m-3 rounded-md shadow-md">
+           {classData?.name}
+          </p>
+
+          <p className="bg-black opacity-50 text-xs text-white px-4 py-2 absolute top-0 left-1 m-3 rounded-md shadow-md">
+           {classData?.class_code}
           </p>
         </div>
       )}

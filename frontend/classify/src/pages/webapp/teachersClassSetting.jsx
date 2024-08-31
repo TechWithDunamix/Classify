@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Loader from "../../components/widgets/loader"
-import { useEffect } from "react";
+import Loader from "../../components/widgets/loader";
 import { api } from "../../utils";
 import {
   faPen,
@@ -12,75 +11,78 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+
 const ClassSettings = () => {
-  const {id} = useParams()
-  const [classData,setClassData] = useState({})
-  const [classDataNew,setNewClassData] = useState({})
-  const [isLoading,setIsLoading]= useState(false)
+  const { id } = useParams();
+  const [classData, setClassData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchData = () => {
     api.get(
-        `/class/${id}`, 
-        {}, 
-        50000,
-        (data, status) => {
-            const ClassData = {
-              "name" : data.name,
-              "category" : data.category,
-              "description" : data.description,
-              "default_grade" :  data.setting.default_grade,
-              "student_can_post" : data.setting.student_can_post,
-              "student_can_comment" : data.setting.student_can_comment,
-              "use_code" : data.setting.use_code
-            }
-            setClassData(ClassData);
-            console.log(classData)
-
-        },
-        (error, status) => {
-            console.error("Fetch error:", error);
-            if (status === 400){
-              window.location.href = "/not-found"
-            }
-            
-        },
-        (error) => {
-            toast.error("server is to slow try refreshing")
+      `/class/${id}`,
+      {},
+      50000,
+      (data, status) => {
+        const ClassData = {
+          name: data.name,
+          category: data.category,
+          description: data.description,
+          default_grade: data.setting.default_grade,
+          student_can_post: data.setting.student_can_post,
+          student_can_comment: data.setting.student_can_comment,
+          use_code: data.setting.use_code,
+        };
+        setClassData(ClassData);
+        console.log(classData);
+      },
+      (error, status) => {
+        console.error("Fetch error:", error);
+        if (status === 400) {
+          window.location.href = "/not-found";
         }
+      },
+      (error) => {
+        toast.error("Server is too slow. Try refreshing");
+      }
     );
-};
-    useEffect(fetchData,[])
+  };
 
-  
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setClassData((prevUser) => ({
-        ...prevUser,
-        [name]: value,
-      }));
-     
-    };
+  useEffect(fetchData, []);
 
-    const handleSubmit = () => {
-      setIsLoading(true)
-      api.put(`/class/${id}`,classData,{},50000,
-        (data,status) => {
-            window.location.href = "/d"
-        },
-        (err,status) => {
-          setIsLoading(false)  
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const inputValue = type === "checkbox" ? checked : value;
 
-          if (status === 404){
-            window.location.href = "/not-found"
-          }
+    setClassData((prevClassData) => ({
+      ...prevClassData,
+      [name]: inputValue,
+    }));
+  };
 
-        },
-        (error) => {
-          setIsLoading(false)  
+  const handleSubmit = () => {
+    setIsLoading(true);
+    api.put(
+      `/class/${id}`,
+      classData,
+      {},
+      50000,
+      (data, status) => {
+        window.location.href = "/d";
+      },
+      (err, status) => {
+        setIsLoading(false);
 
-          alert("Error : Time out")
+        if (status === 404) {
+          window.location.href = "/not-found";
         }
-      )
-    }
+      },
+      (error) => {
+        setIsLoading(false);
+        alert("Error: Timeout");
+      }
+    );
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-xl">
@@ -91,22 +93,22 @@ const ClassSettings = () => {
             Basic info
           </p>
           <input
-            name = "name"
+            name="name"
             value={classData.name}
             onChange={handleInputChange}
             placeholder="Class Name (required)"
             className="form-input bg-slate-100 w-full py-4 border-0 border-b-[1px] border-slate-400 px-4"
-            required={true}
+            required
           />
 
           <textarea
-            name = "description"
+            name="description"
             value={classData.description}
             onChange={handleInputChange}
             rows={3}
             placeholder="Class Description (required)"
             className="my-6 form-input bg-slate-100 w-full py-4 border-0 border-b-[1px] border-slate-400 px-4"
-            required={true}
+            required
           />
 
           <input
@@ -115,7 +117,7 @@ const ClassSettings = () => {
             onChange={handleInputChange}
             placeholder="Class Category (required)"
             className="form-input bg-slate-100 w-full py-4 border-0 border-b-[1px] border-slate-400 px-4 my-6"
-            required={true}
+            required
           />
         </div>
 
@@ -155,7 +157,7 @@ const ClassSettings = () => {
                 Students can comment
               </label>
               <input
-              name="student_can_comment"
+                name="student_can_comment"
                 type="checkbox"
                 checked={classData.student_can_comment}
                 onChange={handleInputChange}
@@ -165,16 +167,11 @@ const ClassSettings = () => {
 
             <div className="flex justify-between items-center">
               <label className="flex items-center text-slate-700">
-                <FontAwesomeIcon
-                  icon={faStream}
-                  className="mr-2 text-slate-500"
-                />
+                <FontAwesomeIcon icon={faStream} className="mr-2 text-slate-500" />
                 Classwork on the Stream
               </label>
               <input
                 type="checkbox"
-                // checked={classData}
-                // onChange={() => setClassworkOnStream(!classworkOnStream)}
                 className="toggle toggle-primary checked:bg-purple-600"
               />
             </div>
@@ -185,10 +182,9 @@ const ClassSettings = () => {
                 <FontAwesomeIcon icon={faCode} className="mr-2 text-slate-500" />
                 Class Link
               </label>
-              {/* <p>{classData.class_code}</p> */}
               <input
                 type="checkbox"
-                name = "use_code"
+                name="use_code"
                 checked={classData.use_code}
                 onChange={handleInputChange}
                 className="toggle toggle-primary checked:bg-purple-600"
@@ -215,8 +211,8 @@ const ClassSettings = () => {
                 Learn more
               </a>
               <p className="mt-2 text-red-600">
-                You don’t have permission to create or edit the Meet link. Contact
-                your admin to get access.
+                You don’t have permission to create or edit the Meet link.
+                Contact your admin to get access.
               </p>
             </div>
 
@@ -234,12 +230,12 @@ const ClassSettings = () => {
 
             <button
               className="btn bg-purple-800 text-white ml-auto mt-4"
-              onClick={(e) => handleSubmit()}
+              onClick={handleSubmit}
             >
               Apply
             </button>
 
-          {isLoading &&  <Loader/> }
+            {isLoading && <Loader />}
           </div>
         </div>
       </div>
