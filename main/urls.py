@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (UserSignUpView,UserLoginView,
 UserProfileView,ClassView,StudentClassView,TeacherAssignmentView,TopicView,TopicUpdateView,
 WorkSubmitionView,WorkMarkView,ChatClassView,AnnouncementView,ClassFileView,StudentAssignmentView,
-CommentView,TeacherGradingView,StudentGradingView,MembersView)
+CommentView,TeacherGradingView,StudentGradingView,MembersView,MembersView)
 
 urlpatterns = [
      path("auth/signup/",UserSignUpView.as_view()),
@@ -19,6 +19,8 @@ urlpatterns = [
      path("class/students/assignment",StudentAssignmentView.as_view()),
 
      path("topics",TopicView.as_view()),
+     path("class/members/<uuid:student_id>",MembersView.as_view()),
+
      path("topics/<uuid:topic_id>",TopicView.as_view()),
      path("topics/updates/<uuid:topic_id>",TopicUpdateView.as_view()),
      path("topic/updates/<int:update_id>",TopicUpdateView.as_view()),

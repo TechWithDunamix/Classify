@@ -903,3 +903,14 @@ class MembersView(generics.GenericAPIView):
         users = obj.members.all()
         serializer = self.get_serializer_class()(users,many = True) 
         return Response(serializer.data)
+
+    def delete(self,request,student_id = None,*args,**kwargs):
+        user = get_object_or_404(User,id = student_id)
+        _class_qs = Class.objects.filter(owner = request.user)
+        _class = get_object_or_404(_class_qs,id = request.GET.get("class_id"))
+        members = _class.members.all()
+        membership = get_object_or_404(members,user = user)
+        membership.delete()
+        return Response(
+            {"detail": "user removed casses"}
+        )

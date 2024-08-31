@@ -5,10 +5,13 @@ import { api } from '../../utils';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../components/widgets/loader';
+import ProfileModal from '../../components/widgets/teacherprofileviewmodal';
 
 const ClassMembers = () => {
   const [members, setMembers] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [newStudentEmail, setNewStudentEmail] = useState('');
   const { id } = useParams();
 
@@ -39,19 +42,49 @@ const ClassMembers = () => {
     })));
   };
 
-  const removeStudent = (index) => {
-    const newMembers = [...members];
-    newMembers.splice(index, 1);
-    setMembers(newMembers);
+  const removeStudent = (student_id) => {
+    api.delete(`/class/members/${student_id}?class_id=${id}`,{},50000,
+        (data,staus) => {
+            toast.success("Student remover succesfully")
+            fetchData()
+
+        },
+        (error,status) => {
+            if (status === 404){
+                toast.error("Not Found")
+            }
+        },
+        (error) => {
+            toast.error("Sevrer is not responding !")
+        }
+    )
+    
   };
 
   const handleInviteClick = () => {
     if (newStudentEmail.trim()) {
       const name = newStudentEmail.split('@')[0];
-      setMembers([...members, { user: { username: name, image_url: 'https://via.placeholder.com/150' }, showMenu: false }]);
+      setMembers([
+        ...members,
+        {
+          user: { username: name, image_url: 'https://via.placeholder.com/150' },
+          date_joined: new Date().toLocaleDateString(),
+          showMenu: false
+        }
+      ]);
       setNewStudentEmail('');
       setShowModal(false);
     }
+  };
+
+  const handleUserClick = (user) => {
+    setSelectedUser(user);
+    setShowProfile(true);
+  };
+
+  const handleCloseProfile = () => {
+    setShowProfile(false);
+    setSelectedUser(null);
   };
 
   if (!members) {
@@ -85,13 +118,15 @@ const ClassMembers = () => {
           >
             <div className="flex items-center space-x-4">
               <img
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-12 h-12 rounded-full object-cover cursor-pointer"
                 src={member.user.image_url}
                 alt="Profile"
+                onClick={() => handleUserClick(member.user)}
               />
               <div>
                 <h2 className="text-lg font-medium text-gray-800">{member.user.username}</h2>
                 <p className="text-gray-500">Student</p>
+                <p className="text-gray-400 text-sm">Date Joined: {member.date_joined || 'N/A'}</p>
               </div>
             </div>
             <div className="relative">
@@ -105,7 +140,7 @@ const ClassMembers = () => {
               {member.showMenu && (
                 <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg">
                   <button
-                    onClick={() => removeStudent(index)}
+                    onClick={() => removeStudent(member.user.id)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                   >
                     Remove Student
@@ -146,6 +181,9 @@ const ClassMembers = () => {
           </div>
         </div>
       )}
+
+      {/* Profile Modal */}
+      <ProfileModal user={selectedUser} onClose={handleCloseProfile} />
     </div>
   );
 };
