@@ -43,7 +43,7 @@ const AssignmentBlock = ({ data ,fetch}) => {
   return (
     <div className="bg-white p-4  mx-auto border-b-2 mx-2 md:w-[60%]">
       <div className="flex items-center mb-2 cursor-pointer" onClick={handleToggle}>
-        <FontAwesomeIcon icon={faClipboard} className="h-8 w-8 p-2 rounded-full bg-purple-500 text-white" />
+        <FontAwesomeIcon icon={faClipboard} className="h-4 w-4 p-2 rounded-full bg-purple-500 text-white" />
         <div className="text-md ml-4 flex items-center">
           {data.title}
           {data.is_due && (

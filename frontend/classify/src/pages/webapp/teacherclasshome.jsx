@@ -149,6 +149,11 @@ const TeachersClassHome = () => {
           <p className="bg-black text-white px-4 py-2 absolute bottom-0 right-1 m-3 rounded-md shadow-md">
             Total Students: {classData?.members?.length || 0}
           </p>
+
+          <p className="bg-black opacity-50 text-sm text-white px-4 py-2 absolute bottom-0 left-1 m-3 rounded-md shadow-md">
+           {classData?.name}
+          </p>
+
         </div>
       ) : (
         <div className="relative h-48 sm:h-64 lg:h-80 flex items-center justify-center bg-gray-200 rounded-t-md">

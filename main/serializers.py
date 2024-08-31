@@ -93,7 +93,11 @@ class ClassSettingSerializer(serializers.ModelSerializer):
     def to_representation(self,obj):
         data = super().to_representation(obj)
         return data
-
+class MemberSerializer(serializers.ModelSerializer):
+    user = UserProfileViewSerializer()
+    class Meta:
+        model = MemberShip
+        fields = "__all__"
 
 class ClassSerializer(serializers.ModelSerializer):
     setting= serializers.SerializerMethodField()
@@ -103,6 +107,7 @@ class ClassSerializer(serializers.ModelSerializer):
     student_can_comment = serializers.BooleanField(required=False)
     default_grade = serializers.IntegerField(required=False)
     use_code = serializers.BooleanField(required=False)
+    members = MemberSerializer(many = True)
 
 
     def __init__(self,*args, **kwargs):
@@ -479,8 +484,3 @@ class GradingSerializer(serializers.ModelSerializer):
         fields = ['score',"title","username"]
 
 
-class MemberSerializer(serializers.ModelSerializer):
-    user = UserProfileViewSerializer()
-    class Meta:
-        model = MemberShip
-        fields = "__all__"

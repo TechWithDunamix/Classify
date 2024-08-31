@@ -4,6 +4,7 @@ import TeachersClassHome from "./teacherclasshome";
 import ClassSettings from "./teachersClassSetting";
 import TeachersClassClassWork from "./teachersClassWork";
 import TeachersTopicPage from "./teachersTopics";
+import ClassMembers from "./teachersmembers";
 const TeacherViewClass = () =>{
     return (
         <DashboardLayout>
@@ -11,7 +12,7 @@ const TeacherViewClass = () =>{
             <TeachersClassHome />
             <TeachersClassClassWork />
             <TeachersTopicPage />
-            <p>People</p>
+            <ClassMembers />
 
             <p>Grades</p>
             <ClassSettings />
