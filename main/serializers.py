@@ -94,10 +94,14 @@ class ClassSettingSerializer(serializers.ModelSerializer):
         data = super().to_representation(obj)
         return data
 class MemberSerializer(serializers.ModelSerializer):
-    user = UserProfileViewSerializer()
+    user = serializers.SerializerMethodField(read_only = True)
     class Meta:
         model = MemberShip
         fields = "__all__"
+
+    def get_user(self,obj):
+        serializer = UserProfileViewSerializer(obj.user,context = self.context)
+        return serializer.data
 
 class ClassSerializer(serializers.ModelSerializer):
     setting= serializers.SerializerMethodField()
@@ -151,7 +155,7 @@ class ClassSerializer(serializers.ModelSerializer):
             data['class_code'] = '######'
         return data
     def get_members(self,obj):
-        serializer = MemberSerializer(obj.members,many = True)
+        serializer = MemberSerializer(obj.members,many = True,context = self.context)
         return serializer.data
     def get_cover_image_url(self,obj):
         request = self.context.get("request")
@@ -484,13 +488,32 @@ class ClassFilesSerializer(serializers.ModelSerializer):
 class GradingSerializer(serializers.ModelSerializer):
     title = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
-
+    submitions = serializers.SerializerMethodField(read_only = True)
+    user = serializers.SerializerMethodField(read_only = True)
     def get_title(self,obj):
         return obj.title
     def get_username(self,obj):
         return obj.username
     class Meta:
         model = Grading
-        fields = ['score',"title","username"]
+        fields = ['score',"title","username",'submitions',"user"]
+
+    def get_submitions(self,obj):
+        qs = obj.assignment.assignment_submitions.filter(user = obj.user)
+        serializer = WorkSubmitionSerializer(qs,context = self.context,many = True)
+        return serializer.data
+
+    
+    def get_user(self,obj):
+        serializer = UserProfileViewSerializer(obj.user,context = self.context)
+        return serializer.data
+
+
+
+
+class TeachersGradingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
 
 

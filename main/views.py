@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.utils import crypto,timezone
 from django.db.models import Q
-from .serializers import (UserSignupSerializer,UserLoginSerializer,
+from .serializers import (UserSignupSerializer,UserLoginSerializer,TeachersGradingSerializer,
                         UserProfileViewSerializer,ClassSerializer,
                         TopicSerializer,CommentSerializer,GradingSerializer,
                         AssignmentSerializer,TopicUpdateSerializer,ClassFilesSerializer,
@@ -851,7 +851,7 @@ class CommentView(generics.GenericAPIView):
 
 class TeacherGradingView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = GradingSerializer
+    serializer_class = TeachersGradingSerializer
     def dispatch(self, request, *args, **kwargs):
         if not request.GET.get("class_id"):
             return HttpResponseBadRequest("Provide class_id as a get_param")
@@ -863,8 +863,11 @@ class TeacherGradingView(generics.GenericAPIView):
         class_id = request.GET.get("class_id")
         obj = get_object_or_404(_class_qs,id = class_id)
         qs = obj.student_grading.all()
-        serializer = self.get_serializer_class()(qs,many = True)
-        return Response(serializer.data)
+        context = {
+            "request":request
+        }
+        serializer = self.get_serializer_class()(qs,many = True,context = context)
+        return Response({"dta":"dta"})
 
 
 class StudentGradingView(generics.GenericAPIView):

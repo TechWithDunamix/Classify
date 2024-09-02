@@ -5,6 +5,7 @@ import ClassSettings from "./teachersClassSetting";
 import TeachersClassClassWork from "./teachersClassWork";
 import TeachersTopicPage from "./teachersTopics";
 import ClassMembers from "./teachersmembers";
+import StudentGrades from "./studentsgrade";
 const TeacherViewClass = () =>{
     return (
         <DashboardLayout>
@@ -14,7 +15,7 @@ const TeacherViewClass = () =>{
             <TeachersTopicPage />
             <ClassMembers />
 
-            <p>Grades</p>
+            <StudentGrades />
             <ClassSettings />
 
         </TabLayout>

@@ -16,6 +16,7 @@ import TopicView from './pages/webapp/topicView';
 import StudentViewClass from './pages/webapp/studentstabs';
 import ClassworkSubmitions from './pages/webapp/classworksubmitons';
 import ClassworkPage from './pages/webapp/teachersubmitionpage';
+import StudentGrades from './pages/webapp/studentsgrade';
 function App() {
   
   return (
@@ -38,6 +39,8 @@ function App() {
         <Route path='s/:id' element={<PrivateRoute element={<StudentViewClass />} />} />
         <Route path='classwork' element={<PrivateRoute element={<ClassworkSubmitions />} />} />
         <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
+        
+
 
 
 
