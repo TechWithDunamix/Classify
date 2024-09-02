@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Loader from '../../components/widgets/loader';
 import { api } from '../../utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faAdd } from '@fortawesome/free-solid-svg-icons';
 import StudentAssignmentBlock from '../../components/widgets/studentclassworkview';
 
 const StudentClassClassWork = () => {
@@ -48,17 +48,11 @@ const StudentClassClassWork = () => {
   if (classWork.length === 0) {
     return (
       <div className="p-4">
-        <button
-          className="btn bg-purple-600 text-white ml-auto mb-4 flex items-center space-x-2"
-          onClick={openModal}
-        >
-          <FontAwesomeIcon icon={faAdd} />
-          <Link to={`/class/cw/create/${id}`} className="ml-2">Create</Link>
-        </button>
+        
         <div className="flex h-[50vh] justify-center items-center">
           <div className="text-center">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="h-40 w-36 text-slate-400" />
-            <p className="mt-5 text-gray-600">This class has no classwork attached to it!</p>
+            <FontAwesomeIcon icon={faCheckCircle} className="h-40 w-36 text-green-400" />
+            <p className="mt-5 text-gray-600">No classwork yet on this class !</p>
           </div>
         </div>
       </div>

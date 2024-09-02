@@ -13,6 +13,7 @@ const ClassMembers = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newStudentEmail, setNewStudentEmail] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const { id } = useParams();
 
   const fetchData = () => {
@@ -95,13 +96,24 @@ const ClassMembers = () => {
     );
   }
 
+  const filteredMembers = members.filter(member =>
+    member.user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Class Members</h1>
-        <div className="flex items-center">
-          <span className="text-xs text-slate-400">{members.length} Members</span>
+        <div className="flex items-center space-x-4">
+          <input
+            type="text"
+            placeholder="Search by username"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <span className="text-xs text-slate-400">{filteredMembers.length} Members</span>
           <AiOutlineUserAdd
             onClick={() => setShowModal(true)}
             className="cursor-pointer inline-block ml-2 text-2xl text-purple-900"
@@ -111,7 +123,7 @@ const ClassMembers = () => {
 
       {/* Student List */}
       <div className="space-y-4">
-        {members.map((member, index) => (
+        {filteredMembers.map((member, index) => (
           <div
             key={index}
             className="bg-white rounded-lg p-4 flex justify-between items-center border border-gray-300"
@@ -136,7 +148,6 @@ const ClassMembers = () => {
               >
                 <BsThreeDotsVertical className="h-6 w-6" />
               </button>
-              {/* Options Menu */}
               {member.showMenu && (
                 <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg">
                   <button
@@ -154,28 +165,28 @@ const ClassMembers = () => {
 
       {/* Modal for Adding Students */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg w-96">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Add Student</h2>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-800 mb-4">Add New Student</h2>
             <input
               type="email"
               placeholder="Enter student email"
               value={newStudentEmail}
               onChange={(e) => setNewStudentEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-md mb-6 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end">
               <button
-                onClick={() => setShowModal(false)}
-                className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none transition duration-200"
-              >
-                Cancel
-              </button>
-              <button
+                className="bg-purple-500 text-white px-4 py-2 rounded-md"
                 onClick={handleInviteClick}
-                className="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-500 focus:outline-none transition duration-200"
               >
                 Invite
+              </button>
+              <button
+                className="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
               </button>
             </div>
           </div>
@@ -183,7 +194,9 @@ const ClassMembers = () => {
       )}
 
       {/* Profile Modal */}
-      <ProfileModal user={selectedUser} onClose={handleCloseProfile} />
+      {showProfile && selectedUser && (
+        <ProfileModal user={selectedUser} onClose={handleCloseProfile} />
+      )}
     </div>
   );
 };
