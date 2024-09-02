@@ -496,7 +496,7 @@ class GradingSerializer(serializers.ModelSerializer):
         return obj.username
     class Meta:
         model = Grading
-        fields = ['score',"title","username",'submitions',"user"]
+        fields = ['score',"title","username",'submitions',"user","comment","date"]
 
     def get_submitions(self,obj):
         qs = obj.assignment.assignment_submitions.filter(user = obj.user)
@@ -512,8 +512,25 @@ class GradingSerializer(serializers.ModelSerializer):
 
 
 class TeachersGradingSerializer(serializers.ModelSerializer):
+    gradings = serializers.SerializerMethodField(read_only = True)
+    user = serializers.SerializerMethodField()
+    average = serializers.SerializerMethodField()
     class Meta:
-        model = User
+        model = MemberShip
         fields = "__all__"
+
+    def get_gradings(self,obj):
+        qs = Grading.objects.filter(user = obj.user)
+        serializer = GradingSerializer(qs,many = True,context = self.context)
+        return serializer.data
+
+    def get_user(self,obj):
+        serializer = UserProfileViewSerializer(obj.user,context = self.context)
+        return serializer.data
+    def get_average(self,obj):
+        qs = Grading.objects.filter(user = obj.user).all()
+        aggregate = [x.score for x in qs]
+        average = sum(aggregate)/len(aggregate)
+        return average
 
 

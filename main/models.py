@@ -276,6 +276,8 @@ class Grading(models.Model):
     _class = models.ForeignKey(Class, on_delete=models.CASCADE,related_name="student_grading")
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE,related_name = 'grades')
     score = models.IntegerField(default=0)
+    date = models.DateTimeField(auto_now_add = True,null = True)
+    comment = models.CharField(max_length = 120,null = True)
 
     @property
     def username(self):

@@ -23,6 +23,7 @@ def add_grade(**kwargs):
     obj = kwargs.get("instance")
     created = kwargs.get("kwargs")
     score = obj.score
+    comment = obj.comment
 
     if obj.marked:
         score = obj.score
@@ -40,7 +41,8 @@ def add_grade(**kwargs):
                 user = user,
                 _class =_class,
                 assignment = assignment,
-                score = score
+                score = score,
+                comment = comment
             )
             return 
         obj = check.first()

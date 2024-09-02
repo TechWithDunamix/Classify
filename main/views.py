@@ -867,7 +867,7 @@ class TeacherGradingView(generics.GenericAPIView):
             "request":request
         }
         serializer = self.get_serializer_class()(qs,many = True,context = context)
-        return Response({"dta":"dta"})
+        return Response(serializer.data)
 
 
 class StudentGradingView(generics.GenericAPIView):
