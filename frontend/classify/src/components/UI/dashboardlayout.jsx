@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faHome, faBook, faUsers, faCalendar, faCog } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+export const globalContext = React.createContext()
+
 const DashboardLayout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -9,8 +11,12 @@ const DashboardLayout = ({ children }) => {
     setIsCollapsed(!isCollapsed);
   };
 
+  const globalContextValues = {
+    "sidebarToggle" : setIsCollapsed  
+  }
   return (
-    <div className="flex h-[105svh]">
+    <globalContext.Provider value={globalContextValues}>
+    <div className="flex h-screen">
       <div className={`bg-secondary  text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-0 md:w-16' : 'w-16 md:w-64'} z-50`}>
         <div className="font-bold text-2xl p-5 hidden md:inline-block text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
           {isCollapsed ? '' : 'Classroom'} 
@@ -63,6 +69,7 @@ const DashboardLayout = ({ children }) => {
         </div>
       </div>
     </div>
+    </globalContext.Provider>
   );
 };
 

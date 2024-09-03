@@ -4,11 +4,12 @@ import { api } from '../../utils';
 import { toast } from 'react-toastify';
 import Loader from "../../components/widgets/loader";
 import { useParams } from "react-router-dom";
-
+import { useContext } from 'react';
+import {globalContext} from '../../components/UI/dashboardlayout';
 const StudentGrades_ = () => {
     const [student, setStudent] = useState(null);
     const { id } = useParams();
-
+    const context = useContext(globalContext)
     const fetchData = () => {
         api.get(`/students/grading?class_id=${id}`, {}, 50000,
             (data, status) => {
@@ -24,6 +25,10 @@ const StudentGrades_ = () => {
         );
     };
 
+    useEffect(() => {
+        console.log(context)
+        context.sidebarToggle(true)
+    },[])
     useEffect(fetchData, [id]);
 
     if (!student) {
@@ -46,7 +51,7 @@ const StudentGrades_ = () => {
     }
 
     return (
-        <div className="bg-gray-100 text-gray-800 min-h-screen">
+        <div className="bg-gray-100 text-gray-800 h-screen">
             <div className="container mx-auto px-4 py-6">
                 <div className="bg-white rounded-lg p-6 shadow-md">
                     <div className="flex items-center space-x-4">
@@ -60,7 +65,7 @@ const StudentGrades_ = () => {
 
                     <div className="mt-6">
                         <h3 className="text-lg font-semibold text-gray-700 mb-4">Grades</h3>
-                        <div className="overflow-x-auto">
+                        <div className="overflow-x-hidden">
                             <table className="min-w-full bg-white">
                                 <thead>
                                     <tr className="text-left text-gray-600 uppercase text-xs tracking-wider">

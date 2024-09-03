@@ -48,14 +48,18 @@ class ChatClass(AsyncWebsocketConsumer):
     def save_message(self,message):
         class_id =  self.class_id 
         _class = Class.objects.get(id = class_id)
-        ClassChat.objects.create(
+        obj = ClassChat.objects.create(
             user = self.scope['user'],
             content = message,
             _class = _class
         )
         test = f" message  '{message}' to {class_id}"
         print(test)
-        return 
+        data = {
+            "email" : obj.user.email,
+            "username" : obj.user.username
+        }
+        return data
     async def connect(self):
         self.class_id = self.scope['url_route']['kwargs']['class_id']
         user = self.scope['user']
@@ -69,9 +73,9 @@ class ChatClass(AsyncWebsocketConsumer):
         )
        
         await self.accept()
-        await self.send(text_data = json.dumps({
-            "message":f"Welcome to classify !! \n {self.scope['user'].username}"
-        }))
+        # await self.send(text_data = json.dumps({
+        #     "message":f"Welcome to classify !! \n {self.scope['user'].username}"
+        # }))
 
 
     async def disconnect(self, close_code):
@@ -83,18 +87,21 @@ class ChatClass(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         print("Received message:")
         data = json.loads(text_data)
-        
+        operation = await self.save_message(data['text'])
         await self.channel_layer.group_send(
             self.class_id,
             {
                 'type': 'send_message',
-                'message': data['text']
+                'message': data['text'],
+                "email" : operation['email'],
+                "username" : operation['username']
             }
         )
-        operation = await self.save_message(data['text'])
+        
     async def send_message(self, event):
        
         await self.send(text_data=json.dumps({
             "message": event['message'],
-            "user_email" : self.scope['user'].email
+            "user_email" : event['email'],
+            "username" : event['username']
         }))

@@ -131,15 +131,17 @@ const DashboardHome = () => {
                 )}
             </div>
 
+            <div className="h-[100vh] overflow-y-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
             {classList.map((data, index) => (
             <ClassCard key={index} data={data} />
             ))}
             </div>
+            </div>
             {isJOinModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box min-h-36">
-           <p>JOin Class</p>
+           <p>Join Class</p>
            <div className="my-5 px-5">
             <p className="text-xs">You&apos;re Currently Signed in as</p>
             <div className="flex items-center gap-4">

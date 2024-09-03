@@ -4,7 +4,7 @@ const StudentTabLayout = ({ children }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const tabs = ['Stream', 'Classwork',"People","GradeBook"];
+  const tabs = ['Stream', 'Classwork',"Chat","GradeBook"];
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {

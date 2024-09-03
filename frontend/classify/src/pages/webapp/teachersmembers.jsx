@@ -114,9 +114,9 @@ const ClassMembers = () => {
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-xl  text-gray-800">Class Members</h1>
-        <div className="flex items-center space-x-4">
+      <div className="md:flex justify-between items-center mb-8">
+        <h1 className="md:text-xl  text-gray-800">Class Members</h1>
+        <div className="md:flex items-center space-x-4">
           <input
             type="text"
             placeholder="Search by username"
@@ -124,11 +124,13 @@ const ClassMembers = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
-          <span className="text-xs text-slate-400">{filteredMembers.length} Members</span>
+
           <AiOutlineUserAdd
             onClick={() => setShowModal(true)}
             className="cursor-pointer inline-block ml-2 text-2xl text-purple-900"
           />
+          <p className="text-xs text-slate-400">{filteredMembers.length} Members</p>
+          
         </div>
       </div>
 
@@ -206,7 +208,8 @@ const ClassMembers = () => {
 
       {/* Profile Modal */}
       {showProfile && selectedUser && (
-        <ProfileModal user={selectedUser} onClose={handleCloseProfile} />
+        // <ProfileModal user={selectedUser} onClose={handleCloseProfile} />
+        <div></div>
       )}
     </div>
   );

@@ -9,11 +9,12 @@ const StudentViewClass = () =>{
         <DashboardLayout>
         <StudentTabLayout>
             <StudentClassHome />
+            
             <StudentClassClassWork />
-            <p>People</p>
+            <ChatBubble />
             <StudentGrades_ />
         </StudentTabLayout>
-        <ChatBubble />
+        {/* <ChatBubble /> */}
         </DashboardLayout>
     )
 }

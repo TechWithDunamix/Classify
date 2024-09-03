@@ -65,7 +65,7 @@ const AnnouncmentHome = ({flag}) => {
         )
     }
     return (
-        <div className="h-[300px] overflow-y-auto">
+        <div className="overflow-y-auto">
             {data.slice(0,6).map(datas => {
                 return <AnnouncementCard data={datas} deleteStream = {deleteStream}/>
             })}

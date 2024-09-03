@@ -22,9 +22,10 @@ const ChatBubble = () => {
       const data = JSON.parse(e.data);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { message: data.message, user_email: data.user_email },
+        { message: data.message, user_email: data.user_email,username:data.username },
       ]);
       toast.success(data.message);
+      console.log(messages)
     };
 
     ws.current.onerror = (e) => {
@@ -55,13 +56,12 @@ const ChatBubble = () => {
   };
 
   return (
-    <div className="fixed bottom-64 md:bottom-4 right-5 z-50">
+    <div className="">
       <div
-        className={`transition-all duration-300 ease-in-out ${
-          isOpen ? "w-full h-full md:w-80 md:h-96" : "w-16 h-16"
-        } bg-white shadow-lg overflow-hidden`}
+        className="transition-all duration-300 ease-in-out w-full h-full
+         bg-white overflow-hidden"
       >
-        {isOpen ? (
+        
           <ChatWindow
             setIsOpen={setIsOpen}
             messages={messages}
@@ -69,9 +69,7 @@ const ChatBubble = () => {
             setInputValue={setInputValue}
             handleSendMessage={handleSendMessage}
           />
-        ) : (
-          <BubbleButton setIsOpen={setIsOpen} />
-        )}
+        
       </div>
     </div>
   );
@@ -101,16 +99,12 @@ const ChatWindow = ({
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full">
-      <header className="bg-purple-500 text-white p-4 flex justify-between items-center">
-        <h2 className="text-lg">Chat</h2>
-        <button className="text-white" onClick={() => setIsOpen(false)}>
-          ✖️
-        </button>
-      </header>
+    <div className="flex flex-col h-[80vh]">
+      
       <div className="flex-1 p-4 overflow-y-auto">
         <div className="flex flex-col">
           {messages.map((msg, index) => (
+            <div>
             <div
               key={index}
               className={`flex ${msg.user_email === localStorage.getItem("email") ? "justify-end" : "justify-start"} mb-2`}
@@ -120,12 +114,17 @@ const ChatWindow = ({
               >
                 {msg.message}
               </div>
+
             </div>
+            <p className="text-center text-xs text-slate-600">{msg.username}</p>
+
+            </div>
+            
           ))}
           <div ref={chatEndRef} />
         </div>
       </div>
-      <footer className="p-4">
+      <footer className="p-4 absolute bottom-2">
         <div className="flex">
           <input
             type="text"
