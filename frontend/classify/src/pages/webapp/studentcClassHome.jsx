@@ -100,7 +100,7 @@ const StudentClassHome = () => {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {classData?.cover_image_url ? (
-        <div className="relative">
+        <div className="relative mx-[10px]">
           <div
             className="h-48 sm:h-64 lg:h-80 bg-cover bg-center rounded-t-md"
             style={{ backgroundImage: `url(${classData.cover_image_url})` }}
@@ -111,7 +111,7 @@ const StudentClassHome = () => {
           </p>
         </div>
       ) : (
-        <div className="relative h-48 sm:h-64 lg:h-80 flex items-center justify-center bg-gray-200 rounded-t-md">
+        <div className="relative mx-[10px] h-48 sm:h-64 lg:h-80 flex items-center justify-center bg-gray-200 rounded-t-md">
           <div className="text-gray-400 text-4xl sm:text-5xl lg:text-6xl font-bold">
             {classData?.name?.split(" ").map((word) => word[0]).join("")}
           </div>

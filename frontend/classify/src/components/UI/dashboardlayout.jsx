@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-[105svh]">
       <div className={`bg-secondary  text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-0 md:w-16' : 'w-16 md:w-64'} z-50`}>
         <div className="font-bold text-2xl p-5 hidden md:inline-block text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
           {isCollapsed ? '' : 'Classroom'} 

@@ -12,7 +12,7 @@ const ChatBubble = () => {
   // Initialize WebSocket connection
   const wsconnect = () => {
     const url = `ws://localhost:8000/ws/chat_class/${id}`;
-    ws.current = new WebSocket(url,localStorage.getItem("token"));
+    ws.current = new WebSocket(url, localStorage.getItem("token"));
 
     ws.current.onopen = (e) => {
       console.log("WebSocket connected", e);
@@ -55,10 +55,10 @@ const ChatBubble = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-64 md:bottom-4 right-5 z-50">
       <div
         className={`transition-all duration-300 ease-in-out ${
-          isOpen ? "w-80 h-96" : "w-16 h-16"
+          isOpen ? "w-full h-full md:w-80 md:h-96" : "w-16 h-16"
         } bg-white shadow-lg overflow-hidden`}
       >
         {isOpen ? (
@@ -103,7 +103,7 @@ const ChatWindow = ({
   return (
     <div className="flex flex-col h-full">
       <header className="bg-purple-500 text-white p-4 flex justify-between items-center">
-        <h2>Chat</h2>
+        <h2 className="text-lg">Chat</h2>
         <button className="text-white" onClick={() => setIsOpen(false)}>
           ✖️
         </button>
