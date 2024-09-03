@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, ChevronUpIcon,ExclamationCircleIcon} from '@heroicons/react/outline';
 import { api } from '../../utils';
 import { toast } from 'react-toastify';
 import Loader from "../../components/widgets/loader";
+import {useParams} from "react-router-dom"
 
 const StudentGrades = () => {
     const [students, setStudents] = useState([]);
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [openIndex, setOpenIndex] = useState(null);
-
+    const {id} = useParams()
     const fetchData = () => {
-        api.get(`/teacher/grading?class_id=${'479117e7-a14f-4abf-9bdd-1780f0991387'}`, {}, 50000,
+        api.get(`/teacher/grading?class_id=${id}`, {}, 50000,
             (data, status) => {
                 setStudents(data);
                 setFilteredStudents(data); // Initialize filtered students with all students
@@ -40,10 +41,21 @@ const StudentGrades = () => {
         setFilteredStudents(filtered);
     };
 
-    if (!students.length){
+    if (!students){
         return (
-            <div className='h-[50vh]'>
+            <div className='h-[50vh] flex items-center justify-center'>
                 <Loader />
+            </div>
+        )
+    }
+
+    if (students.length === 0){
+        return (
+            <div className='h-[70vh] flex items-center justify-center text-slate-700'>
+                <div>
+                <ExclamationCircleIcon />
+                <p>No grades yet !</p>
+                </div>
             </div>
         )
     }

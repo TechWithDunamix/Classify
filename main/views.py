@@ -862,11 +862,12 @@ class TeacherGradingView(generics.GenericAPIView):
         _class_qs = self.get_cls_qs()
         class_id = request.GET.get("class_id")
         obj = get_object_or_404(_class_qs,id = class_id)
-        qs = obj.student_grading.all()
+        
         context = {
             "request":request
         }
-        serializer = self.get_serializer_class()(qs,many = True,context = context)
+        print(obj.members.all())
+        serializer = self.get_serializer_class()(obj.members,many = True,context = context)
         return Response(serializer.data)
 
 

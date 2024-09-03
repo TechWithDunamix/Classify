@@ -12,7 +12,7 @@ const TeacherViewClass = () =>{
         <TabLayout>
             <TeachersClassHome />
             <TeachersClassClassWork />
-            <TeachersTopicPage />
+            
             <ClassMembers />
 
             <StudentGrades />

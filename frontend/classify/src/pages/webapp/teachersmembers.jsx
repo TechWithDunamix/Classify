@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../components/widgets/loader';
 import ProfileModal from '../../components/widgets/teacherprofileviewmodal';
-
+import { ExclamationCircleIcon } from '@heroicons/react/outline';
 const ClassMembers = () => {
   const [members, setMembers] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -100,11 +100,22 @@ const ClassMembers = () => {
     member.user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (filteredMembers.length === 0){
+    return (
+      
+        <div className='h-[70vh] flex items-center justify-center text-slate-700'>
+            <div>
+            <ExclamationCircleIcon />
+            <p>No Members Yet!</p>
+            </div>
+        </div>
+    )
+  }
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Class Members</h1>
+        <h1 className="text-xl  text-gray-800">Class Members</h1>
         <div className="flex items-center space-x-4">
           <input
             type="text"

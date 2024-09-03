@@ -4,7 +4,7 @@ const TabLayout = ({ children }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const tabs = ['Stream', 'Classwork', 'Topics' ,'People', 'Grades',"Setting"];
+  const tabs = ['Stream', 'Classwork','People', 'Grades',"Setting"];
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -39,7 +39,7 @@ const TabLayout = ({ children }) => {
                 {tabs.slice(3).map((tab, index) => (
                   <button
                     key={index + 3}
-                    className={`block w-full text-left px-4 py-2 hover:bg-gray-200 ${activeTab === index + 2 ? 'bg-purple-500 text-white' : ''}`}
+                    className={`block w-full text-left px-4 py-2 hover:bg-gray-200 ${activeTab === index + 3 ? 'bg-purple-500 text-white' : ''}`}
                     onClick={() => {
                       setActiveTab(index + 3);
                       setShowDropdown(false);

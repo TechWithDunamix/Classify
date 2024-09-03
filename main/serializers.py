@@ -520,7 +520,7 @@ class TeachersGradingSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_gradings(self,obj):
-        qs = Grading.objects.filter(user = obj.user)
+        qs = Grading.objects.filter(user = obj.user,_class = obj._class)
         serializer = GradingSerializer(qs,many = True,context = self.context)
         return serializer.data
 
@@ -528,9 +528,12 @@ class TeachersGradingSerializer(serializers.ModelSerializer):
         serializer = UserProfileViewSerializer(obj.user,context = self.context)
         return serializer.data
     def get_average(self,obj):
-        qs = Grading.objects.filter(user = obj.user).all()
+        qs = Grading.objects.filter(user = obj.user,_class = obj._class).all()
         aggregate = [x.score for x in qs]
-        average = sum(aggregate)/len(aggregate)
+        len_of_aggregate = len(aggregate)
+        if len_of_aggregate < 1:
+            len_of_aggregate = 1
+        average = sum(aggregate)/len_of_aggregate
         return average
 
 
