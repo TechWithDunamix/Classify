@@ -873,7 +873,7 @@ class TeacherGradingView(generics.GenericAPIView):
 
 class StudentGradingView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = GradingSerializer
+    serializer_class = TeachersGradingSerializer
     def dispatch(self, request, *args, **kwargs):
         if not request.GET.get("class_id"):
             return HttpResponseBadRequest("Provide class_id as a get_param")
@@ -882,13 +882,17 @@ class StudentGradingView(generics.GenericAPIView):
         return Class.objects.filter(members__user = self.request.user)
     def get(self,request,*args, **kwargs):
         _class_qs = self.get_cls_qs()
-        print(_class_qs)
         class_id = request.GET.get("class_id")
         obj = get_object_or_404(_class_qs,id = class_id)
-        qs = obj.student_grading.filter(user = request.user)
-        serializer = self.get_serializer_class()(qs,many = True)
+        
+        context = {
+            "request":request
+        }
+        print(obj.members.all())
+        serializer = self.get_serializer_class()(obj.members.filter(user = request.user).first(),
+        context = context)
         return Response(serializer.data)
-    
+
 class MembersView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MemberSerializer
