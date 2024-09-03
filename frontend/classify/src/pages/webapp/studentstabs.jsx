@@ -3,6 +3,7 @@ import StudentTabLayout from "../../components/UI/studentTabLayout";
 import StudentClassHome from "./studentcClassHome";
 import StudentClassClassWork from "./studentclasswork";
 import StudentGrades_ from "./studentgrade";
+import ChatBubble from "../../components/widgets/chat";
 const StudentViewClass = () =>{
     return (
         <DashboardLayout>
@@ -12,6 +13,7 @@ const StudentViewClass = () =>{
             <p>People</p>
             <StudentGrades_ />
         </StudentTabLayout>
+        <ChatBubble />
         </DashboardLayout>
     )
 }

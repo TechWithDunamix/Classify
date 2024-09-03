@@ -70,7 +70,7 @@ class ChatClass(AsyncWebsocketConsumer):
        
         await self.accept()
         await self.send(text_data = json.dumps({
-            "message":f"Welcome to classify {self.scope['user'].username}"
+            "message":f"Welcome to classify !! \n {self.scope['user'].username}"
         }))
 
 
@@ -95,5 +95,6 @@ class ChatClass(AsyncWebsocketConsumer):
     async def send_message(self, event):
        
         await self.send(text_data=json.dumps({
-            "message": event['message']
+            "message": event['message'],
+            "user_email" : self.scope['user'].email
         }))
