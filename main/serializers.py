@@ -402,13 +402,16 @@ class WorkMarkSerializer(serializers.ModelSerializer):
 
     
 class ChatSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-
-    def get_user(self,obj):
+    username = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+    def get_username(self,obj):
         return obj.user.username
+
+    def get_email(self,obj):
+        return obj.user.email
     class Meta:
         model  = ClassChat
-        fields = ['content','timestamp','user',"id"]
+        fields = ['content','timestamp','username',"id","email"]
 
 class CommentSerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField(read_only = True)

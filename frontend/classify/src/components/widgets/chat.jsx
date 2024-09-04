@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaEllipsisV } from "react-icons/fa";
+import { api } from "../../utils.js";
 
 const ChatBubble = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +11,39 @@ const ChatBubble = () => {
   const { id } = useParams();
   const ws = useRef(null);
 
-  // Initialize WebSocket connection
+  const fetchMessage = () => {
+    api.get(
+      `/chat_class/${id}`,
+      {},
+      50000,
+      (data, status) => {
+        console.log(data);
+        const messageArray = [];
+        data.map((data, index) => {
+          const message = {
+            message: data.content,
+            user_email: data.email,
+            username: data.username,
+          };
+          messageArray.push(message);
+        });
+
+        setMessages(messageArray);
+      },
+      (error, status) => {
+        console.log(error);
+
+        if (status === 404) {
+          window.location.href = "/not-found";
+        }
+      },
+      (error) => {
+        toast.error("Server not responding");
+      }
+    );
+  };
+
+  useEffect(fetchMessage, []);
   const wsconnect = () => {
     const url = `ws://localhost:8000/ws/chat_class/${id}`;
     ws.current = new WebSocket(url, localStorage.getItem("token"));
@@ -22,10 +56,14 @@ const ChatBubble = () => {
       const data = JSON.parse(e.data);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { message: data.message, user_email: data.user_email,username:data.username },
+        {
+          message: data.message,
+          user_email: data.user_email,
+          username: data.username,
+        },
       ]);
       toast.success(data.message);
-      console.log(messages)
+      console.log(messages);
     };
 
     ws.current.onerror = (e) => {
@@ -61,65 +99,93 @@ const ChatBubble = () => {
         className="transition-all duration-300 ease-in-out w-full h-full
          bg-white overflow-hidden"
       >
-        
-          <ChatWindow
-            setIsOpen={setIsOpen}
-            messages={messages}
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            handleSendMessage={handleSendMessage}
-          />
-        
+        <ChatWindow
+          setIsOpen={setIsOpen}
+          messages={messages}
+          setMessages={setMessages}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          handleSendMessage={handleSendMessage}
+        />
       </div>
     </div>
   );
 };
 
-const BubbleButton = ({ setIsOpen }) => (
-  <button
-    className="w-full h-full flex items-center justify-center bg-purple-500 text-white"
-    onClick={() => setIsOpen(true)}
-  >
-    💬
-  </button>
-);
-
 const ChatWindow = ({
   setIsOpen,
   messages,
+  setMessages,
   inputValue,
   setInputValue,
   handleSendMessage,
 }) => {
   const chatEndRef = useRef(null);
+  const [activeMessageIndex, setActiveMessageIndex] = useState(null);
 
   useEffect(() => {
     // Scroll to the bottom of the chat window when a new message is added
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const handleDeleteMessage = (index) => {
+    // This function handles deleting the message
+    setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
+    toast.success("Message deleted");
+  };
+
   return (
     <div className="flex flex-col h-[80vh]">
-      
       <div className="flex-1 p-4 overflow-y-auto">
         <div className="flex flex-col">
           {messages.map((msg, index) => (
-            <div>
-            <div
-              key={index}
-              className={`flex ${msg.user_email === localStorage.getItem("email") ? "justify-end" : "justify-start"} mb-2`}
-            >
+            <div key={index} className="relative group">
               <div
-                className={`p-2 rounded-lg ${msg.user_email === localStorage.getItem("email") ? "bg-purple-500 text-white" : "bg-gray-300"}`}
+                className={`flex ${
+                  msg.user_email === localStorage.getItem("email")
+                    ? "justify-end"
+                    : "justify-start"
+                } mb-2`}
               >
-                {msg.message}
+                <div
+                  className={`p-2 rounded-lg max-w-[40%] ${
+                    msg.user_email === localStorage.getItem("email")
+                      ? "bg-purple-500 text-white"
+                      : "bg-gray-300"
+                  }`}
+                >
+                  <p className="max-w-[60%]">{msg.message}</p>
+                </div>
+                {/* Options button for each message */}
+                <div className="ml-2 flex items-center">
+                  <button
+                    className="invisible group-hover:visible"
+                    onClick={() =>
+                      setActiveMessageIndex(
+                        activeMessageIndex === index ? null : index
+                      )
+                    }
+                  >
+                    <FaEllipsisV className="text-gray-500" />
+                  </button>
+                </div>
               </div>
+              <p className="text-center text-xs text-slate-600">{msg.username}</p>
 
+              {/* Options Menu */}
+              {activeMessageIndex === index && (
+                <div className="absolute top-8 right-0 bg-white shadow-lg rounded-md z-10">
+                  <ul>
+                    <li
+                      className="px-4 py-2 text-sm text-red-500 hover:bg-red-100 cursor-pointer"
+                      onClick={() => handleDeleteMessage(index)}
+                    >
+                      Delete
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
-            <p className="text-center text-xs text-slate-600">{msg.username}</p>
-
-            </div>
-            
           ))}
           <div ref={chatEndRef} />
         </div>
