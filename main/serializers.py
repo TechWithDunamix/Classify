@@ -226,7 +226,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
     is_submited = serializers.SerializerMethodField(required = False,read_only = True)
     classwork_type = serializers.CharField(write_only=True)
     mark = serializers.IntegerField(write_only=True)
-    # if self.context.get("request").method == 'GET':
     _date_due = serializers.SerializerMethodField(read_only=True)
     _mark = serializers.SerializerMethodField(read_only=True)
     _files = serializers.JSONField(required = False,default = [])

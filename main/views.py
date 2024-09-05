@@ -296,7 +296,8 @@ class TeacherAssignmentView(generics.GenericAPIView):
             classwork_type=serializer.validated_data.get("classwork_type"),
             mark=serializer.validated_data.get("mark")
             )
-            print(serializer.validated_data)
+            print("here was passed #####################")
+            
             asm  = Assignment.objects.create(
                 title=serializer.validated_data.get("title"),
                 question = serializer.validated_data.get("question"),
@@ -306,7 +307,11 @@ class TeacherAssignmentView(generics.GenericAPIView):
                 options = serializer.validated_data.get("options"),
                 draft=serializer.validated_data.get("draft",False)
             )
-            return Response(serializer.data)
+
+            print("here was also passed ########################3")
+            return Response({
+                "succes" : True
+            })
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     def delete(self,request,class_id = None,asm_id = None):
         qs = self.get_object().assignments.all()
