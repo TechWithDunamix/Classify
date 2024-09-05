@@ -4,7 +4,7 @@ from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 import json
 from .models import Class,ClassChat
-
+from django.db.models import Q
 
 class EmailConsumer(AsyncWebsocketConsumer):
     
@@ -40,7 +40,10 @@ class ChatClass(AsyncWebsocketConsumer):
         except Class.DoesNotExist:
             
             return 
+        
         if _class.members.filter(user = self.scope['user']).exists():
+            return _class
+        if _class.owner == self.scope['user']:
             return _class
         return 
 
@@ -53,13 +56,7 @@ class ChatClass(AsyncWebsocketConsumer):
             content = message,
             _class = _class
         )
-        test = f" message  '{message}' to {class_id}"
-        print(test)
-        data = {
-            "email" : obj.user.email,
-            "username" : obj.user.username
-        }
-        return data
+        return obj,_class
     async def connect(self):
         self.class_id = self.scope['url_route']['kwargs']['class_id']
         user = self.scope['user']
@@ -88,13 +85,18 @@ class ChatClass(AsyncWebsocketConsumer):
         print("Received message:")
         data = json.loads(text_data)
         operation = await self.save_message(data['text'])
+        user = self.scope['user']
+        chat,_class = operation
+        checkDeleteable = (chat.user == user) or (_class.owner == user)
         await self.channel_layer.group_send(
             self.class_id,
             {
                 'type': 'send_message',
-                'message': data['text'],
-                "email" : operation['email'],
-                "username" : operation['username']
+                'message': chat.content,
+                "email" : chat.user.email,
+                "username" : chat.user.username,
+                "deletable" : checkDeleteable,
+                "date" : str(chat.timestamp)
             }
         )
         
@@ -103,5 +105,7 @@ class ChatClass(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "message": event['message'],
             "user_email" : event['email'],
-            "username" : event['username']
+            "username" : event['username'],
+            "deletable" : event['deletable'],
+            "timestamp" : event['date']
         }))

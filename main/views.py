@@ -639,17 +639,27 @@ class WorkMarkView(generics.GenericAPIView):
 class ChatClassView(generics.GenericAPIView):
     serializer_class = ChatSerializer 
     permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        query = Q(owner = self.request.user) | Q(members__user = self.request.user)
+        _class = Class.objects.filter(query)
+
+        return _class
 
     def get(self,request,class_id = None,*args, **kwargs):
-        obj = get_object_or_404(Class,id = class_id)
+        obj = get_object_or_404(self.get_queryset(),id = class_id)
         qs = ClassChat.objects.filter(_class = obj)
-        serializer = self.get_serializer_class()(qs,many = True)
+        serializer = self.get_serializer_class()(qs,many = True,context= {
+            "request" : request
+        })
         return Response(
             serializer.data
         )
+
     def delete(self,request,class_id = None,id = None,*args,**kwargs):
         qs = get_object_or_404(Class,id = class_id)
-        obj = get_object_or_404(qs.class_message.all(),id = id)
+        query = Q(user = request.user) | Q(_class__owner = request.user)
+        chatQs = qs.class_message.filter(query)
+        obj = get_object_or_404(chatQs,id = id)
         obj.delete()
         return Response("Deleted successfully")
         

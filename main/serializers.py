@@ -403,14 +403,20 @@ class WorkMarkSerializer(serializers.ModelSerializer):
 class ChatSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
+    deletable = serializers.SerializerMethodField()
     def get_username(self,obj):
         return obj.user.username
 
     def get_email(self,obj):
         return obj.user.email
+
+    def get_deletable(self,obj):
+        request = self.context.get("request")
+        check = (obj.user == request.user) or (obj._class.owner == request.user)
+        return check
     class Meta:
         model  = ClassChat
-        fields = ['content','timestamp','username',"id","email"]
+        fields = ['content','timestamp','username',"id","email","deletable"]
 
 class CommentSerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField(read_only = True)

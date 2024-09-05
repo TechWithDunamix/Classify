@@ -8,7 +8,7 @@ const ChatBubble = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState(null);
   const [inputValue, setInputValue] = useState("");
-  const { id } = useParams();
+  const {id} = useParams();
   const ws = useRef(null);
 
   const fetchMessage = () => {
@@ -24,6 +24,7 @@ const ChatBubble = () => {
             message: data.content,
             user_email: data.email,
             username: data.username,
+            id : data.id
           };
           messageArray.push(message);
         });
@@ -62,7 +63,7 @@ const ChatBubble = () => {
           username: data.username,
         },
       ]);
-      toast.success(data.message);
+      // toast.success(data.message);
       console.log(messages);
     };
 
@@ -93,6 +94,9 @@ const ChatBubble = () => {
     }
   };
 
+  //handle message deletation 
+
+  
   if (!messages){
     return (
       <div>
@@ -129,17 +133,28 @@ const ChatWindow = ({
 }) => {
   const chatEndRef = useRef(null);
   const [activeMessageIndex, setActiveMessageIndex] = useState(null);
-
+  const {id} = useParams();
   useEffect(() => {
     // Scroll to the bottom of the chat window when a new message is added
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleDeleteMessage = (index) => {
-    // This function handles deleting the message
-    setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
-    toast.success("Message deleted");
-  };
+  const handleDeleteMessage = (msgID,index) => {
+    console.log(messages)
+
+    api.delete(`/chat_class/${id}/${msgID}`,{},50000,
+      (data,status) => {
+        setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
+      },
+      (data,status) => {
+        toast.error("An error occured")
+      },
+      (error) => {
+
+      }
+    )
+    
+  }
 
   return (
     <div className="flex flex-col h-[80vh]">
@@ -161,12 +176,12 @@ const ChatWindow = ({
                       : "bg-gray-300"
                   }`}
                 >
-                  <p className="max-w-[260px] [word-wrap:anywhere]">{msg.message}</p>
+                  <p className="max-w-[260px] [overflow-wrap:break-word]">{msg.message}</p>
                 </div>
                 {/* Options button for each message */}
                 <div className="ml-2 flex items-center">
                   <button
-                    className="invisible group-hover:visible"
+                    className={`${(msg.deletable && "hidden")}`}
                     onClick={() =>
                       setActiveMessageIndex(
                         activeMessageIndex === index ? null : index
@@ -185,8 +200,9 @@ const ChatWindow = ({
                   <ul>
                     <li
                       className="px-4 py-2 text-sm text-red-500 hover:bg-red-100 cursor-pointer"
-                      onClick={() => handleDeleteMessage(index)}
+                      onClick={() => handleDeleteMessage(msg.id,index)}
                     >
+
                       Delete
                     </li>
                   </ul>
