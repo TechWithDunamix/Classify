@@ -155,13 +155,13 @@ const ChatWindow = ({
                 } mb-2`}
               >
                 <div
-                  className={`p-2 rounded-lg max-w-[40%] ${
+                  className={`p-2 rounded-lg max-w-fit ${
                     msg.user_email === localStorage.getItem("email")
                       ? "bg-purple-500 text-white"
                       : "bg-gray-300"
                   }`}
                 >
-                  <p className="max-w-[60%]">{msg.message}</p>
+                  <p className="max-w-[260px] [word-wrap:anywhere]">{msg.message}</p>
                 </div>
                 {/* Options button for each message */}
                 <div className="ml-2 flex items-center">
