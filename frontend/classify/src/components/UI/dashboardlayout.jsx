@@ -58,7 +58,7 @@ const DashboardLayout = ({ children }) => {
               <FontAwesomeIcon icon={faUsers} />
             </button>
             <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-4 text-purple-800 z-50">
-              <li><a href="#">Profile</a></li>
+              <li><Link to="/profile">Profile</Link></li>
               <li><a href="#">Settings</a></li>
               <li><a href="#">Logout</a></li>
             </ul>
