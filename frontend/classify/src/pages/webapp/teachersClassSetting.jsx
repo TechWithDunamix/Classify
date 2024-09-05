@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from "../../components/widgets/loader";
 import { api } from "../../utils";
+import { Navigate } from "react-router-dom";
 import {
   faPen,
   faCommentDots,
@@ -84,7 +85,21 @@ const ClassSettings = () => {
   };
 
   const handleDelete = () => {
-    api.delete()
+    api.delete(`/class/${id}`,{},50000,
+      (data,status) =>{
+        toast.success("Class deleted")
+        window.location.href = "/d"
+      
+      },
+      (error,status) => {
+        if (status === 404){
+          
+        }
+      },
+      (error)=> {
+        toast.error("Server too slow !")
+      }
+    )
   }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
@@ -241,7 +256,7 @@ const ClassSettings = () => {
             {isLoading && <Loader />}
 
             <button
-              className="btn bg-red-200 text-white ml-auto mt-4"
+              className="btn bg-red-900 text-white ml-auto mt-4"
               onClick={handleDelete}
             >
               Delete

@@ -163,6 +163,13 @@ class ClassView(generics.GenericAPIView):
             return Response(serializer.data)
 
         return Response(serializer.errors,status = 400)
+
+    def delete(self,request,id = None,*args,**kwargs):
+         obj = get_object_or_404(self.get_queryset(),id = id)
+         obj.delete()
+         return Response({
+            "detail":"success"
+         })
 class StudentClassView(generics.GenericAPIView):
     serializer_class = ClassSerializer
     permission_classes = [IsAuthenticated]
