@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaEllipsisV } from "react-icons/fa";
 import { api } from "../../utils.js";
-
+import Loader from "./loader.jsx";
 const ChatBubble = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const { id } = useParams();
   const ws = useRef(null);
@@ -93,6 +93,13 @@ const ChatBubble = () => {
     }
   };
 
+  if (!messages){
+    return (
+      <div>
+        <Loader />
+      </div>
+    )
+  }
   return (
     <div className="">
       <div
@@ -190,7 +197,7 @@ const ChatWindow = ({
           <div ref={chatEndRef} />
         </div>
       </div>
-      <footer className="p-4 absolute bottom-2">
+      <footer className="p-4 absolute bottom-2 border-t-2 w-2/4">
         <div className="flex">
           <input
             type="text"

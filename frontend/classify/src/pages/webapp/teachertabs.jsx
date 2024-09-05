@@ -6,11 +6,14 @@ import TeachersClassClassWork from "./teachersClassWork";
 import TeachersTopicPage from "./teachersTopics";
 import ClassMembers from "./teachersmembers";
 import StudentGrades from "./studentsgrade";
+import ChatBubble from "../../components/widgets/chat";
+
 const TeacherViewClass = () =>{
     return (
         <DashboardLayout>
         <TabLayout>
             <TeachersClassHome />
+            <ChatBubble />
             <TeachersClassClassWork />
             
             <ClassMembers />

@@ -38,7 +38,7 @@ const ProfileModal = ({ user, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-3/5 max-w-lg mx-3">
+      <div className="bg-white p-8 rounded-lg shadow-lg  max-w-lg mx-3 z-50 ml-12">
         <div className="flex items-center mb-6">
           <img
             className="w-20 h-20 rounded-full mr-4"

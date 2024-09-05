@@ -83,6 +83,9 @@ const ClassSettings = () => {
     );
   };
 
+  const handleDelete = () => {
+    api.delete()
+  }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-xl">
@@ -236,7 +239,17 @@ const ClassSettings = () => {
             </button>
 
             {isLoading && <Loader />}
+
+            <button
+              className="btn bg-red-200 text-white ml-auto mt-4"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
           </div>
+
+          
+         
         </div>
       </div>
     </div>

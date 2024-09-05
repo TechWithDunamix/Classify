@@ -208,8 +208,8 @@ const ClassMembers = () => {
 
       {/* Profile Modal */}
       {showProfile && selectedUser && (
-        // <ProfileModal user={selectedUser} onClose={handleCloseProfile} />
-        <div></div>
+        <ProfileModal user={selectedUser} onClose={handleCloseProfile} />
+        
       )}
     </div>
   );
