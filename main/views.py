@@ -646,7 +646,7 @@ class ChatClassView(generics.GenericAPIView):
         return _class
 
     def get(self,request,class_id = None,*args, **kwargs):
-        obj = get_object_or_404(self.get_queryset(),id = class_id)
+        obj = get_list_or_404(self.get_queryset(),id = class_id)[0]
         qs = ClassChat.objects.filter(_class = obj)
         serializer = self.get_serializer_class()(qs,many = True,context= {
             "request" : request

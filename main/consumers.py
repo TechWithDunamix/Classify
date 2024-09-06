@@ -109,5 +109,6 @@ class ChatClass(AsyncWebsocketConsumer):
             "user_email" : event['email'],
             "username" : event['username'],
             "deletable" : event['deletable'],
-            "timestamp" : event['date']
+            "timestamp" : event['date'],
+            "id" : event['id']
         }))
