@@ -6,6 +6,7 @@ import { api } from "../../utils.js";
 import Loader from "./loader.jsx";
 import { FaPaperPlane } from "react-icons/fa";
 import { format } from 'date-fns'; // Consider using date-fns for easier date manipulation
+import { FaTrash } from "react-icons/fa";
 const ChatBubble = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState(null);
@@ -28,6 +29,7 @@ const ChatBubble = () => {
             username: data.username,
             id: data.id,
             timestamp: data.timestamp,
+            deletable : data.deletable
           };
           messageArray.push(message);
         });
@@ -67,6 +69,7 @@ const ChatBubble = () => {
           username: data.username,
           id: data.id,
           timestamp: data.timestamp,
+          deletable : data.deletable
         },
       ]);
       console.log(messages);
@@ -169,9 +172,15 @@ const ChatWindow = ({
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [groupedMessages]);
 
+
+  const handleCheckAuth = (msg)=>{
+      if (msg.user_email === localStorage.getItem("email")){
+        return true
+      }
+  }
   return (
     <div className="flex flex-col h-[80vh]">
-      <div className="flex-1 p-4 overflow-y-auto">
+      <div className="flex-1 p-4 overflow-y-auto mb-16">
         <div className="flex flex-col">
           {Object.keys(groupedMessages).map((date) => (
             <div key={date}>
@@ -192,39 +201,29 @@ const ChatWindow = ({
                           : "bg-gray-300"
                       }`}
                     >
+                      {msg.user_email !== localStorage.getItem("email") && <small className="text-slate-600">{msg.username}</small>}
                       <p className="max-w-[260px] [overflow-wrap:break-word]">
                         {msg.message}
                       </p>
                       <p className="text-xs text-gray-400">
                         {formatTime(msg.timestamp)}
                       </p>
-                    </div>
-                    <div className="ml-2 flex items-center">
-                      <button
-                        onClick={() =>
-                          setActiveMessageIndex(
-                            activeMessageIndex === index ? null : index
-                          )
-                        }
+
+                    </div> 
+                    <div className="ml-2  items-center">
+                      {handleCheckAuth(msg) && <button
+                        onClick={() => {handleDeleteMessage(msg.id, index)
+                          setActiveMessageIndex(null)
+                        }}
+
+                        className="text-xs"
                       >
-                        <FaEllipsisV className="text-gray-500" />
-                      </button>
+                        <FaTrash className="text-gray-500" />
+                      </button>}
                     </div>
                   </div>
-                  {activeMessageIndex === index && (
-                    <div className="absolute top-8 right-0 bg-white shadow-lg rounded-md z-10">
-                      <ul>
-                        <li
-                          className="px-4 py-2 text-sm text-red-500 hover:bg-red-100 cursor-pointer"
-                          onClick={() => {handleDeleteMessage(msg.id, index)
-                            setActiveMessageIndex(null)
-                          }}
-                        >
-                          Delete
-                        </li>
-                      </ul>
-                    </div>
-                  )}
+
+                  
                 </div>
               ))}
             </div>

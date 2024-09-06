@@ -5,7 +5,7 @@ from channels.layers import get_channel_layer
 import json
 from .models import Class,ClassChat
 from django.db.models import Q
-
+from .serializers import ChatSerializer
 class EmailConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
@@ -56,7 +56,11 @@ class ChatClass(AsyncWebsocketConsumer):
             content = message,
             _class = _class
         )
-        return obj,_class
+        isDeletable = True 
+        print(obj.user)
+        print(_class.owner)
+        print(obj._class.owner)
+        return obj,_class,isDeletable
     async def connect(self):
         self.class_id = self.scope['url_route']['kwargs']['class_id']
         user = self.scope['user']
@@ -86,16 +90,15 @@ class ChatClass(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         operation = await self.save_message(data['text'])
         user = self.scope['user']
-        chat,_class = operation
-        checkDeleteable = (chat.user == user) or (_class.owner == user)
+        chat,_class,isDeletable = operation
         await self.channel_layer.group_send(
             self.class_id,
             {
                 'type': 'send_message',
                 'message': chat.content,
                 "email" : chat.user.email,
-                "username" : chat.user.username,
-                "deletable" : checkDeleteable,
+                "username" :"Admin" if chat.user == _class.owner else chat.user.username,
+                "deletable" : isDeletable,
                 "date" : str(chat.timestamp),
                 "id" : chat.id,
             
