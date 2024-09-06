@@ -4,11 +4,13 @@ import { toast } from "react-toastify";
 import { FaEllipsisV } from "react-icons/fa";
 import { api } from "../../utils.js";
 import Loader from "./loader.jsx";
+import { FaPaperPlane } from "react-icons/fa";
+import { format } from 'date-fns'; // Consider using date-fns for easier date manipulation
 const ChatBubble = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState(null);
   const [inputValue, setInputValue] = useState("");
-  const {id} = useParams();
+  const { id } = useParams();
   const ws = useRef(null);
 
   const fetchMessage = () => {
@@ -24,7 +26,8 @@ const ChatBubble = () => {
             message: data.content,
             user_email: data.email,
             username: data.username,
-            id : data.id
+            id: data.id,
+            timestamp: data.timestamp,
           };
           messageArray.push(message);
         });
@@ -45,6 +48,7 @@ const ChatBubble = () => {
   };
 
   useEffect(fetchMessage, []);
+  
   const wsconnect = () => {
     const url = `ws://localhost:8000/ws/chat_class/${id}`;
     ws.current = new WebSocket(url, localStorage.getItem("token"));
@@ -54,7 +58,6 @@ const ChatBubble = () => {
     };
 
     ws.current.onmessage = (e) => {
-      
       const data = JSON.parse(e.data);
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -62,11 +65,10 @@ const ChatBubble = () => {
           message: data.message,
           user_email: data.user_email,
           username: data.username,
-          id : data.id,
-          
+          id: data.id,
+          timestamp: data.timestamp,
         },
       ]);
-      // toast.success(data.message);
       console.log(messages);
     };
 
@@ -84,7 +86,6 @@ const ChatBubble = () => {
     };
   }, []);
 
-  // Handle sending a message
   const handleSendMessage = () => {
     if (inputValue.trim()) {
       const message = inputValue;
@@ -93,33 +94,59 @@ const ChatBubble = () => {
           text: message,
         })
       );
-      setInputValue(""); // Clear input field after sending the message
+      setInputValue("");
     }
   };
 
-  //handle message deletation 
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    return format(date, "HH:mm");
+  };
 
-  
-  if (!messages){
+  const groupMessagesByDate = (messages) => {
+    return messages.reduce((acc, message) => {
+      const messageDate = new Date(message.timestamp).toDateString();
+      if (!acc[messageDate]) acc[messageDate] = [];
+      acc[messageDate].push(message);
+      return acc;
+    }, {});
+  };
+
+  const handleDeleteMessage = (msgID, index) => {
+    api.delete(`/chat_class/${id}/${msgID}`, {}, 50000,
+      (data, status) => {
+        setMessages((prevMessages) =>
+          prevMessages.filter((_, i) => i !== index)
+        );
+      },
+      (data, status) => {
+        toast.error("An error occurred");
+      },
+      (error) => {}
+    );
+  };
+
+  if (!messages) {
     return (
       <div>
         <Loader />
       </div>
-    )
+    );
   }
+
+  const groupedMessages = groupMessagesByDate(messages);
+
   return (
     <div className="">
-      <div
-        className="transition-all duration-300 ease-in-out w-full h-full
-         bg-white overflow-hidden"
-      >
+      <div className="transition-all duration-300 ease-in-out w-full h-full bg-white overflow-hidden">
         <ChatWindow
           setIsOpen={setIsOpen}
-          messages={messages}
-          setMessages={setMessages}
+          groupedMessages={groupedMessages}
           inputValue={inputValue}
           setInputValue={setInputValue}
           handleSendMessage={handleSendMessage}
+          formatTime={formatTime} // Pass formatTime as a prop
+          handleDeleteMessage = {handleDeleteMessage}
         />
       </div>
     </div>
@@ -127,96 +154,85 @@ const ChatBubble = () => {
 };
 
 const ChatWindow = ({
-  setIsOpen,
-  messages,
-  setMessages,
+  groupedMessages,
   inputValue,
   setInputValue,
   handleSendMessage,
+  formatTime, 
+  handleDeleteMessage
 }) => {
   const chatEndRef = useRef(null);
   const [activeMessageIndex, setActiveMessageIndex] = useState(null);
-  const {id} = useParams();
+  const { id } = useParams();
+
   useEffect(() => {
-    // Scroll to the bottom of the chat window when a new message is added
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const handleDeleteMessage = (msgID,index) => {
-    console.log(messages)
-
-    api.delete(`/chat_class/${id}/${msgID}`,{},50000,
-      (data,status) => {
-        setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
-      },
-      (data,status) => {
-        toast.error("An error occured")
-      },
-      (error) => {
-
-      }
-    )
-    
-  }
+  }, [groupedMessages]);
 
   return (
     <div className="flex flex-col h-[80vh]">
       <div className="flex-1 p-4 overflow-y-auto">
         <div className="flex flex-col">
-          {messages.map((msg, index) => (
-            <div key={index} className="relative group">
-              <div
-                className={`flex ${
-                  msg.user_email === localStorage.getItem("email")
-                    ? "justify-end"
-                    : "justify-start"
-                } mb-2`}
-              >
-                <div
-                  className={`p-2 rounded-lg max-w-fit ${
-                    msg.user_email === localStorage.getItem("email")
-                      ? "bg-purple-500 text-white"
-                      : "bg-gray-300"
-                  }`}
-                >
-                  <p className="max-w-[260px] [overflow-wrap:break-word]">{msg.message}</p>
-                </div>
-                {/* Options button for each message */}
-                <div className="ml-2 flex items-center">
-                  <button
-                    className={`${(msg.deletable && "hidden")}`}
-                    onClick={() =>
-                      setActiveMessageIndex(
-                        activeMessageIndex === index ? null : index
-                      )
-                    }
+          {Object.keys(groupedMessages).map((date) => (
+            <div key={date}>
+              <h2 className="text-gray-500 text-center my-4">{date}</h2>
+              {groupedMessages[date].map((msg, index) => (
+                <div key={index} className="relative group">
+                  <div
+                    className={`flex ${
+                      msg.user_email === localStorage.getItem("email")
+                        ? "justify-end"
+                        : "justify-start"
+                    } mb-2`}
                   >
-                    <FaEllipsisV className="text-gray-500" />
-                  </button>
-                </div>
-              </div>
-              <p className="text-center text-xs text-slate-600">{msg.username}</p>
-
-              {/* Options Menu */}
-              {activeMessageIndex === index && (
-                <div className="absolute top-8 right-0 bg-white shadow-lg rounded-md z-10">
-                  <ul>
-                    <li
-                      className="px-4 py-2 text-sm text-red-500 hover:bg-red-100 cursor-pointer"
-                      onClick={() => handleDeleteMessage(msg.id,index)}
+                    <div
+                      className={`p-2 rounded-lg max-w-fit ${
+                        msg.user_email === localStorage.getItem("email")
+                          ? "bg-purple-500 text-white"
+                          : "bg-gray-300"
+                      }`}
                     >
-
-                      Delete
-                    </li>
-                  </ul>
+                      <p className="max-w-[260px] [overflow-wrap:break-word]">
+                        {msg.message}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {formatTime(msg.timestamp)}
+                      </p>
+                    </div>
+                    <div className="ml-2 flex items-center">
+                      <button
+                        onClick={() =>
+                          setActiveMessageIndex(
+                            activeMessageIndex === index ? null : index
+                          )
+                        }
+                      >
+                        <FaEllipsisV className="text-gray-500" />
+                      </button>
+                    </div>
+                  </div>
+                  {activeMessageIndex === index && (
+                    <div className="absolute top-8 right-0 bg-white shadow-lg rounded-md z-10">
+                      <ul>
+                        <li
+                          className="px-4 py-2 text-sm text-red-500 hover:bg-red-100 cursor-pointer"
+                          onClick={() => {handleDeleteMessage(msg.id, index)
+                            setActiveMessageIndex(null)
+                          }}
+                        >
+                          Delete
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
           ))}
           <div ref={chatEndRef} />
         </div>
       </div>
-      <footer className="p-4 absolute bottom-2 border-t-2 w-2/4">
+      <footer className="p-4 absolute bottom-2 border-t-2 w-3/4">
         <div className="flex">
           <input
             type="text"
@@ -229,7 +245,7 @@ const ChatWindow = ({
             onClick={handleSendMessage}
             className="ml-2 px-4 py-2 bg-purple-500 text-white rounded"
           >
-            Send
+            <FaPaperPlane />
           </button>
         </div>
       </footer>
