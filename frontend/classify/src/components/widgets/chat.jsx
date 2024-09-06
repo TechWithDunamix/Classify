@@ -54,6 +54,7 @@ const ChatBubble = () => {
     };
 
     ws.current.onmessage = (e) => {
+      
       const data = JSON.parse(e.data);
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -61,6 +62,8 @@ const ChatBubble = () => {
           message: data.message,
           user_email: data.user_email,
           username: data.username,
+          id : data.id,
+          
         },
       ]);
       // toast.success(data.message);

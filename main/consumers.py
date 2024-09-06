@@ -96,7 +96,9 @@ class ChatClass(AsyncWebsocketConsumer):
                 "email" : chat.user.email,
                 "username" : chat.user.username,
                 "deletable" : checkDeleteable,
-                "date" : str(chat.timestamp)
+                "date" : str(chat.timestamp),
+                "id" : chat.id,
+            
             }
         )
         
