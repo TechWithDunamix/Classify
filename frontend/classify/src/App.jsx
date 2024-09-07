@@ -1,5 +1,6 @@
 // App.js
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import SignUpForm from './components/signupform';
 import DashboardHome from './pages/webapp/dashboardhome';
 import PrivateRoute from './pages/protectedroutes';
@@ -18,8 +19,30 @@ import ClassworkSubmitions from './pages/webapp/classworksubmitons';
 import ClassworkPage from './pages/webapp/teachersubmitionpage';
 import StudentGrades from './pages/webapp/studentsgrade';
 import PostDetail from './pages/webapp/morestream';
+import Chatbot from './pages/webapp/bot';
 function App() {
-  
+  useEffect(() => {
+    // Inject the embedded chatbot config
+    window.embeddedChatbotConfig = {
+      chatbotId: "DsWhyagrmg7o-SwVtOZJZ",
+      domain: "www.chatbase.co",
+    };
+
+    // Check if the script is already added
+    const existingScript = document.getElementById("chatbase-script");
+    if (!existingScript) {
+      // Create a script tag
+      const script = document.createElement("script");
+      script.id = "chatbase-script";
+      script.src = "https://www.chatbase.co/embed.min.js";
+      script.setAttribute("chatbotId", "DsWhyagrmg7o-SwVtOZJZ");
+      script.setAttribute("domain", "www.chatbase.co");
+      script.defer = true;
+
+      // Append the script to the document
+      document.body.appendChild(script);
+    }
+  }, []);
   return (
     
     <BrowserRouter>
@@ -41,6 +64,8 @@ function App() {
         <Route path='classwork' element={<PrivateRoute element={<ClassworkSubmitions />} />} />
         <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
         <Route path="stream/detail/:id" element={<PrivateRoute element={<PostDetail />} />} />
+        <Route path="ai" element={<PrivateRoute element={<Chatbot />} />} />
+
         
 
 
