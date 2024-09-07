@@ -675,7 +675,7 @@ class AnnouncementView(generics.GenericAPIView):
         _class = Class.objects.filter(query).all() 
         
         return _class
-    def get(self,request,*args, **kwargs):
+    def get(self,request,id = None,*args, **kwargs):
         if not request.GET.get("class_id"):
             return Response({
                 "message":"include class id as a get pearam"
@@ -693,6 +693,11 @@ class AnnouncementView(generics.GenericAPIView):
             "request" : request
         }
         serializer = self.get_serializer_class()(qs,many = True,context = context)
+        
+        if id:
+            obj = qs.get(id = id)
+            serializer = self.get_serializer_class()(obj,context = context)
+
         return Response(serializer.data)
     def post(self,request,*args, **kwargs):
         if not request.GET.get("class_id"):
@@ -856,7 +861,7 @@ class CommentView(generics.GenericAPIView):
     def post(self,request,id = None,*args, **kwargs):
         class_qs = self.get_class_qs()
         class_id =request.GET.get("class_id")
-        _class = get_object_or_404(class_qs,id = class_id)
+        _class = get_list_or_404(class_qs,id = class_id)[0]
 
         anouncment = get_object_or_404(_class.announcments.all(),id = id)
         serializer = self.get_serializer_class()(data = request.data)
