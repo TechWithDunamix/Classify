@@ -177,6 +177,10 @@ const ChatWindow = ({
       if (msg.user_email === localStorage.getItem("email")){
         return true
       }
+
+      if (msg.deletable){
+        return true
+      }
   }
   return (
     <div className="flex flex-col h-[80vh]">

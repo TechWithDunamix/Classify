@@ -412,7 +412,7 @@ class ChatSerializer(serializers.ModelSerializer):
 
     def get_deletable(self,obj):
         request = self.context.get("request")
-        check = (obj.user == request.user) or (obj._class.owner == request.user)
+        check =  obj._class.owner == request.user
         return check
     class Meta:
         model  = ClassChat

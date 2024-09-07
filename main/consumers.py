@@ -56,7 +56,7 @@ class ChatClass(AsyncWebsocketConsumer):
             content = message,
             _class = _class
         )
-        isDeletable = True 
+        isDeletable = obj.user == _class.owner 
         print(obj.user)
         print(_class.owner)
         print(obj._class.owner)
