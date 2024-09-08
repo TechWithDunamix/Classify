@@ -19,7 +19,9 @@ import ClassworkSubmitions from './pages/webapp/classworksubmitons';
 import ClassworkPage from './pages/webapp/teachersubmitionpage';
 import StudentGrades from './pages/webapp/studentsgrade';
 import PostDetail from './pages/webapp/morestream';
-import Chatbot from './pages/webapp/bot';
+import VideoCallComponent from './pages/webapp/videocall';
+
+
 function App() {
   useEffect(() => {
     // Inject the embedded chatbot config
@@ -51,7 +53,6 @@ function App() {
       <Route index element={<LandingPage />} />
 
         <Route path='*' element={<NotFoundPage />} />
-        <Route path="vid" element={<VideoCall />}  />
 
         <Route path="signup" element={<SignUpForm />} />
         <Route path="d" element={<PrivateRoute element={<DashboardHome />} />} />
@@ -64,14 +65,7 @@ function App() {
         <Route path='classwork' element={<PrivateRoute element={<ClassworkSubmitions />} />} />
         <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
         <Route path="stream/detail/:id" element={<PrivateRoute element={<PostDetail />} />} />
-        <Route path="ai" element={<PrivateRoute element={<Chatbot />} />} />
-
-        
-
-
-
-
-
+        <Route path="t/vid" element={<VideoCallComponent />}  />        
 
       </Routes>
     </BrowserRouter>
