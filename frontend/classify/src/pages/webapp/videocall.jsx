@@ -5,19 +5,19 @@ import { FaDesktop, FaMicrophone, FaMicrophoneSlash, FaPhoneSlash, FaArrowDown, 
 const VideoCallComponent = () => {
   const [peer, setPeer] = useState(null);
   const [currentStream, setCurrentStream] = useState(null);
-  const [originalStream, setOriginalStream] = useState(null); // Store original stream
+  const [originalStream, setOriginalStream] = useState(null);
   const [isMuted, setIsMuted] = useState(false);
   const [loading, setLoading] = useState(true); 
   const [showPermissionModal, setShowPermissionModal] = useState(true); 
-  const [showStudentList, setShowStudentList] = useState(false); // State for toggling student list
-  const [isSharingScreen, setIsSharingScreen] = useState(false); // Track screen sharing state
+  const [showStudentList, setShowStudentList] = useState(false);
+  const [isSharingScreen, setIsSharingScreen] = useState(false); 
   const mainVideoRef = useRef(null);
   const thumbnailsRef = useRef(null);
   const alertsRef = useRef(null);
   const onlineLearnersRef = useRef(null);
 
   useEffect(() => {
-    const peerInstance = new Peer();
+    const peerInstance = new Peer("12345");
     setPeer(peerInstance);
 
     return () => {
@@ -30,7 +30,7 @@ const VideoCallComponent = () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       setCurrentStream(stream);
-      setOriginalStream(stream); // Save the original stream
+      setOriginalStream(stream); 
       setLoading(false);
 
       const myVideo = mainVideoRef.current;

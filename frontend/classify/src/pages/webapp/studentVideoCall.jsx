@@ -9,9 +9,10 @@ const StudentViewComponent = () => {
   const [showStudentList, setShowStudentList] = useState(false);
   const videoRef = useRef(null);
   const queryParams = new URLSearchParams(window.location.search);
-  const peerId = queryParams.get('peerId'); // Get peerId from query parameters
-
+  const peerId = queryParams.get('peerId'); 
   useEffect(() => {
+  console.log(peerId)
+
     if (!peerId) {
       console.error('No peer ID provided in query parameters.');
       return;
@@ -25,7 +26,8 @@ const StudentViewComponent = () => {
 
       
       if (peerId) {
-        const call = peerInstance.call(peerId, null);
+        const call = peerInstance.call("12345", null);
+        console.log("Calling ",call)
 
         if (call) {
           call.on('stream', (remoteStream) => {

@@ -11,7 +11,6 @@ import CreateClassWork from './pages/webapp/classworkcreate';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundPage from './pages/404';
-import VideoCall from './pages/webrtc';
 import LandingPage from './pages/site/landing';
 import TopicView from './pages/webapp/topicView';
 import StudentViewClass from './pages/webapp/studentstabs';
@@ -21,7 +20,7 @@ import StudentGrades from './pages/webapp/studentsgrade';
 import PostDetail from './pages/webapp/morestream';
 import VideoCallComponent from './pages/webapp/videocall';
 import StudentVideoCallComponent from './pages/webapp/studentVideoCall';
-
+import VideoCall from './pages/webapp/videocallmain';
 function App() {
   useEffect(() => {
     // Inject the embedded chatbot config
@@ -65,8 +64,7 @@ function App() {
         <Route path='classwork' element={<PrivateRoute element={<ClassworkSubmitions />} />} />
         <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
         <Route path="stream/detail/:id" element={<PrivateRoute element={<PostDetail />} />} />
-        <Route path="t/vid" element={<VideoCallComponent />}  />        
-        <Route path="s/vid" element={<StudentVideoCallComponent />}  />        
+        <Route path="call" element={<VideoCall />}  />        
 
 
       </Routes>

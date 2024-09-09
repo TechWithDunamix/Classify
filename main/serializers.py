@@ -112,6 +112,7 @@ class ClassSerializer(serializers.ModelSerializer):
     default_grade = serializers.IntegerField(required=False)
     use_code = serializers.BooleanField(required=False)
     members = serializers.SerializerMethodField(read_only = True)
+    is_admin = serializers.SerializerMethodField(read_only = True)
 
 
     def __init__(self,*args, **kwargs):
@@ -146,8 +147,14 @@ class ClassSerializer(serializers.ModelSerializer):
             },
             "setting":{
                 "read_only":True
-            }
+    
         }
+        }
+    def get_is_admin(self,obj):
+        request = self.context.get("request")
+        if (request.user == obj.owner):
+            return True
+        return None
     def to_representation(self,*args,**kwargs):
         data = super().to_representation(*args,**kwargs)
         check = data['setting']['use_code']

@@ -949,3 +949,6 @@ class MembersView(generics.GenericAPIView):
         return Response(
             {"detail": "user removed casses"}
         )
+    
+
+
