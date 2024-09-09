@@ -20,7 +20,7 @@ import ClassworkPage from './pages/webapp/teachersubmitionpage';
 import StudentGrades from './pages/webapp/studentsgrade';
 import PostDetail from './pages/webapp/morestream';
 import VideoCallComponent from './pages/webapp/videocall';
-
+import StudentVideoCallComponent from './pages/webapp/studentVideoCall';
 
 function App() {
   useEffect(() => {
@@ -66,6 +66,8 @@ function App() {
         <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
         <Route path="stream/detail/:id" element={<PrivateRoute element={<PostDetail />} />} />
         <Route path="t/vid" element={<VideoCallComponent />}  />        
+        <Route path="s/vid" element={<StudentVideoCallComponent />}  />        
+
 
       </Routes>
     </BrowserRouter>

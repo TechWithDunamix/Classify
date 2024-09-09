@@ -1,104 +1,145 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Peer from 'peerjs';
+import { FaHandPaper, FaPaperPlane } from 'react-icons/fa';
 
-const StudentVideoCallComponent = () => {
+const StudentViewComponent = () => {
   const [peer, setPeer] = useState(null);
   const [currentStream, setCurrentStream] = useState(null);
-  const [alerts, setAlerts] = useState([]);
-  const mainVideoRef = useRef(null);
-  const onlineLearnersRef = useRef(null);
+  const [message, setMessage] = useState('');
+  const [showStudentList, setShowStudentList] = useState(false);
+  const videoRef = useRef(null);
+  const queryParams = new URLSearchParams(window.location.search);
+  const peerId = queryParams.get('peerId'); // Get peerId from query parameters
 
   useEffect(() => {
-    const peerInstance = new Peer(); // Initialize PeerJS
+    if (!peerId) {
+      console.error('No peer ID provided in query parameters.');
+      return;
+    }
+
+    const peerInstance = new Peer();
     setPeer(peerInstance);
 
-    const getUserMedia = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
-        setCurrentStream(stream);
+    peerInstance.on('open', () => {
+      console.log('Connected to peer network.');
 
-        // Display local audio stream
-        const audio = document.createElement('audio');
-        audio.srcObject = stream;
-        audio.muted = true; // Mute local audio
-        audio.play();
+      
+      if (peerId) {
+        const call = peerInstance.call(peerId, null);
 
-        peerInstance.on('call', (call) => {
-          call.answer(stream);
+        if (call) {
           call.on('stream', (remoteStream) => {
-            const audio = document.createElement('audio');
-            audio.srcObject = remoteStream;
-            audio.play();
-            mainVideoRef.current.appendChild(audio);
+            if (videoRef.current) {
+              videoRef.current.srcObject = remoteStream;
+              videoRef.current.play();
+            }
+            setCurrentStream(remoteStream);
           });
-        });
 
-        peerInstance.on('open', (id) => {
-          console.log('My peer ID is: ' + id);
-        });
-      } catch (err) {
-        console.error('Failed to get user media', err);
+          call.on('error', (err) => {
+            console.error('Call error:', err);
+          });
+
+          call.on('close', () => {
+            console.log('Call ended.');
+          });
+        } else {
+          console.error('Failed to make a call. Call object is null.');
+        }
+      } else {
+        console.error('Invalid peer ID.');
       }
-    };
+    });
 
-    getUserMedia();
+    peerInstance.on('call', (call) => {
+      // Handle incoming calls (if applicable)
+      call.answer(); // Answer the call with no stream initially
+      call.on('stream', (remoteStream) => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = remoteStream;
+          videoRef.current.play();
+        }
+        setCurrentStream(remoteStream);
+      });
+
+      call.on('error', (err) => {
+        console.error('Incoming call error:', err);
+      });
+    });
+
+    peerInstance.on('error', (err) => {
+      console.error('Peer connection error:', err);
+    });
 
     return () => {
-      // Clean up peer instance on unmount
       if (peerInstance) peerInstance.destroy();
       if (currentStream) currentStream.getTracks().forEach(track => track.stop());
     };
-  }, []);
+  }, [peerId, currentStream]);
 
-  const raiseHand = () => {
-    setAlerts([...alerts, 'Student has raised their hand']);
+  const handleRaiseHand = () => {
+    // Logic for raising hand, e.g., notify the teacher
+    console.log('Raise hand button clicked');
   };
 
-  useEffect(() => {
-    // Simulate adding online learners
-    onlineLearnersRef.current.innerHTML = `
-      <li class="flex items-center"><i class="fas fa-user mr-2"></i> Student A</li>
-      <li class="flex items-center"><i class="fas fa-user mr-2"></i> Student B</li>
-      <li class="flex items-center"><i class="fas fa-user mr-2"></i> Student C</li>
-    `;
-  }, []);
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      // Logic for sending a message
+      console.log('Message sent:', message);
+      setMessage('');
+    }
+  };
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Audio Area */}
-      <div className="flex-1 relative flex flex-col">
-        {/* Main Audio Feed */}
-        <div ref={mainVideoRef} className="flex-1 audio-feed bg-black"></div>
-        {/* Controls Area */}
-        <div className="absolute bottom-4 right-4 flex flex-col gap-4">
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Main Video Area */}
+      <div className="flex-1 flex justify-center items-center">
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover border border-gray-300 rounded-md"
+          autoPlay
+        ></video>
+      </div>
+
+      {/* Controls */}
+      <div className="flex flex-col p-4 bg-gray-900 text-white">
+        {/* Raise Hand Button */}
+        <button
+          onClick={handleRaiseHand}
+          className="bg-yellow-600 p-3 rounded-full mb-4"
+        >
+          <FaHandPaper />
+        </button>
+
+        {/* Message Input */}
+        <div className="flex gap-2 items-center">
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="flex-1 p-2 rounded border border-gray-300"
+            placeholder="Type a message..."
+          />
           <button
-            onClick={raiseHand}
-            className="bg-yellow-600 text-white px-4 py-2 rounded-full flex items-center"
+            onClick={handleSendMessage}
+            className="bg-blue-600 p-2 rounded-full"
           >
-            <i className="fas fa-hand-paper mr-2"></i> Raise Hand
+            <FaPaperPlane />
           </button>
         </div>
       </div>
 
-      {/* Sidebar Area */}
-      <div className="w-72 bg-gray-100 p-4 flex flex-col border-l border-gray-300">
-        {/* Alerts Section */}
-        <div className="mb-4">
-          <p className="text-lg font-semibold mb-2">Alerts</p>
-          <div className="p-2 bg-yellow-100 border border-yellow-300 rounded-lg">
-            {alerts.map((alert, index) => (
-              <p key={index} className="text-yellow-800">{alert}</p>
-            ))}
-          </div>
-        </div>
-        {/* Online Learners List */}
-        <div>
-          <p className="text-lg font-semibold mb-2">Online Learners</p>
-          <ul ref={onlineLearnersRef} className="list-disc pl-5"></ul>
-        </div>
+      {/* Toggle Student List Button */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 flex justify-between items-center border-t border-gray-700">
+        <button
+          onClick={() => setShowStudentList(!showStudentList)}
+          className="flex items-center gap-2"
+        >
+          {showStudentList ? 'Hide Students' : 'Show Students'}
+        </button>
       </div>
     </div>
   );
 };
 
-export default StudentVideoCallComponent;
+export default StudentViewComponent;

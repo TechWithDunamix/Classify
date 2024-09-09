@@ -148,14 +148,14 @@ const VideoCallComponent = () => {
       </div>
 
       {/* Controls */}
-      <div className="flex justify-start p-4 bg-gray-900 text-white">
+      <div className="flex flex-col md:flex-row justify-center md:justify-start p-4 bg-gray-900 text-white">
         {/* Thumbnail Section */}
-        <div className="flex gap-4" ref={thumbnailsRef}>
+        <div className="flex gap-4 mb-4 md:mb-0" ref={thumbnailsRef}>
           {/* Remote streams will be appended here */}
         </div>
 
         {/* Controls */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 absolute top-0 mt-4">
           <button onClick={endCall} className="bg-red-600 p-3 rounded-full">
             <FaPhoneSlash />
           </button>
