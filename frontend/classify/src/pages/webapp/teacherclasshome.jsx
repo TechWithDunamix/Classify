@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faCameraAlt, faPaperclip, faQuestionCircle, faLightbulb, faComments, faBullhorn } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faVideoCamera,faPaperclip, faQuestionCircle, faLightbulb, faComments, faBullhorn } from "@fortawesome/free-solid-svg-icons";
 import { useParams, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnnouncmentHome from "../../components/primitives/announcmentHome";
 import { api } from "../../utils";
 import { toast } from "react-toastify";
 import ReactQuill from 'react-quill';
-
+import { Link } from "react-router-dom";
 const TeachersClassHome = () => {
   const { id } = useParams();
   const [classData, setClassData] = useState(null);
@@ -64,7 +64,9 @@ const TeachersClassHome = () => {
   };
 
   const handleCustomizeClick = () => setShowModal(true);
-
+  const handleNoLink = () => {
+    toast.info("This class do not have a meet Link !")
+  }
   const handleCloseModal = () => setShowModal(false);
 
   const handleFormSubmit = (e) => {
@@ -229,11 +231,16 @@ const TeachersClassHome = () => {
 
         <div className="md:w-[100%] flex flex-col gap-4">
           <div className="flex gap-4">
-            <button 
+           {classData?.meet_link ? 
+            <Link to={classData?.meet_link} target="_blank"
             className="rounded-full bg-purple-50 text-purple-700 font-medium px-4  p-2 flex items-center justify-center shadow-sm">
-              <FontAwesomeIcon icon={faCameraAlt} className="mr-2" />
+              <FontAwesomeIcon icon={faVideoCamera} className="mr-2" />
               
-            </button>
+            </Link> : <button onClick={handleNoLink}
+            className="rounded-full bg-purple-50 text-purple-700 font-medium px-4  p-2 flex items-center justify-center shadow-sm">
+              <FontAwesomeIcon icon={faVideoCamera} className="mr-2" />
+              
+            </button>}
             <div onClick={() => setStreamDiv(!streamDIV)}
               className="flex items-center gap-4 border-[1px] shadow-sm p-2 rounded-full cursor-pointer">
               <img src={userData && userData.profile_image} className="w-8 h-8 rounded-full" />
