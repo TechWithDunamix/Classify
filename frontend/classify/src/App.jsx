@@ -20,30 +20,9 @@ import StudentGrades from './pages/webapp/studentsgrade';
 import PostDetail from './pages/webapp/morestream';
 import VideoCallComponent from './pages/webapp/videocall';
 import StudentVideoCallComponent from './pages/webapp/studentVideoCall';
-import VideoCall from './pages/webapp/videocallmain';
+import ChatbotIframe from './pages/webapp/bot';
 function App() {
-  useEffect(() => {
-    // Inject the embedded chatbot config
-    window.embeddedChatbotConfig = {
-      chatbotId: "DsWhyagrmg7o-SwVtOZJZ",
-      domain: "www.chatbase.co",
-    };
-
-    // Check if the script is already added
-    const existingScript = document.getElementById("chatbase-script");
-    if (!existingScript) {
-      // Create a script tag
-      const script = document.createElement("script");
-      script.id = "chatbase-script";
-      script.src = "https://www.chatbase.co/embed.min.js";
-      script.setAttribute("chatbotId", "DsWhyagrmg7o-SwVtOZJZ");
-      script.setAttribute("domain", "www.chatbase.co");
-      script.defer = true;
-
-      // Append the script to the document
-      document.body.appendChild(script);
-    }
-  }, []);
+  
   return (
     
     <BrowserRouter>
@@ -64,7 +43,7 @@ function App() {
         <Route path='classwork' element={<PrivateRoute element={<ClassworkSubmitions />} />} />
         <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
         <Route path="stream/detail/:id" element={<PrivateRoute element={<PostDetail />} />} />
-        <Route path="call" element={<VideoCall />}  />        
+        <Route path="chatbot" element={<ChatbotIframe />}  />        
 
 
       </Routes>

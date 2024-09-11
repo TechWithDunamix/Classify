@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faHome, faBook, faUsers, faCalendar, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faHome, faBook, faRobot,faUsers, faCalendar, faCog } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 export const globalContext = React.createContext()
 
@@ -31,6 +31,12 @@ const DashboardLayout = ({ children }) => {
           <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
             <FontAwesomeIcon icon={faBook} className="mr-4" />
             {!isCollapsed && <span className='hidden md:inline-block'>Classes</span>}
+          </li>
+          <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
+           
+           <Link to={"/chatbot"}> <FontAwesomeIcon icon={faRobot} className="mr-4" />
+            {!isCollapsed && <span className='hidden md:inline-block'>AI</span>}
+            </Link>
           </li>
           <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
             <FontAwesomeIcon icon={faUsers} className="mr-4" />

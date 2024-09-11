@@ -1,34 +1,19 @@
-import React, { useEffect } from "react";
-
-const Chatbot = () => {
-  useEffect(() => {
-    // Inject the embedded chatbot config
-    window.embeddedChatbotConfig = {
-      chatbotId: "DsWhyagrmg7o-SwVtOZJZ",
-      domain: "www.chatbase.co",
-    };
-
-    // Check if the script is already added
-    const existingScript = document.getElementById("chatbase-script");
-    if (!existingScript) {
-      // Create a script tag
-      const script = document.createElement("script");
-      script.id = "chatbase-script";
-      script.src = "https://www.chatbase.co/embed.min.js";
-      script.setAttribute("chatbotId", "DsWhyagrmg7o-SwVtOZJZ");
-      script.setAttribute("domain", "www.chatbase.co");
-      script.defer = true;
-
-      // Append the script to the document
-      document.body.appendChild(script);
-    }
-  }, []);
-
+import React from 'react';
+import DashboardLayout from '../../components/UI/dashboardlayout';
+const ChatbotIframe = () => {
   return (
-    <div>
-      <h2>Chatbot is loading...</h2>
+    <DashboardLayout>
+    <div style={{ width: '100%', height: '80%', minHeight: '700px' }}>
+      <iframe
+        src="https://www.chatbase.co/chatbot-iframe/DsWhyagrmg7o-SwVtOZJZ"
+        width="100%"
+        style={{ height: '90%', minHeight: '90%' }}
+        frameBorder="0"
+        title="Chatbot"
+      ></iframe>
     </div>
+    </DashboardLayout>
   );
 };
 
-export default Chatbot;
+export default ChatbotIframe;

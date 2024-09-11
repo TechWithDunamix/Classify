@@ -7,6 +7,7 @@ import { api } from "../../utils.js";
 import Loader from "../../components/widgets/loader.jsx";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 const CreateClassWork = () => {
     const { id } = useParams();
     const [title, setTitle] = useState("");
@@ -43,7 +44,6 @@ const CreateClassWork = () => {
             newErrors.mark = "Marks must be an integer.";
         }
 
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -68,21 +68,19 @@ const CreateClassWork = () => {
                 console.log(data);
                 setIsLoading(false);
                 window.location.href = `/class/view/${id}`
-
             },
             (error, status) => {
-                
-                if (status === 404){
-                    window.location.href = "/not-found"
+                if (status === 404) {
+                    window.location.href = "/not-found";
                 }
 
-                if (status === 400){
-                    toast.error("Error 400 : Bad request")
-                    setIsLoading(false)
+                if (status === 400) {
+                    toast.error("Error 400 : Bad request");
+                    setIsLoading(false);
                 }
             },
             (error) => {
-                toast.error("Sever is to slow , try refreshing")
+                toast.error("Server is too slow, try refreshing");
                 setIsLoading(false);
             }
         );
@@ -91,50 +89,51 @@ const CreateClassWork = () => {
 
     return (
         <DashboardLayout>
-            <div className="flex justify-center items-center">
-                <div className="h-[60%] md:w-[60%] p-2">
-                    <h2 className="text-xl font-bold mb-4">Create Class Work</h2>
+            <div className="flex justify-center items-center min-h-screen p-4 bg-gray-50">
+                <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-6">
+                    <h2 className="text-2xl font-semibold mb-6">Create Class Work</h2>
 
                     <input
-                        className={`bg-white w-full py-4 px-2 my-4 border-2 ${errors.title ? 'border-red-600' : ''}`}
+                        className={`bg-gray-100 w-full py-3 px-4 mb-4 border rounded-lg focus:outline-none focus:ring-2 ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
                         placeholder="ClassWork Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                    {errors.title && <p className="text-red-600">{errors.title}</p>}
+                    {errors.title && <p className="text-red-500 text-sm mb-2">{errors.title}</p>}
 
-                    <p className="mb-4">Add Class Work Instructions</p>
-                    <ReactQuill value={value} onChange={setValue} className={`h-32 mb-12 ${errors.value ? 'border-red-600' : ''}`} />
-                    {errors.value && <p className="text-red-600">{errors.value}</p>}
+                    <p className="mb-4 text-gray-600">Add Class Work Instructions</p>
+                    <ReactQuill
+                    value={value} onChange={setValue} className={`mb-6 h-[250px]  rounded-lg mb-24`} />
+                    {errors.value && <p className="text-red-500 text-sm mb-2">{errors.value}</p>}
 
                     <input
                         type="number"
-                        className={`bg-white w-full py-4 px-2 my-4 border-2 ${errors.mark ? 'border-red-600' : ''}`}
+                        className={`bg-gray-100 w-full py-3 px-4 mb-4 border rounded-lg focus:outline-none focus:ring-2 ${errors.mark ? 'border-red-500' : 'border-gray-300'}`}
                         placeholder="Marks"
                         value={mark}
                         onChange={(e) => setMark(e.target.value)}
                     />
-                    {errors.mark && <p className="text-red-600">{errors.mark}</p>}
+                    {errors.mark && <p className="text-red-500 text-sm mb-2">{errors.mark}</p>}
 
                     <div className="py-4">
-                        <p className="text-slate-700 my-3">Date Due</p>
+                        <p className="text-gray-600 mb-2">Date Due</p>
                         <input
                             type="datetime-local"
-                            className={`date bg-white py-2 w-full border-2 ${errors.dateDue ? 'border-red-600' : ''}`}
+                            className={`bg-gray-100 py-3 w-full border rounded-lg focus:outline-none focus:ring-2 ${errors.dateDue ? 'border-red-500' : 'border-gray-300'}`}
                             value={dateDue}
                             onChange={(e) => setDateDue(e.target.value)}
                         />
-                        {errors.dateDue && <p className="text-red-600">{errors.dateDue}</p>}
+                        {errors.dateDue && <p className="text-red-500 text-sm mb-2">{errors.dateDue}</p>}
                     </div>
 
-                    <div className="my-4">
-                        <p className="text-slate-700 my-3">Files</p>
-                        <div className="flex flex-wrap">
+                    <div className="my-6">
+                        <p className="text-gray-600 mb-2">Files</p>
+                        <div className="flex flex-wrap gap-2 mb-4">
                             {files.map((file, index) => (
-                                <span key={index} className="bg-gray-200 p-2 m-1 rounded-lg flex items-center">
+                                <span key={index} className="bg-gray-200 p-2 rounded-lg flex items-center text-sm">
                                     {file}
                                     <button
-                                        className="ml-2 text-red-600"
+                                        className="ml-2 text-red-500 hover:text-red-700"
                                         onClick={() => handleRemoveUrl(index)}
                                     >
                                         &times;
@@ -143,7 +142,7 @@ const CreateClassWork = () => {
                             ))}
                         </div>
                         <button
-                            className="btn bg-purple-800 text-white mt-4"
+                            className="btn bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-800 transition"
                             onClick={() => setModalOpen(true)}
                         >
                             Add File URL
@@ -152,44 +151,46 @@ const CreateClassWork = () => {
 
                     {modalOpen && (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                            <div className="bg-white p-4 rounded-lg">
-                                <h2 className="text-xl font-bold mb-4">Add File URL</h2>
+                            <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                                <h2 className="text-xl font-semibold mb-4">Add File URL</h2>
                                 <input
-                                    className="bg-white w-full py-2 px-2 mb-4 border-2"
+                                    className="bg-gray-100 w-full py-2 px-3 mb-4 border rounded-lg focus:outline-none focus:ring-2"
                                     placeholder="Enter URL"
                                     value={newUrl}
                                     onChange={(e) => setNewUrl(e.target.value)}
                                 />
-                                <button
-                                    className="btn bg-purple-800 text-white mr-2"
-                                    onClick={handleAddUrl}
-                                >
-                                    Add
-                                </button>
-                                <button
-                                    className="btn bg-gray-600 text-white"
-                                    onClick={() => setModalOpen(false)}
-                                >
-                                    Cancel
-                                </button>
+                                <div className="flex gap-2">
+                                    <button
+                                        className="btn bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-800 transition"
+                                        onClick={handleAddUrl}
+                                    >
+                                        Add
+                                    </button>
+                                    <button
+                                        className="btn bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+                                        onClick={() => setModalOpen(false)}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
 
                     {/* Draft Switch */}
-                    <div className="flex items-center my-4">
-                        <label htmlFor="draft-switch" className="mr-2 text-slate-700">Save as Draft</label>
+                    <div className="flex items-center my-6">
+                        <label htmlFor="draft-switch" className="mr-3 text-gray-600">Save as Draft</label>
                         <input
                             type="checkbox"
                             id="draft-switch"
                             checked={isDraft}
                             onChange={(e) => setIsDraft(e.target.checked)}
-                            className="toggle-switch"
+                            className="form-checkbox h-5 w-5 text-purple-600 transition duration-150 ease-in-out"
                         />
                     </div>
 
                     <button
-                        className="btn bg-purple-800 text-white mt-8"
+                        className="btn bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-800 transition mt-6"
                         onClick={handleSubmit}
                     >
                         Submit
