@@ -14,7 +14,7 @@ from channels.routing import URLRouter,ProtocolTypeRouter
 from channels.auth import AuthMiddlewareStack 
 from main.routing import ws_paths
 from django.urls import path
-from main.consumers import EmailConsumer,ChatClass
+from main.consumers import EmailConsumer,ChatClass,AccountActivation
 from channels.routing import ChannelNameRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from main.middlewares import TokenAuthMiddleware
@@ -27,7 +27,8 @@ application = ProtocolTypeRouter(
                 URLRouter(
                 [
                     path("ws/send_mail",EmailConsumer.as_asgi()),
-                    path("ws/chat_class/<str:class_id>",ChatClass.as_asgi())
+                    path("ws/chat_class/<str:class_id>",ChatClass.as_asgi()),
+                    path("ws/activate",AccountActivation.as_asgi())
 
                 ] 
                 

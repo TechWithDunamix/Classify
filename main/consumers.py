@@ -115,3 +115,39 @@ class ChatClass(AsyncWebsocketConsumer):
             "timestamp" : event['date'],
             "id" : event['id']
         }))
+
+
+
+class AccountActivation(AsyncWebsocketConsumer):
+    async def connect(self):
+        if not self.scope['user']:
+            self.disconnect(code=101)
+
+        userEmail = self.scope['user'].user_id
+        await self.channel_layer.group_add(
+            'userEmail',
+            self.channel_name
+        )
+
+        message = json.dumps(
+            {
+                "type" : "NEW",
+                "code" : "001"
+            }
+        )
+
+        await self.accept()
+        await self.send(message)
+
+
+    async def disconnect(self, code):
+        return await super().disconnect(code)
+    
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        # print(data)
+        print(text_data)
+        pass
+
+    
+    

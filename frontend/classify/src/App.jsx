@@ -21,6 +21,7 @@ import PostDetail from './pages/webapp/morestream';
 import VideoCallComponent from './pages/webapp/videocall';
 import StudentVideoCallComponent from './pages/webapp/studentVideoCall';
 import ChatbotIframe from './pages/webapp/bot';
+import WaitingPage from './pages/site/auth/confirmemail';
 function App() {
   
   return (
@@ -44,6 +45,8 @@ function App() {
         <Route path='classwork/:id' element={<PrivateRoute element={<ClassworkPage />} />} />
         <Route path="stream/detail/:id" element={<PrivateRoute element={<PostDetail />} />} />
         <Route path="chatbot" element={<ChatbotIframe />}  />        
+        <Route path="waiting" element={<WaitingPage />}  />        
+
 
 
       </Routes>
