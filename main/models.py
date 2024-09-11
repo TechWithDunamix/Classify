@@ -93,7 +93,7 @@ class Class(models.Model):
     category = models.CharField(max_length=90)
     cover = models.ImageField(null = True,blank = True,upload_to = 'class/covers')
     class_code = models.CharField(max_length=12)
-
+    meet_link = models.URLField(null = True,blank = True)
     @property
     def invite_link(self):
         return ''

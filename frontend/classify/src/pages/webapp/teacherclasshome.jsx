@@ -230,7 +230,7 @@ const TeachersClassHome = () => {
         <div className="md:w-[100%] flex flex-col gap-4">
           <div className="flex gap-4">
             <button 
-            className="rounded-full bg-purple-50 text-purple-700 font-medium px-4 justify-center p-2 flex items-center justify-center shadow-sm">
+            className="rounded-full bg-purple-50 text-purple-700 font-medium px-4  p-2 flex items-center justify-center shadow-sm">
               <FontAwesomeIcon icon={faCameraAlt} className="mr-2" />
               
             </button>

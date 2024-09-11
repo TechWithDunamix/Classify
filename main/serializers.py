@@ -145,6 +145,10 @@ class ClassSerializer(serializers.ModelSerializer):
             "class_code":{
                 "read_only":True
             },
+            "meet_link":{
+                "required":False
+                
+            },
             "setting":{
                 "read_only":True
     
@@ -208,6 +212,8 @@ class ClassSerializer(serializers.ModelSerializer):
                                     instance.setting.default_grade)
         
         instance.setting.use_code = validated_data.get("use_code",instance.setting.use_code)
+        instance.meet_link = validated_data.get("meet_link",instance.meet_link)
+
 
 
         instance.save()

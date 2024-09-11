@@ -32,6 +32,7 @@ const ClassSettings = () => {
           student_can_post: data.setting.student_can_post,
           student_can_comment: data.setting.student_can_comment,
           use_code: data.setting.use_code,
+          meet_link : data.meet_link
         };
         setClassData(ClassData);
         console.log(classData);
@@ -217,6 +218,10 @@ const ClassSettings = () => {
                 <FontAwesomeIcon icon={faLink} className="mr-2 text-slate-500" />
                 Manage Meet link
               </label>
+              <input name="meet_link" 
+              onChange={handleInputChange}
+              value={classData.meet_link}
+              className="form-input bg-slate-100 w-full py-4 border-0 border-b-[1px] border-slate-400 px-4 my-6"/>
             </div>
 
             <div className="text-slate-600 mt-4">
