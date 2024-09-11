@@ -6,6 +6,8 @@ import json
 from .models import Class,ClassChat
 from django.db.models import Q
 from .serializers import ChatSerializer
+from .models import ActivationsCode
+from django.utils import crypto
 class EmailConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
@@ -133,15 +135,44 @@ class AccountActivation(AsyncWebsocketConsumer):
         await self.accept()
        
 
+    @database_sync_to_async
+    def create_code(self):
+        user = self.scope['user']
+        code = crypto.get_random_string(18)
+        check = ActivationsCode.objects.filter(user = user)
+        if check:
+            [obj.delete() for obj in check.all()]
+        
+        obj = ActivationsCode.objects.create(user = user,code = code)
+
+        return obj,check.exists(),code
+
+    @database_sync_to_async
+    def confirm_code(self,id =None):
+        try:
+            user_code = AccountActivation.objects.get(id = id)
+        except:
+            self.disconnect()
+
+        user_code.user.activated = True
+        user_code.user.save()
+        return user_code
 
     async def disconnect(self, code):
         return await super().disconnect(code)
     
     async def receive(self, text_data):
         data = json.loads(text_data)
-        
+        user = self.scope['user']
         if data.get("code") == "001":
-            print("Handle mailing") #handle mailing
+            obj,checked,code = await self.create_code()
+            print(code)
+        
+        if data.get("code") == "002":
+            operation = await self.confirm_code(data.get("id"))
+
+            
+
         pass
 
     

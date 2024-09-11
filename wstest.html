@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Confirmation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+      <!-- Logo -->
+      <div class="text-center">
+        <img src="https://via.placeholder.com/150" alt="Logo" class="mx-auto w-20 mb-4">
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-2xl font-semibold text-gray-800 text-center mb-2">Confirm Your Email</h1>
+      <p class="text-gray-600 text-center mb-6">
+        Please confirm your email address to complete your registration.
+      </p>
+
+      <!-- Call to Action Button -->
+      <div class="text-center mb-6">
+        <button id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg inline-block">
+          Confirm Email
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <hr class="border-t border-gray-300 mb-4">
+
+      <!-- Footer Section -->
+      <p class="text-gray-600 text-sm text-center">
+        If you didn’t create this account, you can safely ignore this email.
+      </p>
+    </div>
+  </div>
+
+</body>
+<script>
+  const url = "ws://127.0.0.1:8000/ws/activate"
+
+  const ws = new WebSocket(url,"25fbb68a275e11cfaf3ba4a4bd8a7f467f7883c3")
+  ws.onopen = (e) => {
+    console.log("Connected")
+
+  }
+
+  const btn = document.querySelector("#submit-btn")
+  btn.addEventListener("click",(event) => {
+      const data = {"type" : "confirmed",
+        "code" : "002"}
+
+      ws.send(JSON.stringify(data))
+  })
+</script>
+</html>
+
