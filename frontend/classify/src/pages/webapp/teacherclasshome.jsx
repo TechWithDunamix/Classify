@@ -235,102 +235,72 @@ const TeachersClassHome = () => {
               
             </button>
             <div onClick={() => setStreamDiv(!streamDIV)}
-              className="flex items-center gap-4 border-2 p-2 rounded-md w-full cursor-pointer">
+              className="flex items-center gap-4 border-[1px] shadow-sm p-2 rounded-full cursor-pointer">
               <img src={userData && userData.profile_image} className="w-8 h-8 rounded-full" />
-              <span>What's on your mind ?</span>
+              <span>Post an update </span>
             </div>
           </div>
           <div className="max-w-[100%]">
           {streamDIV && (
-            <motion.div className=""
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3 }}
-            >
-              <form className="">
-                <label htmlFor="announcement-text" className="block text-sm font-medium text-gray-700 mb-2">
-                  Create Post
-                </label>
-                <div className="flex gap-4 mb-4 flex-col md:flex-row">
-                  <div className="hidden">
-                    <input
-                      type="radio"
-                      id="question"
-                      name="postType"
-                      value="question"
-                      checked={postType === "question"}
-                      onChange={() => setPostType("question")}
-                      className="mr-2"
-                    />
-                    <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
-                    <label htmlFor="question" className="text-sm text-gray-700">Question</label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="idea"
-                      name="postType"
-                      value="idea"
-                      checked={postType === "idea"}
-                      onChange={() => setPostType("idea")}
-                      className="mr-2"
-                    />
-                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" />
-                    <label htmlFor="idea" className="text-sm text-gray-700">Idea</label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="discussion"
-                      name="postType"
-                      value="discussion"
-                      checked={postType === "discussion"}
-                      onChange={() => setPostType("discussion")}
-                      className="mr-2"
-                    />
-                    <FontAwesomeIcon icon={faComments} className="mr-2" />
-                    <label htmlFor="discussion" className="text-sm text-gray-700">Discussion</label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="announcement"
-                      name="postType"
-                      value="announcement"
-                      checked={postType === "announcement"}
-                      onChange={() => setPostType("announcement")}
-                      className="mr-2"
-                    />
-                    <FontAwesomeIcon icon={faBullhorn} className="mr-2" />
-                    <label htmlFor="announcement" className="text-sm text-gray-700">Announcement</label>
-                  </div>
-                </div>
-                <input  
-                placeholder="Post title"
-                className="w-full bg-white border-2 px-2 p-2 my-2"
-                value={postTitle}
-                onChange={(e) => setPostTitle(e.target.value)}/>
-                <ReactQuill
-                  id="announcement-text"
-                  name="announcement-text"
-                  value={announcementText}
-                  onChange={setAnnouncementText}
-                  rows="4"
-                  className="w-full p-2  border-gray-300 rounded-md bg-white h-36"
-                  placeholder="Type your announcement here..."
-                />
-                <div className="flex justify-end mt-4">
-                  <button
-                    type="button"
-                    onClick={handleMakeAnnouncement}
-                    className="px-4 py-2 mt-12 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition duration-300 ease-in-out"
-                  >
-                    Post
-                  </button>
-                </div>
-              </form>
-            </motion.div>
+           <motion.div 
+           className="bg-white shadow-lg rounded-lg md:p-6 p-2"
+           initial={{ opacity: 0, scale: 0.8 }}
+           animate={{ opacity: 1, scale: 1 }}
+           exit={{ opacity: 0, scale: 0.8 }}
+           transition={{ duration: 0.3 }}
+         >
+           <form className="space-y-6">
+             <label htmlFor="announcement-text" className="block text-lg font-semibold text-gray-800 mb-2">
+               Create Post
+             </label>
+             {/* Post Type Dropdown */}
+             <div className="mb-4">
+               <label htmlFor="postType" className="block text-sm font-medium text-gray-700 mb-2">Post Type</label>
+               <select
+                 id="postType"
+                 name="postType"
+                 value={postType}
+                 onChange={(e) => setPostType(e.target.value)}
+                 className="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
+               >
+                 <option value="idea">Idea 💡</option>
+                 <option value="discussion">Discussion 💬</option>
+                 <option value="announcement">Announcement 📢</option>
+                 <option value="question">Question ❓</option>
+               </select>
+             </div>
+             
+             {/* Post Title */}
+             <input  
+               placeholder="Post Title"
+               className="w-full bg-white border-2 border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+               value={postTitle}
+               onChange={(e) => setPostTitle(e.target.value)}
+             />
+             
+             {/* React Quill Text Editor */}
+             <ReactQuill
+               id="announcement-text"
+               name="announcement-text"
+               value={announcementText}
+               onChange={setAnnouncementText}
+               className="w-full h-48 [padding:0px!important] border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+               placeholder="Type your announcement here..."
+             />
+             
+             {/* Post Button */}
+             <div className="flex justify-end">
+               <button
+                 type="button"
+                 onClick={handleMakeAnnouncement}
+                 className="px-5 mt-16 md:mt-8 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md shadow-md transition duration-300 ease-in-out"
+               >
+                 Post
+               </button>
+             </div>
+           </form>
+         </motion.div>
+         
           )}
           </div>
         </div>
