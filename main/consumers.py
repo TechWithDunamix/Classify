@@ -129,15 +129,9 @@ class AccountActivation(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-        message = json.dumps(
-            {
-                "type" : "NEW",
-                "code" : "001"
-            }
-        )
-
+       
         await self.accept()
-        await self.send(message)
+       
 
 
     async def disconnect(self, code):
@@ -145,9 +139,11 @@ class AccountActivation(AsyncWebsocketConsumer):
     
     async def receive(self, text_data):
         data = json.loads(text_data)
-        # print(data)
-        print(text_data)
+        
+        if data.get("code") == "001":
+            print("Handle mailing") #handle mailing
         pass
 
+    
     
     

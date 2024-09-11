@@ -287,3 +287,11 @@ class Grading(models.Model):
     @property
     def title(self):
         return self.assignment.title
+
+
+class ActivationsCode(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    code = models.TextField()
+
+    def __str__(self):
+        return self.code
