@@ -147,6 +147,7 @@ class AccountActivation(AsyncWebsocketConsumer):
         if check:
             [obj.delete() for obj in check.all()]
         
+        print(code)
         obj = ActivationsCode.objects.create(user = user,code = code)
 
         return obj,check.exists(),code
@@ -154,12 +155,16 @@ class AccountActivation(AsyncWebsocketConsumer):
     @database_sync_to_async
     def confirm_code(self,id =None):
         try:
-            user_code = AccountActivation.objects.get(id = id)
+            user_code = ActivationsCode.objects.get(code = id)
         except:
             self.disconnect(101)
+            print("None found",id)
+            return None
 
         user_code.user.activated = True
         user_code.user.save()
+        print("activated")
+        user_code.delete()
         return user_code
 
     async def disconnect(self, code):
