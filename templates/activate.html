@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Classify</title>
+    <style>
+        /* Tailwind-like utility styles for emails */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .bg-blue {
+            background-color: #1D4ED8; /* Tailwind's blue-700 */
+        }
+        .bg-white {
+            background-color: white;
+        }
+        .text-white {
+            color: white;
+        }
+        .text-gray {
+            color: #4B5563; /* Tailwind's gray-600 */
+        }
+        .text-center {
+            text-align: center;
+        }
+        .rounded {
+            border-radius: 8px;
+        }
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        .font-bold {
+            font-weight: bold;
+        }
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+        .mt-4 {
+            margin-top: 1rem;
+        }
+        .leading-6 {
+            line-height: 1.5rem;
+        }
+        .btn {
+            background-color: #3B82F6; /* Tailwind's blue-500 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #2563EB; /* Darker blue */
+        }
+    </style>
+</head>
+<body>
+    <div class="container bg-white rounded py-4 px-6">
+        <!-- Header -->
+        <div class="text-center">
+            <h1 class="font-bold text-gray text-2xl">Welcome to Classify, {{ user }}!</h1>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="bg-blue rounded text-white py-4 mt-4 text-center">
+            <h2 class="font-bold text-2xl">Your Journey Begins Here</h2>
+            <p class="leading-6">Classify is your new home for managing classes, assignments, and social interactions all in one place.</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="text-gray mt-4">
+            <p class="leading-6">Hi {{ user_name }},</p>
+            <p class="leading-6">
+                We’re thrilled to have you on board! At Classify, we aim to make classroom management seamless and engaging. You're just one step away from exploring all the amazing features we offer.
+            </p>
+            <p class="leading-6">
+                To get started, click the button below to set up your profile and explore Classify:
+            </p>
+        </div>
+
+        <!-- Call to Action Button -->
+        <div class="text-center mt-6">
+            <a href="{{ profile_setup_link }}" class="btn">Get Started</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6">
+            <p class="text-gray leading-6">If you have any questions, feel free to reply to this email—we're here to help!</p>
+            <p class="text-gray leading-6">Cheers, <br> The Classify Team</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -8,6 +8,7 @@ from django.db.models import Q
 from .serializers import ChatSerializer
 from .models import ActivationsCode
 from django.utils import crypto
+from .emailUtils import send_html_email
 class EmailConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
@@ -164,9 +165,19 @@ class AccountActivation(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         user = self.scope['user']
+       
         if data.get("code") == "001":
+            print(user)
+            print(data)
             obj,checked,code = await self.create_code()
-            print(code)
+            context = {
+                "code" : code,
+                "user" : obj.user.username 
+            }
+            users = ["techwithdunamix@gmail.com"]
+            sender = "techwithdunamix@gmail.com"
+            await   send_html_email("Classify","activate.html",context,users,sender)
+            print("Email sent")
         
         if data.get("code") == "002":
             operation = await self.confirm_code(data.get("id"))
