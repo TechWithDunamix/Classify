@@ -12,7 +12,7 @@
             padding: 20px;
         }
         .bg-blue {
-            background-color: #1D4ED8; /* Tailwind's blue-700 */
+            background-color: #b807a9; /* Tailwind's blue-700 */
         }
         .bg-white {
             background-color: white;
@@ -50,15 +50,16 @@
             line-height: 1.5rem;
         }
         .btn {
-            background-color: #3B82F6; /* Tailwind's blue-500 */
+            background-color: #810dc5; /* Tailwind's blue-500 */
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             text-decoration: none;
             display: inline-block;
+            
         }
         .btn:hover {
-            background-color: #2563EB; /* Darker blue */
+            background-color: #6e0783; /* Darker blue */
         }
     </style>
 </head>
@@ -88,7 +89,7 @@
 
         <!-- Call to Action Button -->
         <div class="text-center mt-6">
-            <a href="{{ profile_setup_link }}" class="btn">Get Started</a>
+            <a href="http://localhost:3000/auth/confirm/{{code}}/{{token}}" id="main-btn" class="btn">Get Started</a>
         </div>
 
         <!-- Footer -->
@@ -98,4 +99,6 @@
         </div>
     </div>
 </body>
+
+
 </html>

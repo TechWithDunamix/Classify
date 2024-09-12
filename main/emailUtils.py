@@ -4,7 +4,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-def send_html_email(subject, template_name, context, recipient_list, sender=None):
+async   def send_html_email(subject, template_name, context, recipient_list, sender=None):
     """
     Utility function to send an HTML email using a template.
     

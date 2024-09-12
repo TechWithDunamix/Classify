@@ -176,9 +176,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # settings.py
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True  # Use TLS for secure communication
-EMAIL_HOST_USER = 'techwithdunamix@gmail.com'  # Replace with your Gmail address
-EMAIL_HOST_PASSWORD = 'hknrioddugyyyfhy'   # Replace with your Gmail app-specific password
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'techwithdunamix@gmail.com'
+EMAIL_HOST_PASSWORD = 'khfuxdrmglzlxqxa'
+DEFAULT_FROM_EMAIL = 'blockvestaa@gmail.com'

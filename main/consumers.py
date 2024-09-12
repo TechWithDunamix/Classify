@@ -12,11 +12,14 @@ from .emailUtils import send_html_email
 class EmailConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):
-        print(self.scope['user'])
-        await self.channel_layer.group_add(
-            "email_channel",
-            self.channel_name
-        )
+        scope = self.scope 
+        if scope['user']:
+            await self.channel_layer.group_add(
+                "email_channel",
+                self.channel_name
+                )
+        else:pass
+
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -153,7 +156,7 @@ class AccountActivation(AsyncWebsocketConsumer):
         try:
             user_code = AccountActivation.objects.get(id = id)
         except:
-            self.disconnect()
+            self.disconnect(101)
 
         user_code.user.activated = True
         user_code.user.save()
@@ -167,12 +170,12 @@ class AccountActivation(AsyncWebsocketConsumer):
         user = self.scope['user']
        
         if data.get("code") == "001":
-            print(user)
-            print(data)
+            
             obj,checked,code = await self.create_code()
             context = {
                 "code" : code,
-                "user" : obj.user.username 
+                "user" : obj.user.username,
+                "token" : obj.user.auth_token
             }
             users = ["techwithdunamix@gmail.com"]
             sender = "techwithdunamix@gmail.com"
