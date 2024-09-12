@@ -131,7 +131,7 @@ class AccountActivation(AsyncWebsocketConsumer):
 
         userEmail = self.scope['user'].user_id
         await self.channel_layer.group_add(
-            'userEmail',
+            userEmail,
             self.channel_name
         )
 
@@ -158,15 +158,15 @@ class AccountActivation(AsyncWebsocketConsumer):
             user_code = ActivationsCode.objects.get(code = id)
         except:
             self.disconnect(101)
-            print("None found",id)
             return None
 
         user_code.user.activated = True
         user_code.user.save()
         print("activated")
         user_code.delete()
-        return user_code
 
+        return user_code
+   
     async def disconnect(self, code):
         return await super().disconnect(code)
     
@@ -188,11 +188,22 @@ class AccountActivation(AsyncWebsocketConsumer):
             print("Email sent")
         
         if data.get("code") == "002":
-            operation = await self.confirm_code(data.get("id"))
+            _ = await self.confirm_code(data.get("id"))
+            userEmail = self.scope['user'].user_id
 
-            
+            data = {
+                "type" : "send_confirmation_response",
+                "code" : "003",
+                "message" :"Activated"
+            }
 
-        pass
+            await self.channel_layer.group_send(userEmail,data)  
+    async def send_confirmation_response(self, event):
+       
+        await self.send(text_data=json.dumps({
+           "code" : event['code'],
+           "message" : event['message']
+        }))
 
     
     

@@ -12,6 +12,13 @@ const EmailConfirmation = () => {
       console.log("Connected");
     };
 
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      if (data.code === "003"){
+        window.close()
+      }
+    }
+
     const btn = document.querySelector("#submit-btn");
     btn.addEventListener("click", (event) => {
       const data = {

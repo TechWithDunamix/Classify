@@ -32,7 +32,8 @@ class UserManager(BaseUserManager):
             intro = intro,
             dob = fields.get("dob"),
             intrest = fields.get("intrest"),
-            profile_image = fields.get("profile_image")
+            profile_image = fields.get("profile_image"),
+            user_id = crypto.get_random_string(18)
 
         )
         user.set_password(fields.get("password"))

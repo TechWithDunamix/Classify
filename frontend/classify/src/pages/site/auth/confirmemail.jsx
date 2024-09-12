@@ -21,7 +21,9 @@ const WaitingPage = () => {
     }
     ws.current.onmessage = (event) =>{ 
     const data = JSON.parse(event.data)
-    console.log(data)
+    if (data.code === "003"){
+      window.location.href = "/d"
+    }
   }
 
   }

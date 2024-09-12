@@ -98,6 +98,7 @@ const SignUpForm = () => {
           localStorage.setItem("token",data.token)
           localStorage.setItem("email",data.email)
           localStorage.setItem("id",data.id)
+          window.location.href = "/waiting"
       },
       (err, status) => {
 
