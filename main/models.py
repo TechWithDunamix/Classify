@@ -53,6 +53,10 @@ class User(AbstractBaseUser,PermissionsMixin):
     date_created = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     activated = models.BooleanField(default = False)
+    profile_type = models.CharField(max_length = 150,default="public")
+    notify = models.BooleanField(default=True)
+    recieve_email = models.BooleanField(default=True)
+
 
     USERNAME_FIELD = 'email'
 
