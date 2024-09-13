@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core import exceptions  
+import json
 class UserManager(BaseUserManager):
     def create_user(self,**fields):
         if not fields.get("email"):
@@ -66,14 +67,18 @@ class User(AbstractBaseUser,PermissionsMixin):
     
 
     def save(self,*args,**kwargs):
-        self.intrest = json.dumps(self.intrest)
+        # self.intrest = json.loads(self.intrest)
         if not self.pk:
             self.user_id = crypto.get_random_string(8)
         return super().save(*args,**kwargs)
 
     @property
     def get_intrests(self):
-        return json.loads(self.intrest)
+        return self.intrest
+    
+    
+    
+
 
         
 class MemberShip(models.Model):

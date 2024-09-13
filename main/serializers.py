@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User,Class,ClassSetting,ClassWork,Assignment,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment,Grading,MemberShip
 from django.shortcuts import get_object_or_404
 from .validators import file_size_validator
+import json
 class UserSignupSerializer(serializers.ModelSerializer):
         
     class Meta:
@@ -34,7 +35,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
             full_name = validated_data.get("full_name"),
             username = validated_data.get("username"),
             dob = validated_data.get("dob"),
-            intrest = validated_data.get("intrest"),
+            intrest = json.loads(validated_data.get("intrest")),
             profile_image = validated_data.get("profile_image"),
         )
         return user
@@ -98,6 +99,10 @@ class UserProfileViewSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get("username",instance.username)
         instance.profile_image = validated_data.get("profile_image",instance.profile_image)
         instance.intro = validated_data.get("intro",instance.intro)
+        instance.profile_type = validated_data.get("profile_type",instance.profile_type)
+        instance.notify = validated_data.get("notify",instance.notify)
+        instance.recieve_email	 = validated_data.get("recieve_email",instance.recieve_email)
+
         instance.save()
         return instance
 class ClassSettingSerializer(serializers.ModelSerializer):

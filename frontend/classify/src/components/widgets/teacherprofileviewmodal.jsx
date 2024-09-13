@@ -29,7 +29,7 @@ const ProfileModal = ({ user, onClose }) => {
 
   // Convert interests string to a list of tags
   const interestsArray = user.intrest.split(',').map(interest => interest.trim());
-  
+  console.log(interestsArray)  
   const interestTags = interestsArray.map(interest => (
     <span key={interest} className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 inline-flex items-center">
       <span className="mr-1">{getEmojiForInterest(interest)}</span>{interest}
@@ -38,7 +38,7 @@ const ProfileModal = ({ user, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg  max-w-lg mx-3 z-50 ml-12">
+      <div className="bg-white p-8 rounded-lg shadow-md  max-w-lg mx-3 z-50 ml-12">
         <div className="flex items-center mb-6">
           <img
             className="w-20 h-20 rounded-full mr-4"

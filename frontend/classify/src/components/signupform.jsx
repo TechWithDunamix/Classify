@@ -84,11 +84,12 @@ const SignUpForm = () => {
     SetIsLoading(true)
     e.preventDefault();
     console.log(formData); 
-    formData['intrest'] = formData.interest
+    formData['intrest'] = JSON.stringify(formData.interest)
     const data = new FormData();
     Object.keys(formData).forEach(key => {
         data.append(key, formData[key]);
     });
+    
     data.append("profile_image",formData.profileImage[0])
     
     api.post('/auth/signup/', data, {}, 50000,
