@@ -47,6 +47,7 @@ useEffect(() => {
     api.put("/user/profile",formData,{},50000,
       (data,status) => {
         setIsModalOpen(false)
+        toast.success("Image Changed")
       },
       (error,status) => {
         if (status === 400){
@@ -117,29 +118,29 @@ useEffect(() => {
 
       <div className="flex justify-center gap-4 md:gap-14 mb-6">
         <div className="flex flex-col items-center">
-          <h3 className="text-purple-600 text-2xl font-bold">17</h3>
+          <h3 className="text-purple-600 text-2xl font-bold">{userData?.post.length}</h3>
           <p className="text-gray-500 text-sm">Posts</p>
         </div>
         <div className="flex flex-col items-center">
-          <h3 className="text-blue-600 text-2xl font-bold">9.7K</h3>
-          <p className="text-gray-500 text-sm">Followers</p>
+          <h3 className="text-blue-600 text-2xl font-bold">{userData?.teaching.length}</h3>
+          <p className="text-gray-500 text-sm">Teaching</p>
         </div>
         <div className="flex flex-col items-center">
-          <h3 className="text-blue-600 text-2xl font-bold">434</h3>
-          <p className="text-gray-500 text-sm">Following</p>
+          <h3 className="text-blue-600 text-2xl font-bold">{userData?.learning.length}</h3>
+          <p className="text-gray-500 text-sm">Learning</p>
         </div>
       </div>
 
       {/* Tabs */}
       <div className="flex flex-wrap mb-4 border-b border-gray-200">
         <button
-          className={`flex-1 py-2 px-4 text-center ${activeTab === 'personalInfo' ? 'border-b-4 border-purple-600 font-semibold' : 'border-b-4 border-transparent text-gray-600'} hover:border-b-4 hover:border-purple-400`}
+          className={`flex-1 py-2 px-4 text-center ${activeTab === 'personalInfo' ? 'border-b-4 border-purple-600 font-semibold' : 'border-b-n border-transparent text-gray-600'} hover:border-b-none hover:border-purple-400 rounded-none`}
           onClick={() => setActiveTab('personalInfo')}
         >
           Personal Info
         </button>
         <button
-          className={`flex-1 py-2 px-4 text-center ${activeTab === 'security' ? 'border-b-4 border-purple-600 font-semibold' : 'border-b-4 border-transparent text-gray-600'} hover:border-b-4 hover:border-purple-400`}
+          className={`flex-1 py-2 px-4 text-center ${activeTab === 'security' ? 'border-b-4 border-purple-600 font-semibold' : 'border-b-2 border-transparent text-gray-600'} hover:border-b-4 hover:border-purple-400 rounded-none`}
           onClick={() => setActiveTab('security')}
         >
           Security
@@ -191,10 +192,51 @@ useEffect(() => {
           </div>
         )}
         {activeTab === 'security' && (
-          <div className="p-4 bg-gray-100 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Security Settings</h2>
-            <p className="text-gray-500 dark:text-gray-400">Security settings content goes here.</p>
-          </div>
+           <div class="container mx-auto my-8">
+           <div class="bg-white shadow-md rounded-lg p-6">
+               <h2 class="text-2xl font-semibold text-gray-800 mb-4">Settings</h2>
+               
+               <div class="mb-6">
+                   <h3 class="text-xl font-bold mb-3 text-purple-600">Profile Settings</h3>
+                   
+               </div>
+   
+               <div class="mb-6">
+                   <h3 class="text-xl font-bold mb-3 text-purple-600">Notification Settings</h3>
+                   <form>
+                       <div class="flex items-center mb-4">
+                           <input type="checkbox" id="emailNotifications" class="h-4 bg-white w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
+                           <label for="emailNotifications" class="ml-2 text-gray-700">Receive Email Notifications</label>
+                       </div>
+                       <div class="flex items-center mb-4">
+                           <input type="checkbox" id="smsNotifications" class="h-4 w-4 bg-white text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
+                           <label for="smsNotifications" class="ml-2 text-gray-700 ">Receive SMS Notifications</label>
+                       </div>
+                       <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Save Notifications</button>
+                   </form>
+               </div>
+   
+               <div>
+                   <h3 class="text-xl font-bold mb-3 text-purple-600">Privacy Settings</h3>
+                   <form>
+                       <div class="flex items-center mb-4">
+                           <input type="radio" name="privacy" id="public" class="h-4 w-4 bg-white text-purple-600 focus:ring-purple-500 border-gray-300" />
+                           <label for="public" class="ml-2 text-gray-700 bg-white">Public Profile</label>
+                       </div>
+                       <div class="flex items-center mb-4">
+                           <input type="radio" name="privacy" id="private" class="h-4 bg-white w-4 text-purple-600 focus:ring-purple-500 border-gray-300" />
+                           <label for="private" class="ml-2 text-gray-700 bg-white">Private Profile</label>
+                       </div>
+                       <div class="flex items-center mb-4">
+                           <input type="radio" name="privacy" id="custom" class="h-4 w-4 bg-white  text-purple-600 focus:ring-purple-500 border-gray-300" />
+                           <label for="custom" class="ml-2 text-gray-700  bg-white">Custom Privacy Settings</label>
+                       </div>
+                       <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Save Privacy Settings</button>
+                   </form>
+               </div>
+   
+           </div>
+       </div>
         )}
       </div>
 
@@ -207,7 +249,7 @@ useEffect(() => {
               <p>Classify</p>
             </div>
             <h3 className="text-lg font-semibold mb-4">Upload New Profile Image</h3>
-            <img src={data?.profile_image} alt="" className="w-36 h-36 rounded-full my-8" />
+            <img src={userData?.profile_image} alt="" className="w-36 h-36 rounded-full my-8" />
             <p className='text-sm text-slate-700 my-3'>
             Your profile photo represents you visually, making it easier for others to recognize you and adding a personal touch.
             </p>

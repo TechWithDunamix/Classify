@@ -47,6 +47,23 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 class UserProfileViewSerializer(serializers.ModelSerializer):
+    teaching = serializers.SerializerMethodField()
+    learning = serializers.SerializerMethodField()
+    post = serializers.SerializerMethodField()
+    def get_teaching(self,obj):
+        qs = Class.objects.filter(owner = obj).all()
+        serializer = ClassSerializer(qs,many = True,context  = self.context)
+        return serializer.data
+    
+    def get_learning(self,obj):
+        qs = Class.objects.filter(members__user = obj).all()
+        serializer = ClassSerializer(qs,many = True,context  = self.context)
+        return serializer.data
+
+    def get_post(self,obj):
+        qs = Anouncement.objects.filter(user = obj).all()
+        serializer = AnnouncementSerializer(qs,many = True,context = self.context)
+        return serializer.data
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Make all fields not required
