@@ -2,12 +2,36 @@ import React, { useState } from 'react';
 import { FaPen } from 'react-icons/fa'; // Import the pencil icon
 import { api } from '../../../utils';
 import {toast} from "react-toastify"
-const ProfileSettings1 = ({ data }) => {
+import { useEffect } from 'react';
+
+const ProfileSettings1 = () => {
   const [activeTab, setActiveTab] = useState('personalInfo');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newImage, setNewImage] = useState(null);
   const [image,setImage] = useState()
+  const [userData,setUserData] = useState()
+  const fetchAPI = () => {
+    api.get('/user/profile', {}, 50000,
+        (data, status) => {
+            
+            setUserData(data)
+            console.log(status)
 
+           
+        },
+        (err, status) => {
+            console.log(err,status)
+         },
+        
+        (err) => {
+            console.log(err)
+        }
+
+    )
+}
+useEffect(() => {
+    fetchAPI()
+},[])
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -35,6 +59,33 @@ const ProfileSettings1 = ({ data }) => {
     )
   };
 
+  const handleProfileChange = (e)=> {
+    const {name, value} = e.target;
+    setUserData((data) => ({
+      ...data,
+      [name]:value
+    }))
+
+  }
+
+  const handleSubmitProfileData = () => {
+    delete userData.profile_image
+    api.put("/user/profile",userData,{},50000,
+      (data,status) => {
+        fetchAPI()
+        console.log("updated")
+        toast.success("Profile edited")
+      },
+      (error,status) => {
+        if (status === 400){
+          toast.error("AN error occured")
+        }
+      },
+      (error) => {
+        toast.error("Server is not to responding .")
+      }
+    )
+  }
   return (
     <div className="relative mx-auto max-w-3xl bg-white shadow-3xl rounded-lg p-4">
       {/* Banner Image */}
@@ -46,7 +97,7 @@ const ProfileSettings1 = ({ data }) => {
         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
           <img
             className="h-2/3 w-2/3 rounded-full"
-            src={newImage || data?.profile_image}
+            src={newImage || userData?.profile_image}
             alt="Profile"
           />
           <button
@@ -60,8 +111,8 @@ const ProfileSettings1 = ({ data }) => {
 
       {/* General Info */}
       <div className="text-center mb-6">
-        <h4 className="text-gray-900 text-2xl font-bold">{data?.username}</h4>
-        <p className="text-gray-500 text-base">{data?.email}</p>
+        <h4 className="text-gray-900 text-2xl font-bold">{userData?.username}</h4>
+        <p className="text-gray-500 text-base">{userData?.email}</p>
       </div>
 
       <div className="flex justify-center gap-4 md:gap-14 mb-6">
@@ -100,24 +151,41 @@ const ProfileSettings1 = ({ data }) => {
         {activeTab === 'personalInfo' && (
           <div className="p-4 bg-gray-100 rounded-lg">
             <h2 className="text-xl font-bold mb-4">Personal Information</h2>
-            <div className="space-y-4">
+            <div className="space-y-2">
+              <small className='text-slate-700 ml-4'>Username</small>
               <input
                 type="text"
-                placeholder="Name"
-                className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+                placeholder=""
+                name="username"
+                value={userData?.username}
+                onChange={handleProfileChange}
+                className="w-full p-2 border border-gray-300 bg-white rounded-lg"
               />
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+              <small className='text-slate-700 ml-4'>Short Intro about yourself . </small>
+              
+              <textarea
+                rows={5}
+                name="intro"
+                placeholder="Bio"
+                value={userData?.intro}
+                onChange={handleProfileChange}
+
+                className="w-full p-2 border border-gray-300 bg-white rounded-lg"
               />
-              <input
-                type="tel"
-                placeholder="Phone"
-                className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+              <small className='text-slate-700 ml-4'>Date Of Birth</small>
+              <br/>
+              <input 
+              type='date'
+              name="dob"
+              onChange={handleProfileChange}
+
+              className='bg-white p-2 border '
+              value={userData?.dob}
               />
             </div>
-            <button className="mt-4 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 dark:hover:bg-purple-500">
+            <button 
+            onClick={handleSubmitProfileData}
+            className="mt-4 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 dark:hover:bg-purple-500">
               Save Changes
             </button>
           </div>

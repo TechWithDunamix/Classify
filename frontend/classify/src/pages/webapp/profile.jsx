@@ -5,7 +5,7 @@ import ProfileSettings1 from "../../components/primitives/profile/profile1";
 const ProfilePage = () => {
     const [userData,setUserData] = useState({})
     const fetchAPI = () => {
-        api.get('/user/profile', {}, 5000,
+        api.get('/user/profile', {}, 50000,
             (data, status) => {
                 
                 setUserData(data)
