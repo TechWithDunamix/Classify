@@ -25,10 +25,11 @@ const getEmojiForInterest = (interest) => {
 };
 
 const ProfileModal = ({ user, onClose }) => {
+  console.log(user.interest)
   if (!user) return null;
 
   // Convert interests string to a list of tags
-  const interestsArray = user.intrest.split(',').map(interest => interest.trim());
+  const interestsArray = JSON.parse(user.intrest)
   
   const interestTags = interestsArray.map(interest => (
     <span key={interest} className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 inline-flex items-center">
