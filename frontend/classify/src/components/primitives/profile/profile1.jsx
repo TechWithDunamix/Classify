@@ -118,15 +118,15 @@ useEffect(() => {
 
       <div className="flex justify-center gap-4 md:gap-14 mb-6">
         <div className="flex flex-col items-center">
-          <h3 className="text-purple-600 text-2xl font-bold">{userData?.post.length}</h3>
+          <h3 className="text-purple-600 text-2xl font-bold">{userData?.post}</h3>
           <p className="text-gray-500 text-sm">Posts</p>
         </div>
         <div className="flex flex-col items-center">
-          <h3 className="text-blue-600 text-2xl font-bold">{userData?.teaching.length}</h3>
+          <h3 className="text-blue-600 text-2xl font-bold">{userData?.teaching}</h3>
           <p className="text-gray-500 text-sm">Teaching</p>
         </div>
         <div className="flex flex-col items-center">
-          <h3 className="text-blue-600 text-2xl font-bold">{userData?.learning.length}</h3>
+          <h3 className="text-blue-600 text-2xl font-bold">{userData?.learning}</h3>
           <p className="text-gray-500 text-sm">Learning</p>
         </div>
       </div>
