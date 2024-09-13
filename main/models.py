@@ -67,7 +67,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     
 
     def save(self,*args,**kwargs):
-        self.intrest = json.loads(self.intrest)
+        # self.intrest = json.loads(self.intrest)
         if not self.pk:
             self.user_id = crypto.get_random_string(8)
         return super().save(*args,**kwargs)

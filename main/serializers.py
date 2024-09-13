@@ -99,6 +99,10 @@ class UserProfileViewSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get("username",instance.username)
         instance.profile_image = validated_data.get("profile_image",instance.profile_image)
         instance.intro = validated_data.get("intro",instance.intro)
+        instance.profile_type = validated_data.get("profile_type",instance.profile_type)
+        instance.notify = validated_data.get("notify",instance.notify)
+        instance.recieve_email	 = validated_data.get("recieve_email",instance.recieve_email)
+
         instance.save()
         return instance
 class ClassSettingSerializer(serializers.ModelSerializer):

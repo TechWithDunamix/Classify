@@ -69,6 +69,13 @@ useEffect(() => {
 
   }
 
+  const handlePrivacyChange = (key,value) => {
+    setUserData((data) => ({
+        ...data,
+        [key]:value
+
+    }))
+  }
   const handleSubmitProfileData = () => {
     delete userData.profile_image
     api.put("/user/profile",userData,{},50000,
@@ -86,6 +93,12 @@ useEffect(() => {
         toast.error("Server is not to responding .")
       }
     )
+  }
+
+  const handlePrivacySubmit = (e) => {
+    e.preventDefault()
+    handleSubmitProfileData()
+    fetchAPI()
   }
   return (
     <div className="relative mx-auto max-w-3xl bg-white shadow-3xl rounded-lg p-4">
@@ -205,15 +218,23 @@ useEffect(() => {
                    <h3 class="text-xl font-bold mb-3 text-purple-600">Notification Settings</h3>
                    <form>
                        <div class="flex items-center mb-4">
-                           <input type="checkbox" checked={userData?.notify} id="emailNotifications" class="h-4 bg-white w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
+                           <input 
+                           onChange={() => handlePrivacyChange("notify",!userData.notify)}
+                           type="checkbox" checked={userData?.notify} id="emailNotifications" class="h-4 bg-white w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
 
                            <label for="emailNotifications" class="ml-2 text-gray-700">Receive Email Notifications</label>
                        </div>
                        <div class="flex items-center mb-4">
-                           <input type="checkbox" chec={userData?.recieve_email} id="smsNotifications" class="h-4 w-4 bg-white text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
+                           <input 
+                           onChange={() => handlePrivacyChange("recieve_email",!userData.recieve_email)}
+
+                           type="checkbox" checked={userData?.recieve_email} id="smsNotifications" class="h-4 w-4 bg-white text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
                            <label for="smsNotifications" class="ml-2 text-gray-700 ">Receive Email Update</label>
                        </div>
-                       <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Save Notifications</button>
+                       <button 
+                       onClick={handlePrivacySubmit}
+
+                       type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Save Notifications</button>
                    </form>
                </div>
    
@@ -221,13 +242,17 @@ useEffect(() => {
                    <h3 class="text-xl font-bold mb-3 text-purple-600">Privacy Settings</h3>
                    <form>
                        <div class="flex items-center mb-4">
-                           <input 
+                           <input
+                           onChange={() => handlePrivacyChange("profile_type","public")}
+
                            checked={userData?.profile_type === "public"}
                            type="radio" name="profile_type" id="public" class="h-4 w-4 bg-white text-purple-600 focus:ring-purple-500 border-gray-300" />
                            <label for="public" class="ml-2 text-gray-700 bg-white">Public Profile</label>
                        </div>
                        <div class="flex items-center mb-4">
-                           <input 
+                           <input
+                           onChange={() => handlePrivacyChange("profile_type","private")}
+
                            checked={userData?.profile_type === "private"}
                            
                            type="radio" name="profile_type" id="private" class="h-4 bg-white w-4 text-purple-600 focus:ring-purple-500 border-gray-300" />
@@ -235,13 +260,17 @@ useEffect(() => {
                            <label for="private" class="ml-2 text-gray-700 bg-white">Private Profile</label>
                        </div>
                        <div class="flex items-center mb-4">
-                           <input 
+                           <input
+                           onChange={() => handlePrivacyChange("profile_type","costum")}
+
                            checked={userData?.profile_type === "costum"}
                            
                            type="radio" name="profile_type" id="custom" class="h-4 w-4 bg-white  text-purple-600 focus:ring-purple-500 border-gray-300" />
                            <label for="custom" class="ml-2 text-gray-700  bg-white">Custom Privacy Settings</label>
                        </div>
-                       <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Save Privacy Settings</button>
+                       <button type="submit" 
+                       onClick={handlePrivacySubmit}
+                       class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Save Privacy Settings</button>
                    </form>
                </div>
    
