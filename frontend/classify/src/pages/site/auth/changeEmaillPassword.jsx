@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { api } from "../../../utils";
 import DashboardLayout from "../../../components/UI/dashboardlayout";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 const ChangeEmailPassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
@@ -26,6 +28,7 @@ const ChangeEmailPassword = () => {
             toast.success("Success .")
             setIsloading(false)
             setIsPasswordConfirmed(true)
+            setCurrentPassword("")
         },
         (error,status) => {
             if (status === 400){
@@ -33,6 +36,7 @@ const ChangeEmailPassword = () => {
 
                 toast.error("Invalid credentials .")
                 setIsloading(false)
+
             }
         },
         (error)=>{
@@ -42,29 +46,64 @@ const ChangeEmailPassword = () => {
   };
 
   const handleEmailUpdate = (e) => {
-    e.preventDefault();
-    if (!newEmail) {
-      alert("Please enter your new email.");
-    } else {
-      alert("Email updated successfully!");
-    }
+        e.preventDefault()
+        toast.loading("Loading")
+        const formData = {
+            "email" : newEmail
+        }
+        api.post("/auth/change_password_email",formData,{},50000,
+            (data,status) => {
+                console.log(data)
+                toast.dismiss()
+                localStorage.setItem("email",data.email)
+                setIsPasswordConfirmed(true)
+                toast.success("Success")
+                
+            },
+            (error,status)=>{
+
+            },
+            (error) => {
+                toast.error("Server is slow")
+            }
+        )
   };
 
   const handlePasswordUpdate = (e) => {
     e.preventDefault();
     if (!newPassword || !confirmPassword) {
-      alert("Please fill in both password fields.");
+      toast.error("Please fill in both password fields.");
     } else if (newPassword !== confirmPassword) {
-      alert("New password and confirmation do not match.");
+      toast.error("New password and confirmation do not match.");
     } else {
-      alert("Password updated successfully!");
+        e.preventDefault()
+        toast.loading("Loading")
+        const formData = {
+            "password" : newPassword
+        }
+        api.post("/auth/change_password_email",formData,{},50000,
+            (data,status) => {
+                console.log(data)
+                toast.dismiss()
+                localStorage.setItem("email",data.email)
+                setIsPasswordConfirmed(true)
+                toast.success("Success")
+
+            },
+            (error,status)=>{
+
+            },
+            (error) => {
+                toast.error("Server is slow")
+            }
+        )
     }
   };
 
   return (
     <DashboardLayout>
     <div className="container mx-auto px-4 py-8">
-
+    <Link to={"/profile"}><FaArrowLeft /></Link>
       <div className="max-w-lg mx-auto bg-white  rounded-lg p-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Account Settings

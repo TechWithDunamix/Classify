@@ -578,3 +578,7 @@ class TeachersGradingSerializer(serializers.ModelSerializer):
         return average
 
 
+
+class ChangeEmailPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField(required = False)
+    password = serializers.CharField(required = False)

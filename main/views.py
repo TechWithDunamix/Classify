@@ -12,7 +12,7 @@ from .serializers import (UserSignupSerializer,UserLoginSerializer,TeachersGradi
                         TopicSerializer,CommentSerializer,GradingSerializer,
                         AssignmentSerializer,TopicUpdateSerializer,ClassFilesSerializer,
                         WorkSubmitionSerializer,WorkMarkSerializer,ChatSerializer,AnnouncementSerializer,
-                        MemberSerializer)
+                        MemberSerializer,ChangeEmailPasswordSerializer)
 from rest_framework.authtoken.models import Token
 from .auth_check import CheckAuth
 from .models import User,Class,MemberShip,Assignment,ClassWork,Topic,TopicUpdate,WorkSubmitions,ClassChat,Anouncement,ClassFiles,Comment
@@ -952,3 +952,26 @@ class MembersView(generics.GenericAPIView):
     
 
 
+class ChangeEmailPassword(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangeEmailPasswordSerializer
+
+    def post(self,request,*args,**kwargs):
+        serializer = self.get_serializer_class()(data = request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors,status=400)
+        user = request.user
+        email = serializer.validated_data.get("email")
+        password = serializer.validated_data.get("password")
+        print(password)
+        if email:
+            user.email = email 
+        if password:
+            print(password)
+            user.set_password(password)
+        user.save() 
+        return Response({
+            "email" : email
+        })
+    
