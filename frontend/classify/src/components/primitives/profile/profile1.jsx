@@ -3,7 +3,7 @@ import { FaPen } from 'react-icons/fa'; // Import the pencil icon
 import { api } from '../../../utils';
 import {toast} from "react-toastify"
 import { useEffect } from 'react';
-
+import {Link} from "react-router-dom"
 const ProfileSettings1 = () => {
   const [activeTab, setActiveTab] = useState('personalInfo');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -165,6 +165,7 @@ useEffect(() => {
         {activeTab === 'personalInfo' && (
           <div className="p-4 bg-gray-100 rounded-lg">
             <h2 className="text-xl font-bold mb-4">Personal Information</h2>
+            <p>Go to account setting to change email or password . </p>
             <div className="space-y-2">
               <small className='text-slate-700 ml-4'>Username</small>
               <input
@@ -211,6 +212,8 @@ useEffect(() => {
                
                <div class="mb-6">
                    <h3 class="text-xl font-bold mb-3 text-purple-600">Profile Settings</h3>
+                    <p>To Change You Email and password go to <Link to="/auth/change/email-password" className="text-purple-500">Account Info .</Link> </p>
+
                    
                </div>
    

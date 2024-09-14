@@ -92,7 +92,7 @@ const SignUpForm = () => {
     
     data.append("profile_image",formData.profileImage[0])
     
-    api.post('/auth/signup/', data, {}, 50000,
+    api.post('/auth/signup', data, {}, 50000,
       (data, status) => {
           SetIsLoading(false)
           console.log(data)

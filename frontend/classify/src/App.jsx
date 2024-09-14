@@ -23,6 +23,7 @@ import StudentVideoCallComponent from './pages/webapp/studentVideoCall';
 import ChatbotIframe from './pages/webapp/bot';
 import WaitingPage from './pages/site/auth/confirmemail';
 import EmailConfirmation from './pages/site/auth/activateAccount';
+import ChangeEmailPassword from './pages/site/auth/changeEmaillPassword';
 function App() {
   
   return (
@@ -48,6 +49,8 @@ function App() {
         <Route path="chatbot" element={<ChatbotIframe />}  />        
         <Route path="waiting" element={<WaitingPage />}  />
         <Route path="auth/confirm/:id/:token" element={<EmailConfirmation />}  />        
+        <Route path="auth/change/email-password" element={<ChangeEmailPassword />}  />        
+
 
 
 
