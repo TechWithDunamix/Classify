@@ -198,6 +198,14 @@ class StudentClassView(generics.GenericAPIView):
     def post(self,request,class_id = None,*args, **kwargs):
 
         _class = get_object_or_404(Class.objects.filter(setting__use_code = True),class_code = class_id)
+
+        if _class.owner == request.user:
+            print("user owns")
+            return Response({
+            "detail":"user already in group",
+            "code":constants.IS_ADMIN,
+            "class_id" : _class.id
+        })
         member,created = MemberShip.objects.get_or_create(user = request.user,_class=_class)
         response = {
             "detail":"user already in group",

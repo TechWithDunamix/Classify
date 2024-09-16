@@ -35,6 +35,7 @@ const DashboardHome = () => {
     }, []);
 
     const handleJoinClass = () => {
+
         if (joinClassCode.length < 8 || joinClassCode.length > 8) {
             setClassNOtFound("Class Code must be 8 digits.");
             return;
@@ -43,15 +44,25 @@ const DashboardHome = () => {
         setJoinIsLoading(true);
         api.post(`/class/join/${joinClassCode}`, {}, {}, 50000,
             (data, status) => {
+                let classURL = `/s/${data.class_id}`;
+
                 if (data.code === "001") {
                     toast.success("Welcome to the class.");
                 }
                 if (data.code === "004") {
                     toast.info("You're already a member of this class.");
                 }
+                if (data.code === "005") {
+                    toast.info("You're already a member of this class.");
+                    let teacherUrl = `/class/view/${data.class_id}`;
+                    window.location.href = teacherUrl
+                    return ;
+                    
+
+                    
+                }
                 setJoinIsLoading(false);
                 setIsJOinModalOpen(false);
-                const classURL = `/s/${data.class_id}`;
                 window.location.href = classURL;
             },
             (error, status) => {
