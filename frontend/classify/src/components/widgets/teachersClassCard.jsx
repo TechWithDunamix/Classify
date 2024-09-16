@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 const ClassCard = ({ data }) => {
   return (
     <div className="relative card w-full sm:w-64 md:w-72 shadow-sm bg-white text-gray-800 rounded-md m-2">
+      {data.is_admin && <p className='absolute left-1 text-sm text-slate-600 mt-2'>Admin</p>}
       <button className="absolute text-purple-600 top-2 right-2 bg-gray-100 p-2 rounded-full shadow hover:bg-gray-200">
-        <Link to={`/class/view/${data.id}`}> <FontAwesomeIcon icon={faEye} className="text-purple-600" /></Link>
+        <Link to={data.is_admin ? `/class/view/${data.id}` : `/s/${data.id}`}> <FontAwesomeIcon icon={faEye} className="text-purple-600" /></Link>
       </button>
       {data.cover_image_url ? (
         <div

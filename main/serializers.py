@@ -178,7 +178,7 @@ class ClassSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         if (request.user == obj.owner):
             return True
-        return None
+        return False
     def to_representation(self,*args,**kwargs):
         data = super().to_representation(*args,**kwargs)
         check = data['setting']['use_code']

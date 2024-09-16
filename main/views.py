@@ -103,8 +103,13 @@ class ClassView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated, ]
     
     def get_queryset(self):
+        query = Q(owner = self.request.user) | Q(members__user = self.request.user)
+        user_class = Class.objects.filter(query).all()
+        return user_class
 
-        user_class = Class.objects.filter(owner=self.request.user).all()
+    def get_admin_queryset(self):
+        query = Q(owner = self.request.user)
+        user_class = Class.objects.filter(query).all()
         return user_class
     def get(self,request,id = None,*args, **kwargs):
         
@@ -142,7 +147,7 @@ class ClassView(generics.GenericAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def put(self,request,id = None,*args,**kwargs):
-        obj = get_object_or_404(self.get_queryset(),id = id)
+        obj = get_object_or_404(self.get_admin_queryset(),id = id)
         
         print(request.data)
         serializer = self.get_serializer_class()(
@@ -165,7 +170,7 @@ class ClassView(generics.GenericAPIView):
         return Response(serializer.errors,status = 400)
 
     def delete(self,request,id = None,*args,**kwargs):
-         obj = get_object_or_404(self.get_queryset(),id = id)
+         obj = get_object_or_404(self.get_admin_queryset(),id = id)
          obj.delete()
          return Response({
             "detail":"success"

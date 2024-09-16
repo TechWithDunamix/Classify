@@ -108,7 +108,7 @@ const CreateClassWork = () => {
 
                     <input
                         type="number"
-                        className={`bg-gray-100 w-full py-3 px-4 mb-4 border rounded-lg focus:outline-none focus:ring-2 ${errors.mark ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`bg-gray-100 mt-8 w-full py-3 px-4 mb-4 border rounded-lg focus:outline-none focus:ring-2 ${errors.mark ? 'border-red-500' : 'border-gray-300'}`}
                         placeholder="Marks"
                         value={mark}
                         onChange={(e) => setMark(e.target.value)}
