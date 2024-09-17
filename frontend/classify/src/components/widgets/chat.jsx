@@ -214,7 +214,8 @@ const ChatWindow = ({
                       </p>
 
                     </div> 
-                    <div className="ml-2  items-center">
+                    <div className="ml-2  items-center hidden"> 
+                      {/* Still on development */}
                       {handleCheckAuth(msg) && <button
                         onClick={() => {handleDeleteMessage(msg.id, index)
                           setActiveMessageIndex(null)

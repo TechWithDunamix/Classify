@@ -98,6 +98,8 @@ const CreateClassWork = () => {
                         placeholder="ClassWork Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        maxLength={90}
+
                     />
                     {errors.title && <p className="text-red-500 text-sm mb-2">{errors.title}</p>}
 
@@ -112,6 +114,8 @@ const CreateClassWork = () => {
                         placeholder="Marks"
                         value={mark}
                         onChange={(e) => setMark(e.target.value)}
+                        maxLength={20}
+
                     />
                     {errors.mark && <p className="text-red-500 text-sm mb-2">{errors.mark}</p>}
 
@@ -122,6 +126,7 @@ const CreateClassWork = () => {
                             className={`bg-gray-100 py-3 w-full border rounded-lg focus:outline-none focus:ring-2 ${errors.dateDue ? 'border-red-500' : 'border-gray-300'}`}
                             value={dateDue}
                             onChange={(e) => setDateDue(e.target.value)}
+
                         />
                         {errors.dateDue && <p className="text-red-500 text-sm mb-2">{errors.dateDue}</p>}
                     </div>

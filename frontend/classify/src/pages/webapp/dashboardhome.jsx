@@ -30,10 +30,16 @@ const DashboardHome = () => {
         );
     };
 
+    
+
     useEffect(() => {
         fetchCLass();
     }, []);
 
+
+    
+
+    // useEffect(,[])
     const handleJoinClass = () => {
 
         if (joinClassCode.length < 8 || joinClassCode.length > 8) {

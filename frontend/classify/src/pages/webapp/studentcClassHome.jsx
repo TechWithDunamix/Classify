@@ -125,7 +125,7 @@ const StudentClassHome = () => {
           </p>
         </div>
       )}
-
+      <p className="px-4 text-sm w-3/4">{classData?.description}</p>
       
       <div className="mt-6">
         {/* <div className="md:w-[30%] flex justify-center items-center border-2 h-36 p-4 rounded-lg shadow-sm">

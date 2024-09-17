@@ -72,6 +72,7 @@ const CreateNewClass = () => {
                         <input
                             type="text"
                             name="name"
+                            maxLength={40}
                             placeholder="Enter Your class Name"
                             className="input input-bordered w-full"
                             value={formData.className}
@@ -96,6 +97,8 @@ const CreateNewClass = () => {
                             className="textarea textarea-bordered w-full"
                             value={formData.description}
                             onChange={handleChange}
+                            maxLength={100}
+
                         />
                         <span className="text-red-500 text-sm my-2">This field is required.</span>
                     </div>
@@ -117,6 +120,8 @@ const CreateNewClass = () => {
                             className="input input-bordered w-full"
                             value={formData.category}
                             onChange={handleChange}
+                            maxLength={20}
+
                         />
                         <span className="text-red-500 text-sm my-2">This field is required.</span>
                     </div>

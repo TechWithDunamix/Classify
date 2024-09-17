@@ -174,6 +174,8 @@ useEffect(() => {
                 name="username"
                 value={userData?.username}
                 onChange={handleProfileChange}
+                maxLength={20}
+
                 className="w-full p-2 border border-gray-300 bg-white rounded-lg"
               />
               <small className='text-slate-700 ml-4'>Short Intro about yourself . </small>
@@ -184,6 +186,8 @@ useEffect(() => {
                 placeholder="Bio"
                 value={userData?.intro}
                 onChange={handleProfileChange}
+                maxLength={130}
+
 
                 className="w-full p-2 border border-gray-300 bg-white rounded-lg"
               />

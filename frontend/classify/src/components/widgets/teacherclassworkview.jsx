@@ -71,7 +71,7 @@ const AssignmentBlock = ({ data ,fetch}) => {
                 <button 
                 onClick={(e) => handleDelete(data.id)}
                 className="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100">Delete</button>
-                <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Update</button>
+                {/* <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Update</button> */}
 
                {data.draft && <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Delete</button>}
 

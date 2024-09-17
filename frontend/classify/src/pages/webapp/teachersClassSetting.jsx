@@ -118,6 +118,8 @@ const ClassSettings = () => {
             placeholder="Class Name (required)"
             className="form-input bg-slate-100 w-full py-4 border-0 border-b-[1px] border-slate-400 px-4"
             required
+            maxLength={80}
+
           />
 
           <textarea
@@ -128,6 +130,8 @@ const ClassSettings = () => {
             placeholder="Class Description (required)"
             className="my-6 form-input bg-slate-100 w-full py-4 border-0 border-b-[1px] border-slate-400 px-4"
             required
+            maxLength={180}
+
           />
 
           <input
@@ -137,6 +141,8 @@ const ClassSettings = () => {
             placeholder="Class Category (required)"
             className="form-input bg-slate-100 w-full py-4 border-0 border-b-[1px] border-slate-400 px-4 my-6"
             required
+            maxLength={40}
+
           />
         </div>
 
