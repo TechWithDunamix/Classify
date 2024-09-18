@@ -1,12 +1,19 @@
-<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background rectangle -->
-  <rect x="10" y="10" width="180" height="180" rx="20" ry="20" fill="#7B1FA2"/>
-  
-  <!-- Central icon (example: stack of cards) -->
-  <rect x="60" y="60" width="80" height="60" rx="10" ry="10" fill="#FFF"/>
-  <rect x="70" y="70" width="80" height="60" rx="10" ry="10" fill="#E1BEE7"/>
-  <rect x="80" y="80" width="80" height="60" rx="10" ry="10" fill="#FFF"/>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Neon Light -->
+  <defs>
+    <radialGradient id="neonGradient" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#A020F0" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#A020F0" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurFilter" x="0" y="0" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
+    </filter>
+  </defs>
 
-  <!-- Text label -->
-  <text x="50%" y="170" font-family="Arial, sans-serif" font-size="24" fill="#FFF" text-anchor="middle">Classify</text>
+  <!-- Neon Light Effect with Blur -->
+  <circle cx="100" cy="100" r="100" fill="url(#neonGradient)" filter="url(#blurFilter)" />
+
+  <!-- Diamond Shape -->
+  <polygon points="100,30 135,100 100,85 65,100" fill="#A020F0" opacity="0.3" />
+  <polygon points="100,30 135,100 100,170 65,100" fill="#A020F0" opacity="0.6" />
 </svg>
