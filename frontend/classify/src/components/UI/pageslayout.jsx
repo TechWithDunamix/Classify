@@ -9,9 +9,7 @@ const PagesLayout = ({children}) => {
             {children}
 
             </div>
-            <div>
-                footer
-            </div>
+            
         </div>
     )
 }
