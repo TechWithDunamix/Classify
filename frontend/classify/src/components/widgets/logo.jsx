@@ -1,10 +1,10 @@
 // src/components/Logo.js
-
+import LogoImage from "../../assets/react.svg"
 const Logo = () => {
   return (
-    <div className="text-3xl font-bold text-white">
-      <span className="text-purple-400">C</span>
-      <span className="text-gray-300">lassify<span className="font-thin text-[0.7rem] text-purple-500">By Dunamix</span></span>
+    <div className="flex justify-center items-center gab-4 cursor-pointer">
+      <img src={LogoImage} className="w-8 h-8"/>
+      <p className="text-purple-800">Classify</p>
     </div>
   );
 }

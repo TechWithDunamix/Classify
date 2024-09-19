@@ -5,6 +5,7 @@ import DashboardLayout from '../../components/UI/dashboardlayout';
 import { api } from "../../utils";
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/widgets/loader';
+import { BsEmojiFrown } from 'react-icons/bs';
 const ClassworkPage = () => {
     const [students, setStudents] = useState([]);
     const [submitions,setSubmitions] = useState([])
@@ -63,7 +64,12 @@ const ClassworkPage = () => {
         return (
             <DashboardLayout>
             <div className='h-[50%] flex items-center justify-center'>
-                <Loader />
+                <div className='text-center'>
+                    <BsEmojiFrown className='w-18 h-18 text-[2rem] mx-auto my-2 text-purple-700'/>
+                    <p className='text-lg text-slate-800'>No Submitions</p>
+
+                    
+                </div>
             </div>
             </DashboardLayout>
         )
