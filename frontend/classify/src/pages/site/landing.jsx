@@ -3,13 +3,14 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FaRocket, FaUsers, FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { MdEventAvailable, MdWork, MdContactMail } from "react-icons/md";
+import { AiOutlineClose, AiFillCloseCircle } from 'react-icons/ai'; //
 import PagesLayout from "../../components/UI/pageslayout";
-import HeroImage from "../../assets/hero.png";
-import PlaceholderImage2 from "../../assets/hero2.png";
-import FeatureImage from "../../assets/hero.png"; // Add the feature image here
+import HeroImage from "../../assets/hero3.png";
+import PlaceholderImage2 from "../../assets/hero2.svg";
+import FeatureImage from "../../assets/hero.svg"; // Add the feature image here
 import Fet1 from "../../assets/fet.png"; // Add the feature image here
 import Fet2 from "../../assets/fet2.png"; // Add the feature image here
-
+import HeroSide from "../../assets/hero2.png";
 
 // Animation variants for sections and icons
 const sectionVariants = {
@@ -18,12 +19,12 @@ const sectionVariants = {
 };
 
 const iconVariants = {
-  hidden: { opacity: 0, scale: 0.5, rotate: 0 },
+  hidden: {rotate: 0 },
   visible: {
-    opacity: 1,
+    // opacity: 1,
     scale: 1,
-    rotate: [0, 360],
-    transition: { duration: 2, repeat: Infinity, ease: "linear" },
+    rotate: [5, 360],
+    transition: { duration: 5, repeat: Infinity, ease: "ease" },
   },
 };
 
@@ -41,13 +42,13 @@ const LandingPage = () => {
       {/* Floating Icons */}
       <div className="relative h-[100vh] w-full">
         {[
-          FaRocket,
-          FaUsers,
-          FaChalkboardTeacher,
-          FaBook,
-          MdEventAvailable,
-          MdWork,
-          MdContactMail,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          // AiOutlineClose,
+          // AiOutlineClose,
         ].map((Icon, index) => (
           <motion.div
             key={index}
@@ -63,10 +64,8 @@ const LandingPage = () => {
 
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-purple-600 via-purple-400 to-purple-200 p-8 md:p-12 flex flex-col md:flex-row justify-between items-center">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={sectionVariants}
+          <div
+            
             className="text-center md:text-left md:w-[55%] p-4"
           >
             <h1 className="text-white font-bold md:text-5xl text-3xl mb-4">
@@ -82,11 +81,9 @@ const LandingPage = () => {
             >
               Get Started
             </Link>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={sectionVariants}
+          </div>
+          <div
+            
             className="w-full md:w-[40%]"
           >
             <img
@@ -94,15 +91,13 @@ const LandingPage = () => {
               className="w-full h-auto rounded-md shadow-lg transform hover:scale-105 transition duration-500"
               alt="Hero Image"
             />
-          </motion.div>
+          </div>
         </div>
 
         {/* Second Section */}
         <div className="flex flex-col md:flex-row-reverse p-8 md:p-12 justify-center items-center bg-gray-50">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={sectionVariants}
+          <div
+            
             className="md:w-[60%] p-4 text-center md:text-left"
           >
             <h2 className="text-3xl md:text-4xl text-purple-800 font-semibold mb-4">
@@ -113,11 +108,9 @@ const LandingPage = () => {
               engage students in a collaborative learning environment. Stay
               productive and focused with our seamless features.
             </p>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={sectionVariants}
+          </div>
+          <div
+            
             className="w-full md:w-[40%]"
           >
             <img
@@ -125,7 +118,7 @@ const LandingPage = () => {
               className="w-full h-auto rounded-md shadow-lg hover:scale-105 transition duration-500"
               alt="Classify Features"
             />
-          </motion.div>
+          </div>
         </div>
 
         {/* Features Section */}
@@ -140,73 +133,16 @@ const LandingPage = () => {
               an engaging learning experience.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="">
             {/* Icons spinning around */}
-            <motion.div
-              variants={iconVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-purple-600 text-6xl"
-            >
-              <FaRocket />
-            </motion.div>
-            <motion.div
-              variants={iconVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-purple-600 text-6xl"
-            >
-              <FaUsers />
-            </motion.div>
-            <motion.div
-              variants={iconVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-purple-600 text-6xl"
-            >
-              <FaChalkboardTeacher />
-            </motion.div>
-            <motion.div
-              variants={iconVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-purple-600 text-6xl"
-            >
-              <FaBook />
-            </motion.div>
-            <motion.div
-              variants={iconVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-purple-600 text-6xl"
-            >
-              <MdEventAvailable />
-            </motion.div>
-            <motion.div
-              variants={iconVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-purple-600 text-6xl"
-            >
-              <MdWork />
-            </motion.div>
-            <motion.div
-              variants={iconVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-purple-600 text-6xl"
-            >
-              <MdContactMail />
-            </motion.div>
+            <img src={HeroSide} />
           </div>
         </div>
 
         {/* New Feature Section */}
         <div className="flex flex-col md:flex-row p-8 md:p-12 justify-between items-center bg-white">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={sectionVariants}
+          <div
+            
             className="w-full md:w-[40%] mb-6 md:mb-0"
           >
             <img
@@ -214,11 +150,9 @@ const LandingPage = () => {
               className="w-full h-auto rounded-md shadow-lg hover:scale-105 transition duration-500"
               alt="Feature Image"
             />
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={sectionVariants}
+          </div>
+          <div
+            
             className="text-center md:text-left md:w-[55%] p-4"
           >
             <h2 className="text-purple-800 font-bold md:text-4xl text-2xl mb-4">
@@ -256,7 +190,7 @@ const LandingPage = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* CTA Section */}

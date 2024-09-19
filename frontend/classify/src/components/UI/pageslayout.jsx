@@ -5,7 +5,7 @@ const PagesLayout = ({children}) => {
             <div className="fixed w-full -mt-[6rem] z-50">
             <Navbar />
             </div>
-            <div className="min-h-[80vh] mt-16 flex flex-1 flex-col items-center">
+            <div className="min-h-[80vh] mt-24 flex flex-1 flex-col items-center">
             {children}
 
             </div>
