@@ -11,10 +11,11 @@ import FeatureImage from "../../assets/hero.svg"; // Add the feature image here
 import Fet1 from "../../assets/fet.png"; // Add the feature image here
 import Fet2 from "../../assets/fet2.png"; // Add the feature image here
 import HeroSide from "../../assets/hero2.png";
+import Dev from "../../assets/dev.jpg"
 
 // Animation variants for sections and icons
 const sectionVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 1, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
 };
 
@@ -34,6 +35,17 @@ const iconPositions = [
   { top: "60%", left: "20%" },
   { top: "75%", left: "80%" },
   { top: "45%", left: "50%" },
+  { top: "5%", left: "50%" },
+  { top: "35%", left: "30%" },
+  { top: "25%", left: "80%" },
+
+  { top: "15%", left: "90%" },
+  { top: "25%", left: "34%" },
+  { top: "45%", left: "20%" },
+  { top: "15%", left: "40%" },
+  { top: "35%", left: "70%" },
+
+
 ];
 
 const LandingPage = () => {
@@ -47,15 +59,23 @@ const LandingPage = () => {
           AiOutlineClose,
           AiOutlineClose,
           AiOutlineClose,
-          // AiOutlineClose,
-          // AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+          AiOutlineClose,
+
+
         ].map((Icon, index) => (
           <motion.div
             key={index}
             variants={iconVariants}
             initial="hidden"
             animate="visible"
-            className="absolute text-purple-600 text-6xl"
+            className="absolute text-purple-600 text-2xl"
             style={iconPositions[index % iconPositions.length]}
           >
             <Icon />
@@ -212,7 +232,39 @@ const LandingPage = () => {
             </Link>
           </div>
         </div>
+
+        <div className="bg-gray-100 py-12 px-8 md:px-16">
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="text-3xl md:text-4xl text-purple-800 font-bold mb-6">
+          Meet the Developer
+        </h2>
+        <div className="flex flex-col md:flex-row items-center justify-between space-x-8">
+          <div className="w-full md:w-[40%] mb-6 md:mb-0">
+            <img
+              src={Dev}
+              className="w-3/4 h-auto rounded-md"
+              alt="Developer"
+            />
+          </div>
+          <div className="w-full md:w-[60%] text-center md:text-left">
+            <p className="text-lg text-gray-700 mb-4">
+              Hello! I'm Dunamix, a passionate software developer specializing in
+              modern web technologies. With expertise in Python, React, Django, and
+              more, I love creating intuitive and powerful applications. When I'm
+              not coding, you can find me exploring new tech trends and mentoring
+              aspiring developers.
+            </p>
+            <p className="text-lg text-gray-700">
+              Feel free to connect with me through my [LinkedIn](#) or [GitHub](#)
+              profiles. I'm always open to collaboration and new opportunities!
+            </p>
+          </div>
+        </div>
       </div>
+    </div>
+      </div>
+
+      
     </PagesLayout>
   );
 };
