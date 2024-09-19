@@ -102,7 +102,7 @@ class ClassView(generics.GenericAPIView):
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAuthenticated, ]
     
-    def get_queryset(self):
+    def get_queryset(self) -> None:
         query = Q(owner = self.request.user) | Q(members__user = self.request.user)
         user_class = Class.objects.filter(query).all()
         return user_class
@@ -111,7 +111,7 @@ class ClassView(generics.GenericAPIView):
         query = Q(owner = self.request.user)
         user_class = Class.objects.filter(query).all()
         return user_class
-    def get(self,request,id = None,*args, **kwargs):
+    def get(self,request,id = None,*args, **kwargs) -> None:
         
         serializer = self.get_serializer_class()(
             self.get_queryset(),
@@ -121,7 +121,7 @@ class ClassView(generics.GenericAPIView):
                 'id':id
             })
         if id:
-            obj = get_object_or_404(self.get_queryset(),id = id)
+            obj = get_list_or_404(self.get_queryset(),id = id)[0]
             serializer = self.get_serializer_class()(
             obj,
             # many =True,
