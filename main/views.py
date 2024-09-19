@@ -97,6 +97,7 @@ class UserProfileView(generics.GenericAPIView):
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
 class ClassView(generics.GenericAPIView):
     serializer_class = ClassSerializer
     authentication_classes = [TokenAuthentication, ]
@@ -226,7 +227,7 @@ class StudentClassView(generics.GenericAPIView):
         return Response(response)
 
     def delete(self,request,class_id,*args,**kwargs):
-        _class = get_object_or_404(Class,class_code = class_id)
+        _class = get_object_or_404(Class,id = class_id)
         member = get_object_or_404(MemberShip,user = request.user,_class = _class)
         member.delete()
         response = {

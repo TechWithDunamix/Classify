@@ -125,10 +125,10 @@ const ClassMembers = () => {
             className="px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
 
-          <AiOutlineUserAdd
+          {/* <AiOutlineUserAdd
             onClick={() => setShowModal(true)}
             className="cursor-pointer inline-block ml-2 text-2xl text-purple-900"
-          />
+          /> */}
           <p className="text-xs text-slate-400">{filteredMembers.length} Members</p>
           
         </div>

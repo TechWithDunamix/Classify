@@ -38,6 +38,24 @@ const StudentClassHome = () => {
     fetchUserData();
   }, []);
 
+  const handleLeaveClass = () => {
+    toast.loading()
+    api.delete(`/class/s/leave/${classData.id}`,{},50000,
+      (data,statud) => {
+        window.location.href = "/d"
+      },
+      (error,status) => {
+        toast.dismiss()
+        toast.error("An error occured")
+
+      },
+      (error) => {
+        toast.dismiss()
+
+        toast.error("An error occured")
+      }
+    )
+  }
   useEffect(() => {
     if (classData) {
       document.title = classData.name;
@@ -109,6 +127,10 @@ const StudentClassHome = () => {
             className="h-48 sm:h-64 lg:h-80 bg-cover bg-center rounded-t-md"
             style={{ backgroundImage: `url(${classData.cover_image_url})` }}
           ></div>
+          <button onClick={handleLeaveClass}
+            className="bg-red-600 text-white absolute btn top-0 left-1 mt-2">
+            Leave Class
+          </button>
           
           <p className="bg-black text-white px-4 py-2 absolute bottom-0 right-1 m-3 rounded-md shadow-md">
             Total Students: {classData?.members?.length || 0}
@@ -116,6 +138,10 @@ const StudentClassHome = () => {
         </div>
       ) : (
         <div className="relative mx-[10px] h-48 sm:h-64 lg:h-80 flex items-center justify-center bg-gray-200 rounded-t-md">
+          <button onClick={handleLeaveClass}
+            className="bg-red-600 text-white absolute btn top-0 left-1 mt-2">
+            Leave Class
+          </button>
           <div className="text-gray-400 text-4xl sm:text-5xl lg:text-6xl font-bold">
             {classData?.name?.split(" ").map((word) => word[0]).join("")}
           </div>

@@ -56,10 +56,10 @@ useEffect(() => {
                 {!isCollapsed && <span className='hidden md:inline-block'> Home</span>}
               </Link>
             </li>
-            <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
+            {/* <li className="flex items-center p-4 cursor-pointer hover:bg-neutral">
               <FontAwesomeIcon icon={faBook} className="mr-4" />
               {!isCollapsed && <span className='hidden md:inline-block'>Classes</span>}
-            </li>
+            </li> */}
 
             {/* Dropdown one */}
             <li className="relative p-4">
