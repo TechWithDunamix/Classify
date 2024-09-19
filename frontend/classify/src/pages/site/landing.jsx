@@ -239,10 +239,10 @@ const LandingPage = () => {
           Meet the Developer
         </h2>
         <div className="flex flex-col md:flex-row items-center justify-between space-x-8">
-          <div className="w-full md:w-[40%] mb-6 md:mb-0">
+          <div className="w-full md:w-[40%] mb-6 md:mb-0 text-center">
             <img
               src={Dev}
-              className="w-3/4 h-auto rounded-md"
+              className="w-3/4 h-auto rounded-md mx-auto"
               alt="Developer"
             />
           </div>
@@ -255,8 +255,9 @@ const LandingPage = () => {
               aspiring developers.
             </p>
             <p className="text-lg text-gray-700">
-              Feel free to connect with me through my [LinkedIn](#) or [GitHub](#)
-              profiles. I'm always open to collaboration and new opportunities!
+              Feel free to connect with me through my <Link to={"http://github.com/Techwithdunamix"} className="text-purple-800 "> Github </Link> or
+              <Link to="mailto:techwithdunamix@gmail.com" className="text-purple-900"> Email </Link>
+              I'm always open to collaboration and new opportunities!
             </p>
           </div>
         </div>
