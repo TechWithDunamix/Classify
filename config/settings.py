@@ -178,3 +178,11 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'techwithdunamix@gmail.com'
 EMAIL_HOST_PASSWORD = 'khfuxdrmglzlxqxa'
 DEFAULT_FROM_EMAIL = 'blockvestaa@gmail.com'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'drz8g72av',  
+    'API_KEY': '593668441962956', 
+    'API_SECRET': 'w8LAnK0s6-ckDdEHua4tbIyrba0',  
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
