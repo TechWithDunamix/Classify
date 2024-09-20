@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import 'daisyui/dist/full.css';
-import PagesLayout from './UI/pageslayout';
+import PagesLayout from '../../../components/UI/pageslayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
-
+import { api } from '../../../utils';
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
@@ -16,22 +16,32 @@ const LoginForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    toast.loading("Loading")
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     console.log(formData);
 
-    // Add your form validation and API call logic here
-    // Simulating API call delay for demo
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success('Login successful!');
-    }, 2000);
+    api.post("/auth/login",formData,{},500000,
+      (data,status) => {
+        window.location.href = "/d"
+      },
+      (error,status) => {
+        setFormErrors((prev) => ({...prev,['email']:"Invalid user credentials."}))
+        // toast.warn("INvalid")
+        toast.dismiss()
+        
+      },
+      (error) => {
+        console.log(error)
+      }
+
+    )
   };
 
   return (
     <PagesLayout>
-      <div className="flex items-center justify-center h-screen text-gray-800 mt-6">
-        <div className="p-8 bg-white shadow-lg rounded-md max-w-md w-full">
+      <div className="flex items-center justify-center h-3/4 text-gray-800 mt-6">
+        <div className="p-8 bg-white rounded-md max-w-md w-full">
           <h1 className="text-3xl font-bold text-center text-purple-600 mb-8">Classify Login</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative">

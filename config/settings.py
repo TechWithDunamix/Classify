@@ -155,7 +155,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [("redis", 6079)],
+            "hosts": [("redis", 6379)],
         },
     },
 }
@@ -185,4 +185,4 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': 'w8LAnK0s6-ckDdEHua4tbIyrba0',  
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

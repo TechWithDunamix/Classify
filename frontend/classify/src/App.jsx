@@ -24,6 +24,7 @@ import ChatbotIframe from './pages/webapp/bot';
 import WaitingPage from './pages/site/auth/confirmemail';
 import EmailConfirmation from './pages/site/auth/activateAccount';
 import ChangeEmailPassword from './pages/site/auth/changeEmaillPassword';
+import LoginForm from  "./pages/site/auth/login"
 function App() {
   
   return (
@@ -36,6 +37,8 @@ function App() {
         <Route path='*' element={<NotFoundPage />} />
 
         <Route path="signup" element={<SignUpForm />} />
+        <Route path="login" element={<LoginForm />} />
+
         <Route path="d" element={<PrivateRoute element={<DashboardHome />} />} />
         <Route path="profile" element={<PrivateRoute element={<ProfilePage />} />} />
         <Route path="class/new" element={<PrivateRoute element={<CreateNewClass />} />} />
