@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -9,16 +10,9 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - redis
 
-  db:
-    image: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_DB: your_db_name
-      POSTGRES_USER: your_db_user
-      POSTGRES_PASSWORD: your_db_password
-
-volumes:
-  postgres_data:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6079:6079"

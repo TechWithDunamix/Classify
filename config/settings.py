@@ -151,18 +151,12 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication"
     ]
 }
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels.layers.InMemoryChannelLayer",
-#         "CONFIG": {
-#             "capacity": 1000,  # Number of messages that can be in a channel at once
-#             "expiry": 10,  # Number of seconds to keep messages in memory
-#         },
-#     },
-# }
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [("redis", 6079)],
+        },
     },
 }
 
