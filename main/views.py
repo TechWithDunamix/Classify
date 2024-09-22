@@ -1,4 +1,5 @@
 # from adrf.views import APIView
+import jose.jws
 import jose.jwt
 from . import constants
 from django.http import HttpResponseBadRequest,HttpResponseNotFound
@@ -997,6 +998,7 @@ class ChangeEmailPassword(generics.GenericAPIView):
 
 
 class RequestPasswordReset(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     def get_serializer_class(self):
         return []
     
@@ -1017,4 +1019,34 @@ class RequestPasswordReset(generics.GenericAPIView):
         print("email sent")
         print(token)
         return Response(payload)
+    
+
+class VerifyToken(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        return []
+
+
+    def post(self,request,token = None,*args,**kwargs):
+        try:
+            user_payload = jose.jwt.decode(token,key = SECRET_KEY)
+        except jose.JWTError:
+            return Response({
+                "detail":"Invalid Token"
+            },status=400)
+        email = user_payload.get("email")
+        user = get_object_or_404(User,email = email)
+        if Token.objects.filter(user = user).exists():
+            Token.objects.get(user = user).delete()
+
+        token,_ = Token.objects.get_or_create(user = user)
+        return Response({
+                "token":token.key,
+                "email":user.email
+                })
+
+        
+
+    
         

@@ -3,7 +3,7 @@ from .views import (UserSignUpView,UserLoginView,
 UserProfileView,ClassView,StudentClassView,TeacherAssignmentView,TopicView,TopicUpdateView,
 WorkSubmitionView,WorkMarkView,ChatClassView,AnnouncementView,ClassFileView,StudentAssignmentView,
 CommentView,TeacherGradingView,StudentGradingView,MembersView,MembersView,ChangeEmailPassword,
-RequestPasswordReset)
+RequestPasswordReset,VerifyToken)
 
 urlpatterns = [
      path("auth/signup",UserSignUpView.as_view()),
@@ -43,6 +43,8 @@ urlpatterns = [
      path("students/grading",StudentGradingView.as_view()),
      path("class/members",MembersView.as_view()),
      path("auth/change_password_email",ChangeEmailPassword.as_view()),
+     path("auth/verify_token/<str:token>",VerifyToken.as_view()),
+
 
 
 
@@ -58,3 +60,4 @@ urlpatterns = [
 
 
 ]
+
