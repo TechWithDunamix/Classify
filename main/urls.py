@@ -2,11 +2,14 @@ from django.urls import path
 from .views import (UserSignUpView,UserLoginView,
 UserProfileView,ClassView,StudentClassView,TeacherAssignmentView,TopicView,TopicUpdateView,
 WorkSubmitionView,WorkMarkView,ChatClassView,AnnouncementView,ClassFileView,StudentAssignmentView,
-CommentView,TeacherGradingView,StudentGradingView,MembersView,MembersView,ChangeEmailPassword)
+CommentView,TeacherGradingView,StudentGradingView,MembersView,MembersView,ChangeEmailPassword,
+RequestPasswordReset)
 
 urlpatterns = [
      path("auth/signup",UserSignUpView.as_view()),
      path("auth/login",UserLoginView.as_view()),
+     path("auth/reset_email",RequestPasswordReset.as_view()),
+
      path("user/profile",UserProfileView.as_view()),
      path("class",ClassView.as_view()),
      path("class/<uuid:id>",ClassView.as_view()),

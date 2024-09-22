@@ -25,6 +25,7 @@ import WaitingPage from './pages/site/auth/confirmemail';
 import EmailConfirmation from './pages/site/auth/activateAccount';
 import ChangeEmailPassword from './pages/site/auth/changeEmaillPassword';
 import LoginForm from  "./pages/site/auth/login"
+import ForgotPassword from "./pages/site/auth/passwordreset"
 function App() {
   
   return (
@@ -38,6 +39,8 @@ function App() {
 
         <Route path="signup" element={<SignUpForm />} />
         <Route path="login" element={<LoginForm />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+
 
         <Route path="d" element={<PrivateRoute element={<DashboardHome />} />} />
         <Route path="profile" element={<PrivateRoute element={<ProfilePage />} />} />

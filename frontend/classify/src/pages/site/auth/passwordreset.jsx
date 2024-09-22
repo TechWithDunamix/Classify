@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import 'daisyui/dist/full.css';
-
+import {api} from "../../../utils"
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
@@ -16,17 +16,17 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    try {
-      // Simulate API call
-      setTimeout(() => {
-        console.log('Password reset request for:', email);
-        setIsLoading(false);
-        alert('Password reset link sent to your email!');
-      }, 2000);
-    } catch (error) {
-      setIsLoading(false);
-      setFormErrors('Failed to submit. Try again.');
-    }
+    api.post("/auth/reset_email",{"email":email},{},500000,
+      (data,status) => {
+        console.log(datsa)
+      },
+      (error,status) => {
+
+      },
+      (error) => {
+
+      }
+    )
   };
 
   const isStep1Complete = () => {
@@ -35,12 +35,12 @@ const ForgotPassword = () => {
 
   return (
     <div className="flex items-center justify-center h-screen text-gray-800 mt-6">
-      <div className="p-8 bg-white shadow-md rounded-lg max-w-md w-full">
+      <div className="p-8 bg-white rounded-lg max-w-md w-full">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="text-center mb-6">
+          {/* <div className="text-center mb-6">
             <h1 className="text-3xl font-bold text-purple-600 mb-4">Forgot Password</h1>
             <hr />
-          </div>
+          </div> */}
 
           {step === 1 && (
             <div className="space-y-6">

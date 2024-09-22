@@ -1,4 +1,5 @@
 # from adrf.views import APIView
+import jose.jwt
 from . import constants
 from django.http import HttpResponseBadRequest,HttpResponseNotFound
 from django.http import JsonResponse
@@ -22,10 +23,13 @@ from django.shortcuts import get_object_or_404,get_list_or_404
 from django.contrib.contenttypes.models import ContentType
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-import faker,uuid
+import faker,uuid,jose,time
+from config.settings import SECRET_KEY
+from .emailUtils import send_html_email
 class UserSignUpView(generics.GenericAPIView):
     serializer_class = UserSignupSerializer
     permission_classes= [AllowAny]
+    # 09164680166
     authentication_classes = []
 
     def get_serializer_class(self):
@@ -989,3 +993,28 @@ class ChangeEmailPassword(generics.GenericAPIView):
             "email" : email
         })
     
+
+
+
+class RequestPasswordReset(generics.GenericAPIView):
+    def get_serializer_class(self):
+        return []
+    
+    
+    def post(self,request,*args,**kwargs):
+        user = get_object_or_404(User,email = request.data.get("email"))
+        payload = {
+            "email":user.email,
+            "type" : "activate",
+            "exp": int(time.time()) + 3600
+        }
+
+        token = jose.jwt.encode(payload,SECRET_KEY,algorithm="HS256")
+        async_to_sync(send_html_email)("Password Reset","resetEmail.html",{
+            "username":user.username,
+            "reset_link" : "http://localhost:3000/d"
+        },["techwithdunamix@gmail.com"],"techwithdunamix@gmail.com")
+        print("email sent")
+        print(token)
+        return Response(payload)
+        
