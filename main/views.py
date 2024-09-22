@@ -67,10 +67,12 @@ class UserLoginView(generics.GenericAPIView):
                     },
                     status=status.HTTP_400_BAD_REQUEST)
             token,_ = Token.objects.get_or_create(user = user)
-            return Response({
-                "token":token.key,
-                "email":user.email
-                })
+            response = UserProfileViewSerializer(user,context = {
+                "request":request
+            })
+            response = serializer.data
+            response['token'] = token.key
+            return Response(response)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -1041,10 +1043,13 @@ class VerifyToken(generics.GenericAPIView):
             Token.objects.get(user = user).delete()
 
         token,_ = Token.objects.get_or_create(user = user)
-        return Response({
-                "token":token.key,
-                "email":user.email
-                })
+        serializer = UserProfileViewSerializer(user,context = {
+            "request" : request 
+        })
+        response = serializer.data 
+        response['token'] = token.key
+
+        return Response(response)
 
         
 
