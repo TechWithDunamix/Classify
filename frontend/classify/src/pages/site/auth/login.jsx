@@ -23,6 +23,10 @@ const LoginForm = () => {
 
     api.post("/auth/login",formData,{},500000,
       (data,status) => {
+        localStorage.setItem("token",data.token)
+        localStorage.setItem("id",data.id)
+        localStorage.setItem("email",data.email)
+
         window.location.href = "/d"
       },
       (error,status) => {

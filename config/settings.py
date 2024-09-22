@@ -146,11 +146,11 @@ AUTH_USER_MODEL = 'main.User'
 MEDIA_ROOT = 'media/'
 MEDIA_URL = 'media/'
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES":[
-        "rest_framework.authentication.TokenAuthentication"
-    ]
-}
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES":[
+#         "rest_framework.authentication.TokenAuthentication"
+#     ]
+# }
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

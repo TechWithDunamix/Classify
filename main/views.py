@@ -1,5 +1,4 @@
 # from adrf.views import APIView
-import jose.jws
 import jose.jwt
 from . import constants
 from django.http import HttpResponseBadRequest,HttpResponseNotFound
@@ -30,8 +29,6 @@ from .emailUtils import send_html_email
 class UserSignUpView(generics.GenericAPIView):
     serializer_class = UserSignupSerializer
     permission_classes= [AllowAny]
-    # 09164680166
-    authentication_classes = []
 
     def get_serializer_class(self):
         return UserSignupSerializer
@@ -247,6 +244,8 @@ class StudentClassView(generics.GenericAPIView):
 class TeacherAssignmentView(generics.GenericAPIView):
     serializer_class = AssignmentSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     def dispatch(self, request, *args, **kwargs):
         if not request.GET.get("class_id"):
             return HttpResponseBadRequest("Provide class_id as a get_param")
@@ -344,6 +343,8 @@ class TeacherAssignmentView(generics.GenericAPIView):
 class StudentAssignmentView(generics.GenericAPIView):
     serializer_class =  AssignmentSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
 
     def get(self,request,*args, **kwargs):
         class_id = request.GET.get("class_id")
@@ -363,6 +364,8 @@ class StudentAssignmentView(generics.GenericAPIView):
 class TopicView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TopicSerializer
+    authentication_classes = [TokenAuthentication]
+
     def get_class_queryset(self):
         return Class.objects.filter(owner=self.request.user) 
     def get(self,request,*args,**kwargs):
@@ -453,7 +456,9 @@ class TopicView(generics.GenericAPIView):
 
 class TopicUpdateView(generics.GenericAPIView):
     serializer_class = TopicUpdateSerializer
-    permission_classes = [IsAuthenticated]    
+    permission_classes = [IsAuthenticated] 
+    authentication_classes = [TokenAuthentication]
+
 
     def get_class_queryset(self):
         return Class.objects.filter(owner=self.request.user).all()
@@ -517,6 +522,7 @@ class TopicUpdateView(generics.GenericAPIView):
 class WorkSubmitionView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = WorkSubmitionSerializer
+    authentication_classes = [TokenAuthentication]
 
     def get_class_qs(self):
         class_id = self.request.GET.get("class_id")
@@ -603,6 +609,8 @@ class WorkSubmitionView(generics.GenericAPIView):
         
 class WorkMarkView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     serializer_class = WorkMarkSerializer
     def get_cls_qs(self):
         
@@ -660,6 +668,8 @@ class WorkMarkView(generics.GenericAPIView):
 class ChatClassView(generics.GenericAPIView):
     serializer_class = ChatSerializer 
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     def get_queryset(self):
         query = Q(owner = self.request.user) | Q(members__user = self.request.user)
         _class = Class.objects.filter(query)
@@ -690,6 +700,8 @@ class ChatClassView(generics.GenericAPIView):
 class AnnouncementView(generics.GenericAPIView):
     serializer_class = AnnouncementSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     def get_cls_qs(self):
         user = self.request.user
         query = Q(members__user = user) | Q(owner = user)
@@ -788,6 +800,8 @@ class AnnouncementView(generics.GenericAPIView):
 class ClassFileView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ClassFilesSerializer 
+    authentication_classes = [TokenAuthentication]
+
     def get(self,request,file_id = None,*args, **kwargs):
         class_id = request.GET.get("class_id")
         if not class_id:
@@ -859,6 +873,8 @@ class ClassFileView(generics.GenericAPIView):
 class CommentView(generics.GenericAPIView):
     serializer_class= CommentSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     def get_class_qs(self):
         user = self.request.user 
         query = Q(owner = user) | Q(members__user = user)
@@ -900,6 +916,8 @@ class CommentView(generics.GenericAPIView):
 class TeacherGradingView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TeachersGradingSerializer
+    authentication_classes = [TokenAuthentication]
+
     def dispatch(self, request, *args, **kwargs):
         if not request.GET.get("class_id"):
             return HttpResponseBadRequest("Provide class_id as a get_param")
@@ -922,6 +940,8 @@ class TeacherGradingView(generics.GenericAPIView):
 class StudentGradingView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TeachersGradingSerializer
+    authentication_classes = [TokenAuthentication]
+
     def dispatch(self, request, *args, **kwargs):
         if not request.GET.get("class_id"):
             return HttpResponseBadRequest("Provide class_id as a get_param")
@@ -944,6 +964,8 @@ class StudentGradingView(generics.GenericAPIView):
 class MembersView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MemberSerializer
+    authentication_classes = [TokenAuthentication]
+
 
     def dispatch(self, request, *args, **kwargs):
         if not request.GET.get("class_id"):
@@ -974,6 +996,8 @@ class MembersView(generics.GenericAPIView):
 
 
 class ChangeEmailPassword(generics.GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+
     permission_classes = [IsAuthenticated]
     serializer_class = ChangeEmailPasswordSerializer
 
@@ -1016,7 +1040,7 @@ class RequestPasswordReset(generics.GenericAPIView):
         token = jose.jwt.encode(payload,SECRET_KEY,algorithm="HS256")
         async_to_sync(send_html_email)("Password Reset","resetEmail.html",{
             "username":user.username,
-            "reset_link" : "http://localhost:3000/d"
+            "token" : token
         },["techwithdunamix@gmail.com"],"techwithdunamix@gmail.com")
         print("email sent")
         print(token)
@@ -1024,7 +1048,8 @@ class RequestPasswordReset(generics.GenericAPIView):
     
 
 class VerifyToken(generics.GenericAPIView):
-    permission_classes = [AllowAny]
+
+    permission_classes = (AllowAny,)
 
     def get_serializer_class(self):
         return []

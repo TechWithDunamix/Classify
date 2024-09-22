@@ -26,6 +26,7 @@ import EmailConfirmation from './pages/site/auth/activateAccount';
 import ChangeEmailPassword from './pages/site/auth/changeEmaillPassword';
 import LoginForm from  "./pages/site/auth/login"
 import ForgotPassword from "./pages/site/auth/passwordreset"
+import ResetPassword from './pages/site/auth/resetPassword';
 function App() {
   
   return (
@@ -56,6 +57,8 @@ function App() {
         <Route path="waiting" element={<WaitingPage />}  />
         <Route path="auth/confirm/:id/:token" element={<EmailConfirmation />}  />        
         <Route path="auth/change/email-password" element={<ChangeEmailPassword />}  />        
+        <Route path="auth/reset-password/:token" element={<ResetPassword />}  />        
+
 
 
 
