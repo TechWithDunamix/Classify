@@ -109,6 +109,18 @@ const SignUpForm = () => {
           setFormErrors(
             err.message
           )
+          setFormData({
+            email: '',
+            password: '',
+            full_name: '',
+            username: '',
+            dob: '',
+            interest: [],
+            profile_image: null,
+            intro: '',
+            agreeToTerms: false,
+          })
+
         }
       },
       (err) => toast.error("Server is slow be petient")
@@ -267,6 +279,7 @@ const SignUpForm = () => {
                 <div className="flex flex-col items-center">
                   <div className="relative w-32 h-32 mb-4">
                     <img
+                      
                       src={formData.profileImage ? URL.createObjectURL(formData.profileImage[0]) : '/path/to/placeholder-avatar.png'}
                       alt="Profile Preview"
                       className="w-full h-full rounded-full object-cover border-2 border-purple-600"
@@ -282,6 +295,7 @@ const SignUpForm = () => {
                     <FontAwesomeIcon icon={faFileImage} className="absolute left-3 top-3 text-gray-400" />
                     <input
                       type="file"
+                      accept="image/png, image/jpeg image/jpg" 
                       name="profileImage"
                       onChange={handleFileChange}
                       className="file-input file-input-bordered file-input-lg w-full border-gray-300 bg-gray-100 text-gray-700 rounded-md pl-12"

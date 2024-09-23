@@ -52,6 +52,7 @@ const ChatBubble = () => {
   useEffect(fetchMessage, []);
   
   const wsconnect = () => {
+    
     const url = `ws://localhost:8000/ws/chat_class/${id}`;
     ws.current = new WebSocket(url, localStorage.getItem("token"));
 
