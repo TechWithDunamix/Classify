@@ -151,11 +151,12 @@ MEDIA_URL = 'media/'
 #         "rest_framework.authentication.TokenAuthentication"
 #     ]
 # }
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(os.environ.get('REDIS_HOST', 'localhost'), 6379)], 
+            "hosts": ["rediss://red-crou3tqj1k6c73bthrag:W8xIFtDhQT6sS61MDcUf7AHDKTb1kGqi@oregon-redis.render.com:6379"], 
         },
     },
 }
