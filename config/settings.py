@@ -156,7 +156,12 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": ["rediss://red-crou3tqj1k6c73bthrag:W8xIFtDhQT6sS61MDcUf7AHDKTb1kGqi@oregon-redis.render.com:6379"], 
+            "hosts": [
+                {
+                    "address": "redis://redis-18230.c341.af-south-1-1.ec2.redns.redis-cloud.com:18230",
+                    "password": "hlCdIY3Jy8paaPg2ElprWYaohtoXO1TZ",  # Replace with your actual password
+                }
+            ],
         },
     },
 }
