@@ -84,22 +84,25 @@ ASGI_APPLICATION = "config.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'your_db_name',
-#         'USER': 'your_db_user',
-#         'PASSWORD': 'your_db_password',
-#         'HOST': 'db',
-#         'PORT': '5432',
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'defaultdb',  # From the URL: after the port number
+        'USER': 'avnadmin',  # Username from the URL
+        'PASSWORD': 'AVNS_U_koYYVQHCrooM9jJ4w',  # Password from the URL
+        'HOST': 'pg-50db5a9-classify909-8814.h.aivencloud.com',  # Hostname from the URL
+        'PORT': '19085',  # Port from the URL
+        'OPTIONS': {
+            'sslmode': 'require',  # From the URL parameter
+        }
+    }
+}
 
 
 # Password validation
