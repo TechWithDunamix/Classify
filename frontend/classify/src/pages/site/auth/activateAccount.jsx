@@ -6,7 +6,7 @@ const EmailConfirmation = () => {
   const {id,token} = useParams()
 
   useEffect(() => {
-    const url = "ws://127.0.0.1:8000/ws/activate";
+    const url = "wss://classify-web-vqa6.onrender.com/ws/activate";
     const ws = new WebSocket(url, token)
     ws.onopen = (e) => {
       console.log("Connected");

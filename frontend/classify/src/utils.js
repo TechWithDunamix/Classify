@@ -89,6 +89,6 @@ class FetchWrapper {
   }
 }
 
-export const api = new FetchWrapper('http://localhost:8000/api/v1', {
+export const api = new FetchWrapper('https://classify-web-vqa6.onrender.com/api/v1', {
   'Authorization': `Token ${localStorage.getItem("token")}`
 });
