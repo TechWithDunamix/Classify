@@ -93,13 +93,13 @@ ASGI_APPLICATION = "config.asgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',  # From the URL: after the port number
-        'USER': 'avnadmin',  # Username from the URL
-        'PASSWORD': 'AVNS_U_koYYVQHCrooM9jJ4w',  # Password from the URL
-        'HOST': 'pg-50db5a9-classify909-8814.h.aivencloud.com',  # Hostname from the URL
-        'PORT': '19085',  # Port from the URL
+        'NAME': 'defaultdb',  
+        'USER': 'avnadmin',  
+        'PASSWORD': 'AVNS_U_koYYVQHCrooM9jJ4w',  
+        'HOST': 'pg-50db5a9-classify909-8814.h.aivencloud.com',  
+        'PORT': '19085',  
         'OPTIONS': {
-            'sslmode': 'require',  # From the URL parameter
+            'sslmode': 'require',  
         }
     }
 }

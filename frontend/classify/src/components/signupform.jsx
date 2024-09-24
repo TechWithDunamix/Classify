@@ -6,6 +6,7 @@ import { faChevronRight, faChevronLeft, faEnvelope, faLock, faUser, faCalendarDa
 import { api } from '../utils';
 import { toast } from 'react-toastify';
 import Loader from './widgets/loader';
+import { Link } from 'react-router-dom';
 const interestsList = [
   { name: 'Programming', emoji: '💻' },
   { name: 'Design', emoji: '🎨' },
@@ -135,7 +136,7 @@ const SignUpForm = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="text-center mb-6">
               <h1 className="text-3xl font-bold text-purple-600 mb-8">Classify</h1>
-
+              <p>Already have an account ? <Link to={"/login"} className='text-purple-500'>Login</Link></p>
               <hr />
             </div>
             {/* Step 1: Basic Information */}
