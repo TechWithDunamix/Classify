@@ -182,7 +182,7 @@ class AccountActivation(AsyncWebsocketConsumer):
                 "user" : obj.user.username,
                 "token" : obj.user.auth_token
             }
-            users = ["techwithdunamix@gmail.com"]
+            users = [user.email]
             sender = "techwithdunamix@gmail.com"
             await   send_html_email("Classify","activate.html",context,users,sender)
             print("Email sent")

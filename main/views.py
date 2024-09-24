@@ -1041,7 +1041,7 @@ class RequestPasswordReset(generics.GenericAPIView):
         async_to_sync(send_html_email)("Password Reset","resetEmail.html",{
             "username":user.username,
             "token" : token
-        },["techwithdunamix@gmail.com"],"techwithdunamix@gmail.com")
+        },[user.email],"techwithdunamix@gmail.com")
         print("email sent")
         print(token)
         return Response(payload)
