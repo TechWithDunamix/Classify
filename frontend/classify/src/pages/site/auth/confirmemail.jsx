@@ -4,7 +4,7 @@ import { useEffect ,useRef} from 'react';
 const WaitingPage = () => {
   const ws = useRef(null)
   const connectWS = () =>{
-    const url = "wss://classify-web-vqa6.onrender.com/ws/activate"
+    const url = "wss://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/ws/activate"
     const token = localStorage.getItem("token");
     ws.current = new WebSocket(url,token);
 
