@@ -105,8 +105,6 @@ const SignUpForm = () => {
       (err, status) => {
 
         SetIsLoading(false)
-        document.querySelector("#root").innerHTML = Object.entries
-        alert(err)
         if (status === 400){
           setStep(1)
           setFormErrors(
