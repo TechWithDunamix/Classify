@@ -75,7 +75,7 @@ const LandingPage = () => {
             variants={iconVariants}
             initial="hidden"
             animate="visible"
-            className="absolute text-purple-600 text-2xl"
+            className="absolute text-purple-600 text-2xl  hidden md:block"
             style={iconPositions[index % iconPositions.length]}
           >
             <Icon />
