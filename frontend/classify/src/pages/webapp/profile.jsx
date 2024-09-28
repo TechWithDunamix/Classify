@@ -5,7 +5,7 @@ import ProfileSettings1 from "../../components/primitives/profile/profile1";
 const ProfilePage = () => {
     const [userData,setUserData] = useState({})
     const fetchAPI = () => {
-        api.get('/user/profile', {}, 50000,
+        api.get('/user/profile', {}, 500000,
             (data, status) => {
                 
                 setUserData(data)
@@ -23,12 +23,12 @@ const ProfilePage = () => {
 
         )
     }
-    useEffect(() => {
-        fetchAPI()
-    },[])
+    // useEffect(() => {
+    //     fetchAPI()
+    // },[])
     return (
         <DashboardLayout>
-            <ProfileSettings1 data={userData}/>
+            <ProfileSettings1/>
         </DashboardLayout>
     )
 }
