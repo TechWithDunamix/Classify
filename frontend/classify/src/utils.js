@@ -1,5 +1,17 @@
 import { callApi } from "@zayne-labs/callapi";
 
+if (!Object.entries) {
+  Object.entries = function (obj) {
+    let ownProps = Object.keys(obj),
+      i = ownProps.length,
+      resArray = new Array(i); // Preallocate the Array
+    while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+
+    return resArray;
+  };
+}
+
+
 class FetchWrapper {
   constructor(baseURL, defaultHeaders = {}) {
     this.baseURL = baseURL;
