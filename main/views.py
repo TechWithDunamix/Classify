@@ -105,7 +105,7 @@ class UserProfileView(generics.GenericAPIView):
 class ClassView(generics.GenericAPIView):
     serializer_class = ClassSerializer
     authentication_classes = [TokenAuthentication, ]
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self) -> None:
         query = Q(owner = self.request.user) | Q(members__user = self.request.user)
@@ -183,6 +183,7 @@ class ClassView(generics.GenericAPIView):
 class StudentClassView(generics.GenericAPIView):
     serializer_class = ClassSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, ]
 
     def get(self,request,*args, **kwargs):
         class_id = request.GET.get("class_id")
