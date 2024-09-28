@@ -47,9 +47,9 @@ class FetchWrapper {
             responseData = {};
           }
 
-          if (response.status === 401 || 403){
-            window.location.href = "/login"
-          }
+          // if (response.status === 401 || 403){
+          //   window.location.href = "/login"
+          // }
           if (response.ok) {
             if (onSuccess) onSuccess(responseData, response.status);
             resolve({ data: responseData, status: response.status });
