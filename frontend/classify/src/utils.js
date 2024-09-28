@@ -36,7 +36,7 @@ class FetchWrapper {
       if (body instanceof FormData) {
         config.body = body;
       } else {
-        config.body = body;  // callApi will handle JSON stringification
+        config.body = body; 
       }
     }
 
@@ -45,7 +45,7 @@ class FetchWrapper {
       if (error) {
         throw error;
       }
-      return { data, status: 200 };  // Assuming successful responses always have status 200
+      return { data, status: 200 };  
     } catch (error) {
       return Promise.reject(error);
     }
