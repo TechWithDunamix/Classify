@@ -104,7 +104,8 @@ const SignUpForm = () => {
       },
       (err, status) => {
 
-        SetIsLoading(false)
+        // SetIsLoading(false)
+        alert(error)
         if (status === 400){
           setStep(1)
           setFormErrors(
