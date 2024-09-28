@@ -48,7 +48,7 @@ useEffect(() => {
   return (
     <globalContext.Provider value={globalContextValues}>
       <div className="flex h-screen">
-        <div className={`bg-secondary text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-0 md:w-16' : 'w-16 md:w-64'} z-50`}>
+        <div className={`bg-secondary hidden text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-0 md:w-16' : 'w-16 md:w-64'} z-50`}>
           <div className="font-bold text-2xl p-5 hidden md:inline-block text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
             {isCollapsed ? 'C' : 'Classify'}
           </div>
@@ -123,9 +123,18 @@ useEffect(() => {
         </div>
         <div className={`flex-1 flex flex-col transition-margin duration-300`}>
           <div className="p-4 flex justify-between items-center">
-            <button className="btn btn-square btn-ghost" onClick={handleSidebarToggle}>
+            <button className="btn btn-square btn-ghost hidden md:block" onClick={handleSidebarToggle}>
               <FontAwesomeIcon icon={faBars} />
             </button>
+
+            <button className="btn btn-square btn-ghost text-purple-900  md:hidden" onClick={handleSidebarToggle}>
+
+              <Link to={"/d"}>
+              <FontAwesomeIcon icon={faHome} />
+
+              </Link>
+            </button>
+
             <div>Classify</div>
             <div className="dropdown dropdown-end">
               <button className="btn btn-square btn-ghost z-50">
