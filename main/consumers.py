@@ -68,11 +68,13 @@ class ChatClass(AsyncWebsocketConsumer):
         print(obj._class.owner)
         return obj,_class,isDeletable
     async def connect(self):
+
         self.class_id = self.scope['url_route']['kwargs']['class_id']
         user = self.scope['user']
         _class = await self.get_class_qs(self.class_id)
 
         if not _class:
+            print("AN error occured")
             await self.close()
         await self.channel_layer.group_add(
             self.class_id,
@@ -127,6 +129,7 @@ class ChatClass(AsyncWebsocketConsumer):
 class AccountActivation(AsyncWebsocketConsumer):
     async def connect(self):
         if not self.scope['user']:
+            print("AN error occured")
             self.disconnect(code=101)
 
         userEmail = self.scope['user'].user_id
