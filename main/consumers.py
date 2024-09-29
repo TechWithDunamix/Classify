@@ -86,7 +86,7 @@ class ChatClass(AsyncWebsocketConsumer):
 
 
     async def disconnect(self, close_code):
-        
+        print(close_code)
         await self.channel_layer.group_discard(
             "email_channel",
             self.channel_name
@@ -168,6 +168,7 @@ class AccountActivation(AsyncWebsocketConsumer):
         return user_code
    
     async def disconnect(self, code):
+        
         return await super().disconnect(code)
     
     async def receive(self, text_data):

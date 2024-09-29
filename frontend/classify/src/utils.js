@@ -4,7 +4,7 @@ if (!Object.entries) {
   Object.entries = function (obj) {
     let ownProps = Object.keys(obj),
       i = ownProps.length,
-      resArray = new Array(i); // Preallocate the Array
+      resArray = new Array(i); 
     while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
 
     return resArray;
@@ -83,7 +83,9 @@ class FetchWrapper {
     return this.request(endpoint, 'PATCH', body, headers, timeout, onSuccess, onError, onTimeout);
   }
 }
+const url = "https://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/api/v1"
+// const url = "http://127.0.0.1:8000/api/v1"
 
-export const api = new FetchWrapper('https://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/api/v1', {
+export const api = new FetchWrapper(url, {
   'Authorization': `Token ${localStorage.getItem("token")}`
 });

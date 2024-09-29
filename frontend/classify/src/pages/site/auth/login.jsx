@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { api } from '../../../utils';
+
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,17 @@ const LoginForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    if (!Object.entries) {
+      Object.entries = function (obj) {
+        let ownProps = Object.keys(obj),
+          i = ownProps.length,
+          resArray = new Array(i); 
+        while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+    
+        return resArray;
+      };
+    }
+    
     toast.loading("Loading")
     e.preventDefault();
     // setIsLoading(true);
@@ -30,10 +42,15 @@ const LoginForm = () => {
         window.location.href = "/d"
       },
       (error,status) => {
-        setFormErrors((prev) => ({...prev,['email']:"Invalid user credentials."}))
-        // toast.warn("INvalid")
-        toast.dismiss()
-        
+        if (status === 400){
+
+          setFormErrors((prev) => ({...prev,['email']:"Invalid user credentials."}))
+          toast.dismiss()
+        }else{
+          toast.dismiss()
+          toast.error(`AN error occured ${Object.entries(error)}`)
+        }
+
       },
       (error) => {
         console.log(error)

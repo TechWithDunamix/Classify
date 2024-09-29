@@ -60,7 +60,12 @@ const ChatBubble = () => {
       console.log("WebSocket connected", e);
     };
 
+    ws.current.onclose = (e) => {
+      // toast.info("Reconnecting to websocket")
+      setTimeout(wsconnect,5000)
+    }
     ws.current.onmessage = (e) => {
+      
       const data = JSON.parse(e.data);
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -237,7 +242,7 @@ const ChatWindow = ({
           <div ref={chatEndRef} />
         </div>
       </div>
-      <footer className="p-4 absolute bottom-2 border-t-2 w-3/4">
+      <footer className="p-4 absolute bottom-2 border-t-2 w-full md:w-2/3 mx-auto">
         <div className="flex">
           <input
             type="text"
