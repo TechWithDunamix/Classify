@@ -69,6 +69,9 @@ class ChatClass(AsyncWebsocketConsumer):
         return obj,_class,isDeletable
     async def connect(self):
 
+        if not self.scope['user']:
+            print("No Token found")
+            return await self.disconnect(101)
         self.class_id = self.scope['url_route']['kwargs']['class_id']
         user = self.scope['user']
         _class = await self.get_class_qs(self.class_id)
@@ -82,6 +85,7 @@ class ChatClass(AsyncWebsocketConsumer):
         )
        
         await self.accept()
+        print("connected")
         # await self.send(text_data = json.dumps({
         #     "message":f"Welcome to classify !! \n {self.scope['user'].username}"
         # }))
@@ -212,3 +216,4 @@ class AccountActivation(AsyncWebsocketConsumer):
     
     
     
+

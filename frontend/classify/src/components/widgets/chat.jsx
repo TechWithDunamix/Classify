@@ -52,9 +52,9 @@ const ChatBubble = () => {
   useEffect(fetchMessage, []);
   
   const wsconnect = () => {
-    
-    const url = `wss://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/ws/chat_class/${id}`;
-    ws.current = new WebSocket(url, localStorage.getItem("token"));
+    const authToken = localStorage.getItem("token")
+    const url = `wss://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/ws/chat_class/${id}?token=${authToken}`;
+    ws.current = new WebSocket(url);
 
     ws.current.onopen = (e) => {
       console.log("WebSocket connected", e);
@@ -62,7 +62,8 @@ const ChatBubble = () => {
 
     ws.current.onclose = (e) => {
       // toast.info("Reconnecting to websocket")
-      setTimeout(wsconnect,5000)
+      console.log("Connecting to websocket  .... ")
+      setTimeout(wsconnect,500)
     }
     ws.current.onmessage = (e) => {
       
