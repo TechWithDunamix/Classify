@@ -98,7 +98,7 @@ useEffect(() => {
   const handlePrivacySubmit = (e) => {
     e.preventDefault()
     handleSubmitProfileData()
-    fetchAPI()
+    // fetchAPI()
   }
   return (
     <div className="relative mx-auto max-w-3xl bg-white shadow-3xl rounded-lg p-4">
