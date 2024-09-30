@@ -4,9 +4,9 @@ import { useEffect ,useRef} from 'react';
 const WaitingPage = () => {
   const ws = useRef(null)
   const connectWS = () =>{
-    const url = "wss://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/ws/activate"
     const token = localStorage.getItem("token");
-    ws.current = new WebSocket(url,token);
+    const url = `wss://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/ws/activate?token=${token}`
+    ws.current = new WebSocket(url);
 
     const request = {
       "type" : "GET"
