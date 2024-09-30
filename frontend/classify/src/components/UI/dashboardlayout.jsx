@@ -48,7 +48,7 @@ useEffect(() => {
   return (
     <globalContext.Provider value={globalContextValues}>
       <div className="flex h-screen">
-        <div className={`bg-secondary hidden text-white flex flex-col transition-width duration-300 ${isCollapsed ? 'w-0 md:w-16' : 'w-16 md:w-64'} z-50`}>
+        <div className={`bg-secondary hidden  text-white md:flex flex-col transition-width duration-300 ${isCollapsed ? 'w-0 md:w-16' : 'w-16 md:w-64'} z-50`}>
           <div className="font-bold text-2xl p-5 hidden md:inline-block text-center transition-opacity duration-300 whitespace-nowrap overflow-hidden">
             {isCollapsed ? 'C' : 'Classify'}
           </div>
