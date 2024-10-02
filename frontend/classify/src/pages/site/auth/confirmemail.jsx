@@ -5,7 +5,7 @@ const WaitingPage = () => {
   const ws = useRef(null)
   const connectWS = () =>{
     const token = localStorage.getItem("token");
-    const url = `wss://vocational-fish-techwithdunamix-65e5eda3.koyeb.app/ws/activate?token=${token}`
+    const url = `wss://vocational-fish-techwithdunamix-65e5eda4.koyeb.app/ws/activate?token=${token}`
     ws.current = new WebSocket(url);
 
     const request = {
