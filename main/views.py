@@ -109,7 +109,8 @@ class ClassView(generics.GenericAPIView):
     
     def get_queryset(self) -> None:
         query = Q(owner = self.request.user) | Q(members__user = self.request.user)
-        user_class = Class.objects.filter(query).all()
+        user_class = Class.objects.filter(query).distinct()
+        print(user_class)
         return user_class
 
     def get_admin_queryset(self):

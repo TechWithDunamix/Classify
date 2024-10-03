@@ -54,6 +54,8 @@ const ChatBubble = () => {
   const wsconnect = () => {
     const authToken = localStorage.getItem("token")
     const url = `wss://vocational-fish-techwithdunamix-65e5eda4.koyeb.app/ws/chat_class/${id}?token=${authToken}`;
+    // const url = `ws:/localhost:8000/ws/chat_class/${id}?token=${authToken}`;
+
     ws.current = new WebSocket(url);
 
     ws.current.onopen = (e) => {
@@ -63,7 +65,7 @@ const ChatBubble = () => {
     ws.current.onclose = (e) => {
       // toast.info("Reconnecting to websocket")
       console.log("Connecting to websocket  .... ")
-      setTimeout(wsconnect,500)
+      setTimeout(wsconnect,1000)
     }
     ws.current.onmessage = (e) => {
       
