@@ -110,7 +110,7 @@ useEffect(() => {
         {/* Profile Picture and Pencil Icon */}
         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
           <img
-            className="h-2/3 w-2/3 rounded-full"
+            className="h-[130px] w-[130px] rounded-full"
             src={newImage || userData?.profile_image}
             alt="Profile"
           />
