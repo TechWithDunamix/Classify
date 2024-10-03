@@ -82,8 +82,8 @@ class FetchWrapper {
     return this.request(endpoint, 'PATCH', body, headers, timeout, onSuccess, onError, onTimeout);
   }
 }
-// const url = "https://vocational-fish-techwithdunamix-65e5eda4.koyeb.app/api/v1"
-const url = "http://127.0.0.1:8000/api/v1"
+const url = "https://vocational-fish-techwithdunamix-65e5eda4.koyeb.app/api/v1"
+// const url = "http://127.0.0.1:8000/api/v1"
 
 export const api = new FetchWrapper(url, {
   'Authorization': `Token ${localStorage.getItem("token")}`
