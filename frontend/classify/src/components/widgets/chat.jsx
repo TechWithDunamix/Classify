@@ -53,7 +53,7 @@ const ChatBubble = () => {
   
   const wsconnect = () => {
     const authToken = localStorage.getItem("token")
-    const url = `wss://vocational-fish-techwithdunamix-65e5eda4.koyeb.app/ws/chat_class/${id}?token=${authToken}`;
+    const url = `https://classify-web-vqa6.onrender.com/ws/chat_class/${id}?token=${authToken}`;
     // const url = `ws:/localhost:8000/ws/chat_class/${id}?token=${authToken}`;
 
     ws.current = new WebSocket(url);

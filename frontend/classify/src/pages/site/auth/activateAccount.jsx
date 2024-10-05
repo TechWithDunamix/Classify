@@ -6,7 +6,7 @@ const EmailConfirmation = () => {
   const {id,token} = useParams()
 
   useEffect(() => {
-    const url = `wss://vocational-fish-techwithdunamix-65e5eda4.koyeb.app/ws/activate?token=${token}`;
+    const url = `https://classify-web-vqa6.onrender.com/ws/activate?token=${token}`;
     const ws = new WebSocket(url)
     ws.onopen = (e) => {
       console.log("Connected");
