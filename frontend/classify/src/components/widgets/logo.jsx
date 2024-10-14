@@ -4,7 +4,7 @@ const Logo = () => {
   return (
     <div className="flex justify-center items-center gab-4 cursor-pointer">
       <img src={LogoImage} className="w-8 h-8"/>
-      <p className="text-purple-800 text-4xl">Classify</p>
+      <p className="text-purple-800 text-4xl">Classify</p> <small>By Techwithdunamix</small>
     </div>
   );
 }
