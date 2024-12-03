@@ -82,7 +82,7 @@ class FetchWrapper {
     return this.request(endpoint, 'PATCH', body, headers, timeout, onSuccess, onError, onTimeout);
   }
 }
-const url = "https://entire-shelli-techwithdunamix-13993bf2.koyeb.app/"
+const url = "https://entire-shelli-techwithdunamix-13993bf2.koyeb.app"
 // const url = "http://127.0.0.1:8000/api/v1"
 
 export const api = new FetchWrapper(url, {
